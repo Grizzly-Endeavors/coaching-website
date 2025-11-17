@@ -189,36 +189,15 @@ export default function BookingPage() {
                   <CardTitle>Select Your Time Slot</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="bg-[#1a1a2e] border-2 border-dashed border-purple-600/30 rounded-lg p-12 text-center">
-                    <svg className="w-16 h-16 text-purple-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <h3 className="text-xl font-bold text-gray-100 mb-2">Google Calendar Integration</h3>
-                    <p className="text-gray-400 mb-4 max-w-md mx-auto">
-                      Embed your Google Calendar appointment scheduler here. Instructions for setup:
-                    </p>
-                    <ol className="text-left text-sm text-gray-400 max-w-xl mx-auto space-y-2 mb-6">
-                      <li>1. Create an Appointment Schedule in Google Calendar</li>
-                      <li>2. Get the embed code from Calendar settings</li>
-                      <li>3. Add the embed URL to your environment variables</li>
-                      <li>4. Replace this placeholder with the actual iframe embed</li>
-                    </ol>
-                    <p className="text-sm text-purple-400 font-mono bg-purple-600/10 px-4 py-2 rounded inline-block">
-                      GOOGLE_CALENDAR_EMBED_URL
-                    </p>
-                  </div>
-
-                  {/* Example of how to embed when ready */}
-                  {/*
-                  <div className="w-full h-[600px]">
+                  <div className="w-full h-[800px]">
                     <iframe
                       src={process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL}
-                      className="w-full h-full border-0"
+                      className="w-full h-full border-0 rounded-lg"
                       frameBorder="0"
                       scrolling="no"
+                      title="Book Your Coaching Session"
                     />
                   </div>
-                  */}
                 </CardContent>
               </Card>
             </div>
