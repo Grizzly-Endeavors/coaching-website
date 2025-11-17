@@ -64,16 +64,6 @@ export async function GET(request: NextRequest) {
       orderBy: {
         [validatedParams.sort]: validatedParams.order,
       },
-      include: {
-        replays: {
-          select: {
-            id: true,
-            code: true,
-            mapName: true,
-            notes: true,
-          },
-        },
-      },
       select: {
         id: true,
         email: true,
@@ -87,7 +77,14 @@ export async function GET(request: NextRequest) {
         reviewUrl: true,
         submittedAt: true,
         reviewedAt: true,
-        replays: true,
+        replays: {
+          select: {
+            id: true,
+            code: true,
+            mapName: true,
+            notes: true,
+          },
+        },
       },
     });
 
