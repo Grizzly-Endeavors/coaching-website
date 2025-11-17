@@ -23,6 +23,7 @@ export default function GetCoachingPage() {
   const [errors, setErrors] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [submissionId, setSubmissionId] = useState<string>('');
 
   const coachingTypesList = [
     {
@@ -146,6 +147,8 @@ export default function GetCoachingPage() {
         throw new Error('Failed to submit replay codes');
       }
 
+      const data = await response.json();
+      setSubmissionId(data.submissionId);
       setSubmitStatus('success');
       setFormData({
         email: '',
@@ -173,6 +176,7 @@ export default function GetCoachingPage() {
   const handleBack = () => {
     setSelectedType(null);
     setSubmitStatus('idle');
+    setSubmissionId('');
   };
 
   const getCoachingTypeDescription = () => {
@@ -465,13 +469,21 @@ export default function GetCoachingPage() {
 
                   {submitStatus === 'success' && (
                     <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-                      <p className="text-green-400 font-medium mb-1">
+                      <p className="text-green-400 font-medium mb-2">
                         Replay codes submitted successfully!
                       </p>
+                      <div className="mb-2">
+                        <p className="text-green-300 text-sm mb-1">
+                          Your Submission ID:
+                        </p>
+                        <p className="text-green-100 font-mono text-sm bg-green-900/20 px-3 py-2 rounded border border-green-500/30 inline-block">
+                          {submissionId}
+                        </p>
+                      </div>
                       <p className="text-green-300 text-sm">
                         {selectedType === 'review-async'
                           ? 'You\'ll receive your review within 2-3 business days at the email provided.'
-                          : 'We\'ll be in touch shortly to schedule your session!'}
+                          : 'Please use this ID when scheduling your session below.'}
                       </p>
                     </div>
                   )}
@@ -502,6 +514,104 @@ export default function GetCoachingPage() {
                   </p>
                 </form>
               </Card>
+
+              {/* Google Calendar Scheduling - Only for VOD Review and Live Coaching after successful submission */}
+              {(selectedType === 'vod-review' || selectedType === 'live-coaching') && submitStatus === 'success' && submissionId && (
+                <div className="mt-12">
+                  <div className="mb-6">
+                    <h2 className="text-3xl font-bold text-gray-100 mb-4">Schedule Your Session</h2>
+                    <p className="text-gray-400 leading-relaxed mb-4">
+                      {selectedType === 'vod-review'
+                        ? 'Book a time slot where we\'ll review your replays together over Discord. I\'ll stream the replays and provide live commentary while you can ask questions.'
+                        : 'Book a time slot for live coaching where you\'ll stream your gameplay and receive real-time guidance and corrections as you play.'}
+                    </p>
+                    <div className="bg-purple-600/10 border border-purple-600/30 rounded-lg p-4">
+                      <p className="text-purple-400 font-medium mb-2">
+                        📋 Remember to include your Submission ID when booking:
+                      </p>
+                      <p className="text-purple-200 font-mono text-sm bg-purple-900/20 px-3 py-2 rounded border border-purple-500/30 inline-block">
+                        {submissionId}
+                      </p>
+                    </div>
+                  </div>
+
+                  <Card variant="surface" padding="lg" className="mb-8">
+                    <div className="space-y-4">
+                      <div className="flex items-start">
+                        <svg className="w-6 h-6 text-purple-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <div>
+                          <h3 className="font-bold text-gray-100 mb-1">60-Minute Sessions</h3>
+                          <p className="text-gray-400">Full hour of personalized coaching and Q&A</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start">
+                        <svg className="w-6 h-6 text-purple-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <div>
+                          <h3 className="font-bold text-gray-100 mb-1">Discord Screen Sharing</h3>
+                          <p className="text-gray-400">
+                            {selectedType === 'vod-review'
+                              ? 'I\'ll stream the replay analysis'
+                              : 'You stream your live gameplay'}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start">
+                        <svg className="w-6 h-6 text-purple-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <div>
+                          <h3 className="font-bold text-gray-100 mb-1">Recording Provided</h3>
+                          <p className="text-gray-400">Review the session anytime after</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  <Card variant="elevated" padding="lg">
+                    <CardHeader>
+                      <CardTitle>Select Your Time Slot</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL ? (
+                        <div className="w-full h-[800px]">
+                          <iframe
+                            src={process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL}
+                            className="w-full h-full border-0 rounded-lg"
+                            frameBorder="0"
+                            scrolling="no"
+                            title="Book Your Coaching Session"
+                          />
+                        </div>
+                      ) : (
+                        <div className="bg-[#1a1a2e] border-2 border-dashed border-purple-600/30 rounded-lg p-12 text-center">
+                          <svg className="w-16 h-16 text-purple-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          <h3 className="text-xl font-bold text-gray-100 mb-2">Google Calendar Integration</h3>
+                          <p className="text-gray-400 mb-4 max-w-md mx-auto">
+                            Embed your Google Calendar appointment scheduler here. Instructions for setup:
+                          </p>
+                          <ol className="text-left text-sm text-gray-400 max-w-xl mx-auto space-y-2 mb-6">
+                            <li>1. Create an Appointment Schedule in Google Calendar</li>
+                            <li>2. Get the embed code from Calendar settings</li>
+                            <li>3. Add the embed URL to your environment variables</li>
+                            <li>4. Set NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL in .env</li>
+                          </ol>
+                          <p className="text-sm text-purple-400 font-mono bg-purple-600/10 px-4 py-2 rounded inline-block">
+                            NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL
+                          </p>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </div>
           )}
         </div>
