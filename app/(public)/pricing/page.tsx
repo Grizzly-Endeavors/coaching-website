@@ -68,6 +68,29 @@ const pricingOptions = [
   },
 ];
 
+const coachingProcess = [
+  {
+    step: 1,
+    title: 'Book or Submit',
+    description: 'Choose between live coaching or VOD review. Submit your replay code or book a time slot.',
+  },
+  {
+    step: 2,
+    title: 'Analysis',
+    description: 'I analyze your gameplay, identifying strengths, weaknesses, and improvement opportunities.',
+  },
+  {
+    step: 3,
+    title: 'Delivery',
+    description: 'Receive detailed feedback via video review or live session with actionable tips.',
+  },
+  {
+    step: 4,
+    title: 'Improve',
+    description: 'Apply the feedback and strategies to your games and see measurable improvement.',
+  },
+];
+
 export default function PricingPage() {
   return (
     <div className="flex flex-col">
@@ -160,8 +183,36 @@ export default function PricingPage() {
         </div>
       </section>
 
-      {/* Comparison Section */}
+      {/* How It Works */}
       <section className="py-20 bg-[#1a1a2e]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4">
+              How It Works
+            </h2>
+            <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              Simple process from booking to improvement
+            </p>
+          </div>
+
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {coachingProcess.map((item) => (
+                <div key={item.step} className="text-center">
+                  <div className="flex items-center justify-center w-16 h-16 bg-purple-600 text-white rounded-full text-2xl font-bold mb-4 mx-auto shadow-[0_0_20px_rgba(139,92,246,0.4)]">
+                    {item.step}
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-100 mb-2">{item.title}</h3>
+                  <p className="text-gray-400">{item.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Section */}
+      <section className="py-20 bg-[#0f0f23]">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">

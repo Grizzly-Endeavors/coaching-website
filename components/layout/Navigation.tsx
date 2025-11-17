@@ -20,8 +20,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
 
   const navLinks: NavLink[] = [
     { href: '/', label: 'Home' },
-    { href: '/services', label: 'Services' },
-    { href: '/about', label: 'About' },
+    { href: '/pricing', label: 'Pricing' },
     { href: '/blog', label: 'Blog' },
     { href: '/contact', label: 'Contact' },
   ];
@@ -133,18 +132,18 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
               <div className="mt-8 pt-6 border-t border-[#2a2a40]">
                 <div className="space-y-3">
                   <Link
-                    href="/booking"
+                    href="/pricing"
                     className="block w-full px-4 py-3 text-center text-sm font-medium text-purple-400 bg-transparent border border-purple-600/30 rounded-lg hover:bg-purple-600/10 transition-all duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Submit Replay Code
+                    Pricing
                   </Link>
                   <Link
                     href="/booking"
                     className="block w-full px-4 py-3 text-center text-sm font-medium text-white bg-purple-600 rounded-lg shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] hover:bg-purple-500 transition-all duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Book a Session
+                    Get Coaching
                   </Link>
                 </div>
               </div>
