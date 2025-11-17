@@ -189,6 +189,57 @@ export default function GetCoachingPage() {
                   </Card>
                 ))}
               </div>
+              <Card variant="surface" padding="lg" className="mb-8">
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <svg className="w-6 h-6 text-purple-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <h3 className="font-bold text-gray-100 mb-1">60-Minute Sessions</h3>
+                      <p className="text-gray-400">Full hour of personalized coaching and Q&A</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start">
+                    <svg className="w-6 h-6 text-purple-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <h3 className="font-bold text-gray-100 mb-1">Screen Sharing</h3>
+                      <p className="text-gray-400">Live gameplay analysis via Discord</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start">
+                    <svg className="w-6 h-6 text-purple-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <h3 className="font-bold text-gray-100 mb-1">Recording Provided</h3>
+                      <p className="text-gray-400">Review the session anytime after</p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Google Calendar Embed Placeholder */}
+              <Card variant="elevated" padding="lg">
+                <CardHeader>
+                  <CardTitle>Select Your Time Slot</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="w-full h-[800px]">
+                    <iframe
+                      src={process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL}
+                      className="w-full h-full border-0 rounded-lg"
+                      frameBorder="0"
+                      scrolling="no"
+                      title="Book Your Coaching Session"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           )}
 
