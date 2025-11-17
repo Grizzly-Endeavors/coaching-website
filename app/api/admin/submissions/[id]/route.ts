@@ -33,6 +33,16 @@ export async function GET(
     // Fetch submission from database
     const submission = await prisma.replaySubmission.findUnique({
       where: { id },
+      include: {
+        replays: {
+          select: {
+            id: true,
+            code: true,
+            mapName: true,
+            notes: true,
+          },
+        },
+      },
       select: {
         id: true,
         email: true,
@@ -46,13 +56,7 @@ export async function GET(
         reviewUrl: true,
         submittedAt: true,
         reviewedAt: true,
-        replays: {
-          select: {
-            code: true,
-            mapName: true,
-            notes: true,
-          },
-        },
+        replays: true,
       },
     });
 
@@ -160,6 +164,16 @@ export async function PATCH(
     const updatedSubmission = await prisma.replaySubmission.update({
       where: { id },
       data: updateData,
+      include: {
+        replays: {
+          select: {
+            id: true,
+            code: true,
+            mapName: true,
+            notes: true,
+          },
+        },
+      },
       select: {
         id: true,
         email: true,
@@ -173,13 +187,7 @@ export async function PATCH(
         reviewUrl: true,
         submittedAt: true,
         reviewedAt: true,
-        replays: {
-          select: {
-            code: true,
-            mapName: true,
-            notes: true,
-          },
-        },
+        replays: true,
       },
     });
 

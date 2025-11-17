@@ -2,19 +2,27 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { AdminTable, AdminTableRow, AdminTableCell, AdminBadge, AdminSelect, AdminLoading } from '@/components/admin';
+import { AdminTable, AdminTableRow, AdminTableCell, AdminBadge, AdminSelect, AdminInput, AdminLoading } from '@/components/admin';
 
 type SubmissionStatus = 'ALL' | 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
+
+interface ReplayCode {
+  id: string;
+  code: string;
+  mapName: string;
+  notes: string | null;
+}
 
 interface Submission {
   id: string;
   email: string;
-  replayCode: string;
+  coachingType: string;
   rank: string;
   role: string;
   hero: string | null;
   status: string;
   submittedAt: string;
+  replays: ReplayCode[];
 }
 
 export default function SubmissionsPage() {
@@ -22,10 +30,11 @@ export default function SubmissionsPage() {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<SubmissionStatus>('ALL');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     fetchSubmissions();
-  }, [statusFilter, sortOrder]);
+  }, [statusFilter, sortOrder, searchQuery]);
 
   async function fetchSubmissions() {
     try {
@@ -35,6 +44,9 @@ export default function SubmissionsPage() {
         params.append('status', statusFilter);
       }
       params.append('order', sortOrder);
+      if (searchQuery.trim()) {
+        params.append('search', searchQuery.trim());
+      }
 
       const response = await fetch(`/api/admin/submissions?${params}`);
       if (!response.ok) throw new Error('Failed to fetch submissions');
@@ -49,6 +61,19 @@ export default function SubmissionsPage() {
 
   const filteredAndSortedSubmissions = submissions;
 
+  const getCoachingTypeName = (type: string) => {
+    switch (type) {
+      case 'review-async':
+        return 'Review on My Time';
+      case 'vod-review':
+        return 'VOD Review';
+      case 'live-coaching':
+        return 'Live Coaching';
+      default:
+        return type;
+    }
+  };
+
   return (
     <div>
       <div className="mb-8">
@@ -59,6 +84,14 @@ export default function SubmissionsPage() {
       {/* Filters */}
       <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 mb-6">
         <div className="flex flex-wrap items-end gap-4">
+          <div className="flex-1 min-w-[200px]">
+            <AdminInput
+              label="Search by ID or Email"
+              placeholder="Enter submission ID or email..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
           <div className="flex-1 min-w-[200px]">
             <AdminSelect
               label="Filter by Status"
@@ -98,15 +131,22 @@ export default function SubmissionsPage() {
           <div className="text-center py-12">
             <p className="text-[#9ca3af] text-lg mb-2">No submissions found</p>
             <p className="text-[#6b7280] text-sm">
-              {statusFilter !== 'ALL'
+              {searchQuery
+                ? 'No submissions match your search'
+                : statusFilter !== 'ALL'
                 ? 'Try changing the filter to see more submissions'
                 : 'Submissions will appear here when users submit replay codes'}
             </p>
           </div>
         ) : (
-          <AdminTable headers={['Date', 'Email', 'Rank', 'Role', 'Hero', 'Replay Code', 'Status', 'Actions']}>
+          <AdminTable headers={['ID', 'Date', 'Email', 'Coaching Type', 'Rank', 'Role', 'Replays', 'Status', 'Actions']}>
             {filteredAndSortedSubmissions.map((submission) => (
               <AdminTableRow key={submission.id}>
+                <AdminTableCell>
+                  <code className="text-xs text-[#8b5cf6] font-mono">
+                    {submission.id.substring(0, 8)}...
+                  </code>
+                </AdminTableCell>
                 <AdminTableCell>
                   {new Date(submission.submittedAt).toLocaleDateString('en-US', {
                     month: 'short',
@@ -119,13 +159,19 @@ export default function SubmissionsPage() {
                     {submission.email}
                   </div>
                 </AdminTableCell>
+                <AdminTableCell>
+                  <div className="text-sm">
+                    {getCoachingTypeName(submission.coachingType)}
+                  </div>
+                </AdminTableCell>
                 <AdminTableCell>{submission.rank}</AdminTableCell>
                 <AdminTableCell>{submission.role}</AdminTableCell>
-                <AdminTableCell>{submission.hero || '-'}</AdminTableCell>
                 <AdminTableCell>
-                  <code className="px-2 py-1 bg-[#0f0f23] rounded text-[#8b5cf6] font-mono text-sm">
-                    {submission.replayCode}
-                  </code>
+                  <div className="flex items-center gap-1">
+                    <span className="px-2 py-1 bg-[#8b5cf6]/20 text-[#8b5cf6] rounded text-xs font-medium">
+                      {submission.replays.length} {submission.replays.length === 1 ? 'replay' : 'replays'}
+                    </span>
+                  </div>
                 </AdminTableCell>
                 <AdminTableCell>
                   <AdminBadge variant={submission.status.toLowerCase() as any}>
