@@ -579,28 +579,35 @@ export default function GetCoachingPage() {
                     </CardHeader>
                     <CardContent>
                       {process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL ? (
-                        <div className="w-full h-[800px]">
+                        <div
+                          className="w-full rounded-lg overflow-hidden bg-[#1a1a2e]"
+                          style={{ height: '800px' }}
+                        >
                           <iframe
                             src={(() => {
                               const baseUrl = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL;
                               const separator = baseUrl.includes('?') ? '&' : '?';
                               // Dark theme colors matching the site design
                               const params = [
-                                'bgcolor=%230f0f23',     // Dark background matching site
-                                'color=%239333ea',       // Purple accent for events
+                                'bgcolor=%231a1a2e',     // Dark surface background
+                                'color=%238b5cf6',       // Purple accent for events
                                 'showTitle=0',           // Hide title for cleaner look
                                 'showNav=1',             // Show navigation
                                 'showPrint=0',           // Hide print
                                 'showTabs=0',            // Hide tabs for cleaner look
                                 'showCalendars=0',       // Hide calendar list
-                                'showTz=0',              // Hide timezone (cleaner)
+                                'showTz=0',              // Hide timezone
                                 'mode=WEEK',             // Week view by default
                               ].join('&');
                               return `${baseUrl}${separator}${params}`;
                             })()}
-                            className="w-full h-full border-0 rounded-lg"
+                            className="w-full h-full border-0"
+                            style={{
+                              colorScheme: 'dark',
+                              background: 'transparent'
+                            }}
                             frameBorder="0"
-                            scrolling="no"
+                            scrolling="yes"
                             title="Book Your Coaching Session"
                           />
                         </div>
