@@ -3,6 +3,9 @@ import { prisma } from '@/lib/prisma';
 import { blogPostQuerySchema } from '@/lib/validations';
 import { ZodError } from 'zod';
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic';
+
 /**
  * GET /api/blog/posts
  * Get published blog posts with pagination and filtering

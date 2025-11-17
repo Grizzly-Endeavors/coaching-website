@@ -98,7 +98,7 @@ export async function requireAuthPage() {
   const session = await getServerSession();
 
   if (!session || !session.user) {
-    redirect('/admin/login');
+    redirect('/login');
   }
 
   return session;

@@ -34,7 +34,7 @@ export default function SubmissionsPage() {
       if (statusFilter !== 'ALL') {
         params.append('status', statusFilter);
       }
-      params.append('sort', sortOrder);
+      params.append('order', sortOrder);
 
       const response = await fetch(`/api/admin/submissions?${params}`);
       if (!response.ok) throw new Error('Failed to fetch submissions');

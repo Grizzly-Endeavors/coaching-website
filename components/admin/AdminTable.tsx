@@ -1,3 +1,5 @@
+'use client';
+
 interface AdminTableProps {
   headers: string[];
   children: React.ReactNode;

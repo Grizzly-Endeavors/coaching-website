@@ -9,19 +9,19 @@ import { auth } from '@/lib/auth';
  * when trying to access admin routes. If not authenticated, redirects to login page.
  *
  * Protected routes: /admin/*
- * Excluded routes: /admin/login (login page itself)
+ * Excluded routes: /login (login page itself)
  */
 export default auth((req) => {
   const { pathname } = req.nextUrl;
 
   // Check if the request is for an admin route (excluding login page)
   const isAdminRoute = pathname.startsWith('/admin');
-  const isLoginPage = pathname === '/admin/login';
+  const isLoginPage = pathname === '/login';
 
   // If trying to access admin route (not login) and not authenticated
   if (isAdminRoute && !isLoginPage && !req.auth) {
     // Build the login URL with callback parameter
-    const loginUrl = new URL('/admin/login', req.url);
+    const loginUrl = new URL('/login', req.url);
     loginUrl.searchParams.set('callbackUrl', pathname);
     return NextResponse.redirect(loginUrl);
   }

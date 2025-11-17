@@ -3,6 +3,9 @@ import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { AdminCard, AdminButton, AdminTable, AdminTableRow, AdminTableCell, AdminBadge, AdminLoading } from '@/components/admin';
 
+// Force dynamic rendering since this page needs database access
+export const dynamic = 'force-dynamic';
+
 async function getDashboardData() {
   const [
     pendingSubmissions,
@@ -147,26 +150,25 @@ async function DashboardContent() {
         </div>
         <AdminTable headers={['Date', 'Email', 'Rank', 'Role', 'Hero', 'Status']}>
           {data.recentSubmissions.map((submission) => (
-            <AdminTableRow
-              key={submission.id}
-              onClick={() => (window.location.href = `/admin/submissions/${submission.id}`)}
-            >
-              <AdminTableCell>
-                {new Date(submission.submittedAt).toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                })}
-              </AdminTableCell>
-              <AdminTableCell>{submission.email}</AdminTableCell>
-              <AdminTableCell>{submission.rank}</AdminTableCell>
-              <AdminTableCell>{submission.role}</AdminTableCell>
-              <AdminTableCell>{submission.hero || '-'}</AdminTableCell>
-              <AdminTableCell>
-                <AdminBadge variant={submission.status.toLowerCase() as any}>
-                  {submission.status}
-                </AdminBadge>
-              </AdminTableCell>
-            </AdminTableRow>
+            <Link key={submission.id} href={`/admin/submissions/${submission.id}`}>
+              <AdminTableRow className="cursor-pointer hover:bg-[#1a1a2e]">
+                <AdminTableCell>
+                  {new Date(submission.submittedAt).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                  })}
+                </AdminTableCell>
+                <AdminTableCell>{submission.email}</AdminTableCell>
+                <AdminTableCell>{submission.rank}</AdminTableCell>
+                <AdminTableCell>{submission.role}</AdminTableCell>
+                <AdminTableCell>{submission.hero || '-'}</AdminTableCell>
+                <AdminTableCell>
+                  <AdminBadge variant={submission.status.toLowerCase() as any}>
+                    {submission.status}
+                  </AdminBadge>
+                </AdminTableCell>
+              </AdminTableRow>
+            </Link>
           ))}
         </AdminTable>
       </div>

@@ -3,6 +3,9 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic';
+
 // Query parameters validation schema
 const querySchema = z.object({
   page: z.coerce.number().int().positive().optional().default(1),

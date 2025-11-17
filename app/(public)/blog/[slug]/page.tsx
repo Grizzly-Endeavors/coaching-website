@@ -10,6 +10,9 @@ import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 import { BlogContent, BlogContentSkeleton } from '@/components/blog/BlogContent';
 import { estimateReadingTime } from '@/lib/markdown';
 
+// Force dynamic rendering since this page needs database access
+export const dynamic = 'force-dynamic';
+
 interface BlogPostPageProps {
   params: {
     slug: string;

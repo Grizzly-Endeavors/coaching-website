@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  // Ensure we're not in static export mode - this app requires database access
+  output: undefined,
   images: {
     remotePatterns: [
       {
@@ -22,6 +23,10 @@ const nextConfig = {
     });
 
     return config;
+  },
+  // Disable static optimization for pages that need database access
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client', 'prisma'],
   },
 }
 

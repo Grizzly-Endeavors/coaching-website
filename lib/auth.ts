@@ -1,6 +1,6 @@
 import NextAuth, { DefaultSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 import { prisma } from './prisma';
 import { z } from 'zod';
 import { loginRateLimiter } from './rate-limit';
@@ -29,6 +29,7 @@ const loginSchema = z.object({
 });
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true,
   providers: [
     Credentials({
       name: 'credentials',
@@ -87,7 +88,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   pages: {
-    signIn: '/admin/login',
+    signIn: '/login',
   },
   callbacks: {
     async jwt({ token, user }) {

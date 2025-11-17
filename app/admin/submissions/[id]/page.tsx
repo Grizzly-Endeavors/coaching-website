@@ -51,10 +51,10 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
       const response = await fetch(`/api/admin/submissions/${params.id}`);
       if (!response.ok) throw new Error('Failed to fetch submission');
       const data = await response.json();
-      setSubmission(data);
-      setStatus(data.status);
-      setReviewNotes(data.reviewNotes || '');
-      setReviewUrl(data.reviewUrl || '');
+      setSubmission(data.submission);
+      setStatus(data.submission.status);
+      setReviewNotes(data.submission.reviewNotes || '');
+      setReviewUrl(data.submission.reviewUrl || '');
     } catch (error) {
       console.error('Error fetching submission:', error);
       alert('Failed to load submission');
@@ -144,8 +144,8 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
             <h1 className="text-3xl font-bold text-[#e5e7eb] mb-2">Submission Details</h1>
             <p className="text-[#9ca3af]">Review and manage replay submission</p>
           </div>
-          <AdminBadge variant={submission.status.toLowerCase() as any}>
-            {submission.status}
+          <AdminBadge variant={(submission.status || 'pending').toLowerCase() as any}>
+            {submission.status || 'Pending'}
           </AdminBadge>
         </div>
       </div>

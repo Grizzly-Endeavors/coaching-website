@@ -4,6 +4,9 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { SubmissionStatus } from '@prisma/client';
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic';
+
 // Query parameters validation schema
 const querySchema = z.object({
   status: z.nativeEnum(SubmissionStatus).optional(),

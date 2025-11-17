@@ -112,7 +112,7 @@ async function main() {
     console.log(`  Email: ${admin.email}`);
     console.log(`  Name:  ${admin.name || '(not provided)'}`);
     console.log(`  Created: ${admin.createdAt.toISOString()}\n`);
-    console.log('You can now log in at: /admin/login\n');
+    console.log('You can now log in at: /login\n');
   } catch (error) {
     console.error('\n❌ Error creating admin user:', error);
     process.exit(1);

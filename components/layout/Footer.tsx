@@ -33,7 +33,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
     resources: [
       { href: '/booking', label: 'Book Session' },
       { href: '/booking', label: 'Submit Replay' },
-      { href: '/admin/login', label: 'Admin Login' },
+      { href: '/login', label: 'Admin Login' },
     ],
   };
 
