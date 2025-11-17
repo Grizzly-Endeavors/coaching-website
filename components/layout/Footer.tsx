@@ -25,14 +25,12 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
   const footerLinks = {
     navigation: [
       { href: '/', label: 'Home' },
-      { href: '/services', label: 'Services' },
-      { href: '/about', label: 'About' },
+      { href: '/pricing', label: 'Pricing' },
       { href: '/blog', label: 'Blog' },
       { href: '/contact', label: 'Contact' },
     ],
     resources: [
-      { href: '/booking', label: 'Book Session' },
-      { href: '/booking', label: 'Submit Replay' },
+      { href: '/booking', label: 'Get Coaching' },
       { href: '/login', label: 'Admin Login' },
     ],
   };

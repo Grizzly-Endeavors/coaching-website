@@ -24,10 +24,8 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
   const navLinks = [
     { href: '/', label: 'Home' },
-    { href: '/services', label: 'Services' },
-    { href: '/about', label: 'About' },
+    { href: '/pricing', label: 'Pricing' },
     { href: '/blog', label: 'Blog' },
-    { href: '/booking', label: 'Booking' },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -94,15 +92,10 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               ))}
             </ul>
 
-            {/* CTA Buttons */}
-            <div className="flex items-center gap-3">
-              <Link href="/booking">
-                <Button variant="outline" size="sm">Submit Replay</Button>
-              </Link>
-              <Link href="/booking">
-                <Button variant="primary" size="sm">Book Session</Button>
-              </Link>
-            </div>
+            {/* CTA Button */}
+            <Link href="/booking">
+              <Button variant="primary" size="sm">Get Coaching</Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -141,16 +134,11 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               ))}
             </ul>
 
-            {/* Mobile CTA Buttons */}
-            <div className="mt-4 flex flex-col gap-2 px-4">
-              <Link href="/booking" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button variant="outline" size="md" className="w-full">
-                  Submit Replay
-                </Button>
-              </Link>
+            {/* Mobile CTA Button */}
+            <div className="mt-4 px-4">
               <Link href="/booking" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="primary" size="md" className="w-full">
-                  Book Session
+                  Get Coaching
                 </Button>
               </Link>
             </div>

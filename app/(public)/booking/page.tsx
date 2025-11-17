@@ -7,10 +7,11 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { replaySubmissionSchema, type ReplaySubmissionInput } from '@/lib/validations';
 import { rankOptions, roleOptions } from '@/lib/validations/booking';
 
+type CoachingType = 'review-async' | 'vod-review' | 'live-coaching' | null;
 type ReplaySubmissionData = ReplaySubmissionInput;
 
-export default function BookingPage() {
-  const [activeTab, setActiveTab] = useState<'booking' | 'replay'>('booking');
+export default function GetCoachingPage() {
+  const [selectedType, setSelectedType] = useState<CoachingType>(null);
   const [formData, setFormData] = useState<ReplaySubmissionData>({
     email: '',
     discordTag: '',
@@ -23,6 +24,39 @@ export default function BookingPage() {
   const [errors, setErrors] = useState<Partial<Record<keyof ReplaySubmissionData, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+
+  const coachingTypes = [
+    {
+      id: 'review-async' as CoachingType,
+      name: 'Review on My Time',
+      description: 'I review your replay and send detailed notes via Discord/email',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+      ),
+    },
+    {
+      id: 'vod-review' as CoachingType,
+      name: 'VOD Review',
+      description: 'I stream your replay over Discord and review it with you live',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+      ),
+    },
+    {
+      id: 'live-coaching' as CoachingType,
+      name: 'Live Coaching',
+      description: 'You stream your game and I make corrections on the fly',
+      icon: (
+        <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+        </svg>
+      ),
+    },
+  ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -92,6 +126,16 @@ export default function BookingPage() {
     }
   };
 
+  const handleTypeSelection = (type: CoachingType) => {
+    setSelectedType(type);
+    setSubmitStatus('idle');
+  };
+
+  const handleBack = () => {
+    setSelectedType(null);
+    setSubmitStatus('idle');
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header Section */}
@@ -99,56 +143,52 @@ export default function BookingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6">
-              Book Your Session
+              Get Coaching
             </h1>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Choose between live coaching sessions or submit a replay code for detailed VOD review
+              {selectedType ? 'Complete your booking' : 'Choose your coaching style to get started'}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Tab Navigation */}
-      <section className="bg-[#0f0f23] border-b border-[#2a2a40] sticky top-0 z-30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center gap-4 py-4">
-            <button
-              onClick={() => setActiveTab('booking')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
-                activeTab === 'booking'
-                  ? 'bg-purple-600 text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]'
-                  : 'bg-[#2a2a40] text-gray-400 hover:text-gray-200'
-              }`}
-            >
-              Live Coaching
-            </button>
-            <button
-              onClick={() => setActiveTab('replay')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all duration-200 ${
-                activeTab === 'replay'
-                  ? 'bg-purple-600 text-white shadow-[0_0_20px_rgba(139,92,246,0.3)]'
-                  : 'bg-[#2a2a40] text-gray-400 hover:text-gray-200'
-              }`}
-            >
-              Submit Replay
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Content Sections */}
+      {/* Content Section */}
       <section className="py-20 bg-[#0f0f23] flex-grow">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Live Coaching Booking */}
-          {activeTab === 'booking' && (
-            <div className="max-w-4xl mx-auto">
-              <div className="mb-8">
-                <h2 className="text-3xl font-bold text-gray-100 mb-4">Schedule Live Coaching</h2>
+          {/* Coaching Type Selection */}
+          {!selectedType && (
+            <div className="max-w-5xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold text-gray-100 mb-4">Select Your Coaching Style</h2>
                 <p className="text-gray-400 leading-relaxed">
-                  Book a 1-on-1 live coaching session where we'll analyze your gameplay in real-time, work on specific skills, and answer your questions.
+                  Not sure which one to choose? <a href="/pricing" className="text-purple-400 hover:text-purple-300 underline">View detailed pricing and comparisons</a>
                 </p>
               </div>
 
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {coachingTypes.map((type) => (
+                  <Card
+                    key={type.id}
+                    variant="surface"
+                    hover
+                    className="cursor-pointer transition-all duration-200 hover:border-purple-500"
+                    onClick={() => handleTypeSelection(type.id)}
+                  >
+                    <CardContent className="text-center py-8">
+                      <div className="flex items-center justify-center w-16 h-16 bg-purple-600/20 rounded-lg mx-auto mb-4">
+                        <div className="text-purple-400">{type.icon}</div>
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-100 mb-3">{type.name}</h3>
+                      <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                        {type.description}
+                      </p>
+                      <Button variant="outline" size="sm" className="w-full">
+                        Select
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
               <Card variant="surface" padding="lg" className="mb-8">
                 <div className="space-y-4">
                   <div className="flex items-start">
@@ -203,13 +243,19 @@ export default function BookingPage() {
             </div>
           )}
 
-          {/* Replay Code Submission */}
-          {activeTab === 'replay' && (
+          {/* Review on My Time - Replay Submission Form */}
+          {selectedType === 'review-async' && (
             <div className="max-w-4xl mx-auto">
+              <div className="mb-6">
+                <Button variant="outline" size="sm" onClick={handleBack}>
+                  ← Back to Selection
+                </Button>
+              </div>
+
               <div className="mb-8">
-                <h2 className="text-3xl font-bold text-gray-100 mb-4">Submit Replay Code</h2>
+                <h2 className="text-3xl font-bold text-gray-100 mb-4">Submit Your Replay Code</h2>
                 <p className="text-gray-400 leading-relaxed mb-4">
-                  Submit your Overwatch replay code for a detailed VOD review. I'll analyze your gameplay, positioning, decision-making, and provide actionable feedback.
+                  Submit your Overwatch replay code for a detailed review. I'll analyze your gameplay and send comprehensive notes via Discord or email.
                 </p>
                 <div className="bg-purple-600/10 border border-purple-600/30 rounded-lg p-4">
                   <p className="text-purple-400 font-medium">
@@ -232,7 +278,7 @@ export default function BookingPage() {
                       required
                       placeholder="your.email@example.com"
                       disabled={isSubmitting}
-                      helperText="Where should I send the VOD review?"
+                      helperText="Where should I send the review?"
                     />
 
                     <Input
@@ -343,7 +389,7 @@ export default function BookingPage() {
                         Replay code submitted successfully!
                       </p>
                       <p className="text-green-300 text-sm">
-                        You'll receive your VOD review within 2-3 business days at the email provided.
+                        You'll receive your review within 2-3 business days at the email provided.
                       </p>
                     </div>
                   )}
@@ -373,6 +419,105 @@ export default function BookingPage() {
                     By submitting, you agree to our terms of service and privacy policy
                   </p>
                 </form>
+              </Card>
+            </div>
+          )}
+
+          {/* VOD Review or Live Coaching - Schedule Session */}
+          {(selectedType === 'vod-review' || selectedType === 'live-coaching') && (
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-6">
+                <Button variant="outline" size="sm" onClick={handleBack}>
+                  ← Back to Selection
+                </Button>
+              </div>
+
+              <div className="mb-8">
+                <h2 className="text-3xl font-bold text-gray-100 mb-4">
+                  {selectedType === 'vod-review' ? 'Schedule VOD Review Session' : 'Schedule Live Coaching Session'}
+                </h2>
+                <p className="text-gray-400 leading-relaxed">
+                  {selectedType === 'vod-review'
+                    ? 'Book a time slot where we\'ll review your replay together over Discord. I\'ll stream the replay and provide live commentary while you can ask questions.'
+                    : 'Book a time slot for live coaching where you\'ll stream your gameplay and receive real-time guidance and corrections as you play.'}
+                </p>
+              </div>
+
+              <Card variant="surface" padding="lg" className="mb-8">
+                <div className="space-y-4">
+                  <div className="flex items-start">
+                    <svg className="w-6 h-6 text-purple-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <h3 className="font-bold text-gray-100 mb-1">60-Minute Sessions</h3>
+                      <p className="text-gray-400">Full hour of personalized coaching and Q&A</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start">
+                    <svg className="w-6 h-6 text-purple-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <h3 className="font-bold text-gray-100 mb-1">Discord Screen Sharing</h3>
+                      <p className="text-gray-400">
+                        {selectedType === 'vod-review'
+                          ? 'I\'ll stream the replay analysis'
+                          : 'You stream your live gameplay'}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start">
+                    <svg className="w-6 h-6 text-purple-400 mr-3 mt-1" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <h3 className="font-bold text-gray-100 mb-1">Recording Provided</h3>
+                      <p className="text-gray-400">Review the session anytime after</p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Google Calendar Embed */}
+              <Card variant="elevated" padding="lg">
+                <CardHeader>
+                  <CardTitle>Select Your Time Slot</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-[#1a1a2e] border-2 border-dashed border-purple-600/30 rounded-lg p-12 text-center">
+                    <svg className="w-16 h-16 text-purple-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <h3 className="text-xl font-bold text-gray-100 mb-2">Google Calendar Integration</h3>
+                    <p className="text-gray-400 mb-4 max-w-md mx-auto">
+                      Embed your Google Calendar appointment scheduler here. Instructions for setup:
+                    </p>
+                    <ol className="text-left text-sm text-gray-400 max-w-xl mx-auto space-y-2 mb-6">
+                      <li>1. Create an Appointment Schedule in Google Calendar</li>
+                      <li>2. Get the embed code from Calendar settings</li>
+                      <li>3. Add the embed URL to your environment variables</li>
+                      <li>4. Replace this placeholder with the actual iframe embed</li>
+                    </ol>
+                    <p className="text-sm text-purple-400 font-mono bg-purple-600/10 px-4 py-2 rounded inline-block">
+                      GOOGLE_CALENDAR_EMBED_URL
+                    </p>
+                  </div>
+
+                  {/* Example of how to embed when ready */}
+                  {/*
+                  <div className="w-full h-[600px]">
+                    <iframe
+                      src={process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL}
+                      className="w-full h-full border-0"
+                      frameBorder="0"
+                      scrolling="no"
+                    />
+                  </div>
+                  */}
+                </CardContent>
               </Card>
             </div>
           )}
