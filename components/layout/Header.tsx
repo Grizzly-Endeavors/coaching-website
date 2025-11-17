@@ -92,15 +92,10 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               ))}
             </ul>
 
-            {/* CTA Buttons */}
-            <div className="flex items-center gap-3">
-              <Link href="/pricing">
-                <Button variant="outline" size="sm">Pricing</Button>
-              </Link>
-              <Link href="/booking">
-                <Button variant="primary" size="sm">Get Coaching</Button>
-              </Link>
-            </div>
+            {/* CTA Button */}
+            <Link href="/booking">
+              <Button variant="primary" size="sm">Get Coaching</Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -139,13 +134,8 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
               ))}
             </ul>
 
-            {/* Mobile CTA Buttons */}
-            <div className="mt-4 flex flex-col gap-2 px-4">
-              <Link href="/pricing" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button variant="outline" size="md" className="w-full">
-                  Pricing
-                </Button>
-              </Link>
+            {/* Mobile CTA Button */}
+            <div className="mt-4 px-4">
               <Link href="/booking" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="primary" size="md" className="w-full">
                   Get Coaching
