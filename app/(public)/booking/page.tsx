@@ -581,7 +581,23 @@ export default function GetCoachingPage() {
                       {process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL ? (
                         <div className="w-full h-[800px]">
                           <iframe
-                            src={process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL}
+                            src={(() => {
+                              const baseUrl = process.env.NEXT_PUBLIC_GOOGLE_CALENDAR_EMBED_URL;
+                              const separator = baseUrl.includes('?') ? '&' : '?';
+                              // Dark theme colors matching the site design
+                              const params = [
+                                'bgcolor=%230f0f23',     // Dark background matching site
+                                'color=%239333ea',       // Purple accent for events
+                                'showTitle=0',           // Hide title for cleaner look
+                                'showNav=1',             // Show navigation
+                                'showPrint=0',           // Hide print
+                                'showTabs=0',            // Hide tabs for cleaner look
+                                'showCalendars=0',       // Hide calendar list
+                                'showTz=0',              // Hide timezone (cleaner)
+                                'mode=WEEK',             // Week view by default
+                              ].join('&');
+                              return `${baseUrl}${separator}${params}`;
+                            })()}
                             className="w-full h-full border-0 rounded-lg"
                             frameBorder="0"
                             scrolling="no"
