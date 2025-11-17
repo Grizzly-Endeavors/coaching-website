@@ -57,23 +57,36 @@ export async function GET(request: NextRequest) {
         id: true,
         email: true,
         discordTag: true,
-        replayCode: true,
+        coachingType: true,
         rank: true,
         role: true,
         hero: true,
-        notes: true,
         status: true,
         reviewNotes: true,
         reviewUrl: true,
         submittedAt: true,
         reviewedAt: true,
+        replays: {
+          select: {
+            code: true,
+            mapName: true,
+            notes: true,
+          },
+        },
       },
     });
 
+    // Transform the data to include replayCode and notes for backward compatibility
+    const transformedSubmissions = submissions.map(submission => ({
+      ...submission,
+      replayCode: submission.replays[0]?.code || '',
+      notes: submission.replays[0]?.notes || '',
+    }));
+
     return NextResponse.json({
       success: true,
-      count: submissions.length,
-      submissions,
+      count: transformedSubmissions.length,
+      submissions: transformedSubmissions,
     });
   } catch (error) {
     console.error('Error fetching submissions:', error);

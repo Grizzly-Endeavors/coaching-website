@@ -32,7 +32,7 @@ export default function SubmissionNotification({
     <Html>
       <Head />
       <Preview>
-        New replay submission from {submissionDetails.rank} {submissionDetails.role} - {submissionDetails.replays.length} replays
+        New replay submission from {submissionDetails.rank} {submissionDetails.role} - {String(submissionDetails.replays.length)} replays
       </Preview>
       <Body style={main}>
         <Container style={container}>

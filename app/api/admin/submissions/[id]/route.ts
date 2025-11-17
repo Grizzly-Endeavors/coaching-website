@@ -37,16 +37,22 @@ export async function GET(
         id: true,
         email: true,
         discordTag: true,
-        replayCode: true,
+        coachingType: true,
         rank: true,
         role: true,
         hero: true,
-        notes: true,
         status: true,
         reviewNotes: true,
         reviewUrl: true,
         submittedAt: true,
         reviewedAt: true,
+        replays: {
+          select: {
+            code: true,
+            mapName: true,
+            notes: true,
+          },
+        },
       },
     });
 
@@ -57,9 +63,16 @@ export async function GET(
       );
     }
 
+    // Transform the data to include replayCode and notes for backward compatibility
+    const transformedSubmission = {
+      ...submission,
+      replayCode: submission.replays[0]?.code || '',
+      notes: submission.replays[0]?.notes || '',
+    };
+
     return NextResponse.json({
       success: true,
-      submission,
+      submission: transformedSubmission,
     });
   } catch (error) {
     console.error('Error fetching submission:', error);
@@ -151,35 +164,48 @@ export async function PATCH(
         id: true,
         email: true,
         discordTag: true,
-        replayCode: true,
+        coachingType: true,
         rank: true,
         role: true,
         hero: true,
-        notes: true,
         status: true,
         reviewNotes: true,
         reviewUrl: true,
         submittedAt: true,
         reviewedAt: true,
+        replays: {
+          select: {
+            code: true,
+            mapName: true,
+            notes: true,
+          },
+        },
       },
     });
+
+    // Transform the data to include replayCode and notes for backward compatibility
+    const transformedSubmission = {
+      ...updatedSubmission,
+      replayCode: updatedSubmission.replays[0]?.code || '',
+      notes: updatedSubmission.replays[0]?.notes || '',
+    };
 
     // Send email if requested and status is COMPLETED
     let emailSent = false;
     if (
       validatedData.sendEmail &&
-      updatedSubmission.status === SubmissionStatus.COMPLETED
+      transformedSubmission.status === SubmissionStatus.COMPLETED
     ) {
-      const emailResult = await sendReviewReady(updatedSubmission.email, {
-        id: updatedSubmission.id,
-        email: updatedSubmission.email,
-        replayCode: updatedSubmission.replayCode,
-        rank: updatedSubmission.rank,
-        role: updatedSubmission.role,
-        hero: updatedSubmission.hero,
-        reviewNotes: updatedSubmission.reviewNotes,
-        reviewUrl: updatedSubmission.reviewUrl,
-        reviewedAt: updatedSubmission.reviewedAt,
+      const emailResult = await sendReviewReady(transformedSubmission.email, {
+        id: transformedSubmission.id,
+        email: transformedSubmission.email,
+        replayCode: transformedSubmission.replayCode,
+        rank: transformedSubmission.rank,
+        role: transformedSubmission.role,
+        hero: transformedSubmission.hero,
+        reviewNotes: transformedSubmission.reviewNotes,
+        reviewUrl: transformedSubmission.reviewUrl,
+        reviewedAt: transformedSubmission.reviewedAt,
       });
 
       emailSent = emailResult.success;
@@ -191,7 +217,7 @@ export async function PATCH(
 
     return NextResponse.json({
       success: true,
-      submission: updatedSubmission,
+      submission: transformedSubmission,
       emailSent,
     });
   } catch (error) {
