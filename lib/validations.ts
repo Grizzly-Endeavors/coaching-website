@@ -4,24 +4,8 @@ import { z } from 'zod';
  * Validation schemas for API endpoints
  */
 
-// Replay code submission schema
-export const replaySubmissionSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  discordTag: z.string().optional(),
-  replayCode: z
-    .string()
-    .min(1, 'Replay code is required')
-    .max(20, 'Replay code is too long')
-    .regex(/^[A-Z0-9]+$/, 'Replay code must contain only uppercase letters and numbers'),
-  rank: z.string().min(1, 'Rank is required'),
-  role: z.enum(['Tank', 'DPS', 'Support'], {
-    errorMap: () => ({ message: 'Role must be Tank, DPS, or Support' }),
-  }),
-  hero: z.string().optional(),
-  notes: z.string().max(1000, 'Notes must be less than 1000 characters').optional(),
-});
-
-export type ReplaySubmissionInput = z.infer<typeof replaySubmissionSchema>;
+// Import the main replay submission schema from booking validations
+export { replaySubmissionSchema, type ReplaySubmissionData as ReplaySubmissionInput } from './validations/booking';
 
 // Contact form schema
 export const contactFormSchema = z.object({

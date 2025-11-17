@@ -12,6 +12,7 @@ const querySchema = z.object({
   status: z.nativeEnum(SubmissionStatus).optional(),
   sort: z.enum(['submittedAt', 'reviewedAt', 'status']).optional().default('submittedAt'),
   order: z.enum(['asc', 'desc']).optional().default('desc'),
+  search: z.string().optional(), // Search by submission ID or email
 });
 
 /**
@@ -23,6 +24,7 @@ const querySchema = z.object({
  * - status: Filter by submission status (PENDING, IN_PROGRESS, COMPLETED, ARCHIVED)
  * - sort: Sort field (submittedAt, reviewedAt, status) - default: submittedAt
  * - order: Sort order (asc, desc) - default: desc
+ * - search: Search by submission ID or email
  *
  * Requires authentication
  */
@@ -37,14 +39,23 @@ export async function GET(request: NextRequest) {
       status: searchParams.get('status') || undefined,
       sort: searchParams.get('sort') || undefined,
       order: searchParams.get('order') || undefined,
+      search: searchParams.get('search') || undefined,
     };
 
     const validatedParams = querySchema.parse(queryParams);
 
     // Build query filter
-    const where: { status?: SubmissionStatus } = {};
+    const where: any = {};
     if (validatedParams.status) {
       where.status = validatedParams.status;
+    }
+
+    // Add search filter for ID or email
+    if (validatedParams.search) {
+      where.OR = [
+        { id: { contains: validatedParams.search, mode: 'insensitive' } },
+        { email: { contains: validatedParams.search, mode: 'insensitive' } },
+      ];
     }
 
     // Fetch submissions from database
@@ -53,27 +64,44 @@ export async function GET(request: NextRequest) {
       orderBy: {
         [validatedParams.sort]: validatedParams.order,
       },
+      include: {
+        replays: {
+          select: {
+            id: true,
+            code: true,
+            mapName: true,
+            notes: true,
+          },
+        },
+      },
       select: {
         id: true,
         email: true,
         discordTag: true,
-        replayCode: true,
+        coachingType: true,
         rank: true,
         role: true,
         hero: true,
-        notes: true,
         status: true,
         reviewNotes: true,
         reviewUrl: true,
         submittedAt: true,
         reviewedAt: true,
+        replays: true,
       },
     });
 
+    // Transform the data to include replayCode and notes for backward compatibility
+    const transformedSubmissions = submissions.map(submission => ({
+      ...submission,
+      replayCode: submission.replays[0]?.code || '',
+      notes: submission.replays[0]?.notes || '',
+    }));
+
     return NextResponse.json({
       success: true,
-      count: submissions.length,
-      submissions,
+      count: transformedSubmissions.length,
+      submissions: transformedSubmissions,
     });
   } catch (error) {
     console.error('Error fetching submissions:', error);

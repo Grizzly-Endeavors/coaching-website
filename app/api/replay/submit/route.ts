@@ -6,17 +6,21 @@ import { ZodError } from 'zod';
 
 /**
  * POST /api/replay/submit
- * Submit a replay code for review
+ * Submit replay codes for review
  *
  * Request body:
  * {
  *   email: string,
  *   discordTag?: string,
- *   replayCode: string,
+ *   coachingType: "review-async" | "vod-review" | "live-coaching",
  *   rank: string,
  *   role: "Tank" | "DPS" | "Support",
  *   hero?: string,
- *   notes?: string
+ *   replays: Array<{
+ *     code: string,
+ *     mapName: string,
+ *     notes?: string
+ *   }>
  * }
  *
  * Response: 201 Created
@@ -37,32 +41,41 @@ export async function POST(request: NextRequest) {
     // Consider using a rate limiting middleware or service like Upstash Redis
     // to prevent spam submissions from the same IP or email
 
-    // Create replay submission in database
+    // Create replay submission in database with nested replay codes
     const submission = await prisma.replaySubmission.create({
       data: {
         email: validatedData.email,
         discordTag: validatedData.discordTag || null,
-        replayCode: validatedData.replayCode.toUpperCase(), // Normalize to uppercase
+        coachingType: validatedData.coachingType,
         rank: validatedData.rank,
         role: validatedData.role,
         hero: validatedData.hero || null,
-        notes: validatedData.notes || null,
         status: 'PENDING',
+        replays: {
+          create: validatedData.replays.map((replay) => ({
+            code: replay.code.toUpperCase(), // Normalize to uppercase
+            mapName: replay.mapName,
+            notes: replay.notes || null,
+          })),
+        },
+      },
+      include: {
+        replays: true,
       },
     });
 
-    console.log(`New replay submission created: ${submission.id}`);
+    console.log(`New replay submission created: ${submission.id} with ${submission.replays.length} replays`);
 
     // Send confirmation email to submitter (non-blocking)
     sendSubmissionConfirmation(submission.email, {
       id: submission.id,
       email: submission.email,
       discordTag: submission.discordTag,
-      replayCode: submission.replayCode,
+      coachingType: submission.coachingType,
       rank: submission.rank,
       role: submission.role,
       hero: submission.hero,
-      notes: submission.notes,
+      replays: submission.replays,
       submittedAt: submission.submittedAt,
     })
       .then((result) => {
@@ -83,11 +96,11 @@ export async function POST(request: NextRequest) {
         id: submission.id,
         email: submission.email,
         discordTag: submission.discordTag,
-        replayCode: submission.replayCode,
+        coachingType: submission.coachingType,
         rank: submission.rank,
         role: submission.role,
         hero: submission.hero,
-        notes: submission.notes,
+        replays: submission.replays,
         submittedAt: submission.submittedAt,
       })
         .then((result) => {

@@ -12,20 +12,27 @@ import {
   AdminLoading,
 } from '@/components/admin';
 
+interface ReplayCode {
+  id: string;
+  code: string;
+  mapName: string;
+  notes: string | null;
+}
+
 interface Submission {
   id: string;
   email: string;
   discordTag: string | null;
-  replayCode: string;
+  coachingType: string;
   rank: string;
   role: string;
   hero: string | null;
-  notes: string | null;
   status: string;
   reviewNotes: string | null;
   reviewUrl: string | null;
   submittedAt: string;
   reviewedAt: string | null;
+  replays: ReplayCode[];
 }
 
 export default function SubmissionDetailPage({ params }: { params: { id: string } }) {
@@ -40,6 +47,7 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
   const [reviewNotes, setReviewNotes] = useState('');
   const [reviewUrl, setReviewUrl] = useState('');
   const [sendEmail, setSendEmail] = useState(false);
+  const [copiedId, setCopiedId] = useState(false);
 
   useEffect(() => {
     fetchSubmission();
@@ -117,6 +125,27 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
     }
   }
 
+  function copySubmissionId() {
+    if (submission) {
+      navigator.clipboard.writeText(submission.id);
+      setCopiedId(true);
+      setTimeout(() => setCopiedId(false), 2000);
+    }
+  }
+
+  const getCoachingTypeName = (type: string) => {
+    switch (type) {
+      case 'review-async':
+        return 'Review on My Time';
+      case 'vod-review':
+        return 'VOD Review';
+      case 'live-coaching':
+        return 'Live Coaching';
+      default:
+        return type;
+    }
+  };
+
   if (loading) {
     return <AdminLoading message="Loading submission details..." />;
   }
@@ -142,7 +171,24 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-[#e5e7eb] mb-2">Submission Details</h1>
-            <p className="text-[#9ca3af]">Review and manage replay submission</p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={copySubmissionId}
+                className="group flex items-center gap-2 text-[#9ca3af] hover:text-[#8b5cf6] transition-colors"
+                title="Click to copy"
+              >
+                <code className="text-sm font-mono bg-[#0f0f23] px-3 py-1 rounded border border-[#2a2a40] group-hover:border-[#8b5cf6]">
+                  ID: {submission.id}
+                </code>
+                {copiedId ? (
+                  <span className="text-xs text-green-400">Copied!</span>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
           <AdminBadge variant={(submission.status || 'pending').toLowerCase() as any}>
             {submission.status || 'Pending'}
@@ -157,6 +203,10 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
             <h2 className="text-lg font-bold text-[#e5e7eb] mb-4">Submission Info</h2>
             <div className="space-y-4">
               <div>
+                <label className="text-sm text-[#9ca3af] block mb-1">Coaching Type</label>
+                <p className="text-[#e5e7eb]">{getCoachingTypeName(submission.coachingType)}</p>
+              </div>
+              <div>
                 <label className="text-sm text-[#9ca3af] block mb-1">Email</label>
                 <p className="text-[#e5e7eb] break-words">{submission.email}</p>
               </div>
@@ -166,12 +216,6 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
                   <p className="text-[#e5e7eb]">{submission.discordTag}</p>
                 </div>
               )}
-              <div>
-                <label className="text-sm text-[#9ca3af] block mb-1">Replay Code</label>
-                <code className="block px-3 py-2 bg-[#0f0f23] rounded text-[#8b5cf6] font-mono">
-                  {submission.replayCode}
-                </code>
-              </div>
               <div>
                 <label className="text-sm text-[#9ca3af] block mb-1">Rank</label>
                 <p className="text-[#e5e7eb]">{submission.rank}</p>
@@ -215,12 +259,39 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
             </div>
           </div>
 
-          {submission.notes && (
-            <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6">
-              <h2 className="text-lg font-bold text-[#e5e7eb] mb-4">Player Notes</h2>
-              <p className="text-[#9ca3af] whitespace-pre-wrap">{submission.notes}</p>
+          {/* Replay Codes */}
+          <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6">
+            <h2 className="text-lg font-bold text-[#e5e7eb] mb-4">
+              Replay Codes ({submission.replays.length})
+            </h2>
+            <div className="space-y-4">
+              {submission.replays.map((replay, index) => (
+                <div key={replay.id} className="bg-[#0f0f23] border border-[#2a2a40] rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-[#9ca3af]">Replay {index + 1}</span>
+                  </div>
+                  <div className="space-y-2">
+                    <div>
+                      <label className="text-xs text-[#9ca3af] block mb-1">Code</label>
+                      <code className="block px-3 py-2 bg-[#1a1a2e] rounded text-[#8b5cf6] font-mono text-sm">
+                        {replay.code}
+                      </code>
+                    </div>
+                    <div>
+                      <label className="text-xs text-[#9ca3af] block mb-1">Map</label>
+                      <p className="text-[#e5e7eb] text-sm">{replay.mapName}</p>
+                    </div>
+                    {replay.notes && (
+                      <div>
+                        <label className="text-xs text-[#9ca3af] block mb-1">Player Notes</label>
+                        <p className="text-[#9ca3af] text-sm whitespace-pre-wrap">{replay.notes}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
         </div>
 
         {/* Review Form */}

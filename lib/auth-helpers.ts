@@ -1,4 +1,4 @@
-import { hash, compare } from 'bcrypt';
+import { hash, compare } from 'bcryptjs';
 import { auth } from './auth';
 import { redirect } from 'next/navigation';
 

@@ -15,15 +15,21 @@ const FROM_EMAIL = 'coaching@yourdomain.com'; // Update with your verified domai
 const FROM_NAME = 'Overwatch Coaching';
 
 // Types for email function parameters
+export interface ReplayCodeDetails {
+  code: string;
+  mapName: string;
+  notes?: string | null;
+}
+
 export interface SubmissionDetails {
   id: string;
   email: string;
   discordTag?: string | null;
-  replayCode: string;
+  coachingType: string;
   rank: string;
   role: string;
   hero?: string | null;
-  notes?: string | null;
+  replays: ReplayCodeDetails[];
   submittedAt: Date;
 }
 

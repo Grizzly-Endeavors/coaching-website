@@ -32,14 +32,14 @@ export default function SubmissionNotification({
     <Html>
       <Head />
       <Preview>
-        New replay submission from {submissionDetails.rank} {submissionDetails.role}
+        New replay submission from {submissionDetails.rank} {submissionDetails.role} - {String(submissionDetails.replays.length)} replays
       </Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={header}>
             <Heading style={h1}>🎮 New Replay Submission</Heading>
             <Text style={subtitle}>
-              {submissionDetails.rank} {submissionDetails.role}
+              {submissionDetails.rank} {submissionDetails.role} - {submissionDetails.replays.length} {submissionDetails.replays.length === 1 ? 'Replay' : 'Replays'}
             </Text>
           </Section>
 
@@ -63,8 +63,12 @@ export default function SubmissionNotification({
                     <td style={detailValue}>{submissionDetails.id}</td>
                   </tr>
                   <tr>
-                    <td style={detailLabel}>Replay Code:</td>
-                    <td style={highlightValue}>{submissionDetails.replayCode}</td>
+                    <td style={detailLabel}>Coaching Type:</td>
+                    <td style={detailValue}>
+                      {submissionDetails.coachingType === 'review-async' && 'Review on My Time'}
+                      {submissionDetails.coachingType === 'vod-review' && 'VOD Review'}
+                      {submissionDetails.coachingType === 'live-coaching' && 'Live Coaching'}
+                    </td>
                   </tr>
                   <tr>
                     <td style={detailLabel}>Email:</td>
@@ -96,15 +100,39 @@ export default function SubmissionNotification({
                   </tr>
                 </tbody>
               </table>
+            </Section>
 
-              {submissionDetails.notes && (
-                <>
+            <Section style={infoBox}>
+              <Heading as="h2" style={h2}>
+                Replay Codes ({submissionDetails.replays.length})
+              </Heading>
+              <Hr style={divider} />
+
+              {submissionDetails.replays.map((replay, index) => (
+                <Section key={index} style={replayItem}>
                   <Heading as="h3" style={h3}>
-                    Player Notes:
+                    Replay {index + 1}
                   </Heading>
-                  <Text style={notesText}>{submissionDetails.notes}</Text>
-                </>
-              )}
+                  <table style={detailsTable}>
+                    <tbody>
+                      <tr>
+                        <td style={detailLabel}>Code:</td>
+                        <td style={highlightValue}>{replay.code}</td>
+                      </tr>
+                      <tr>
+                        <td style={detailLabel}>Map:</td>
+                        <td style={detailValue}>{replay.mapName}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {replay.notes && (
+                    <>
+                      <Text style={detailLabel}>Player Notes:</Text>
+                      <Text style={notesText}>{replay.notes}</Text>
+                    </>
+                  )}
+                </Section>
+              ))}
             </Section>
 
             <Section style={actionSection}>
@@ -272,6 +300,13 @@ const notesText = {
   padding: '12px',
   borderRadius: '6px',
   margin: '8px 0 0 0',
+};
+
+const replayItem = {
+  backgroundColor: '#1a1a2e',
+  borderRadius: '6px',
+  padding: '16px',
+  margin: '12px 0',
 };
 
 const actionSection = {

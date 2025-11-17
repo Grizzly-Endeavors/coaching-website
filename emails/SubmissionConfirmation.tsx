@@ -50,8 +50,12 @@ export default function SubmissionConfirmation({
               <table style={detailsTable}>
                 <tbody>
                   <tr>
-                    <td style={detailLabel}>Replay Code:</td>
-                    <td style={detailValue}>{submissionDetails.replayCode}</td>
+                    <td style={detailLabel}>Coaching Type:</td>
+                    <td style={detailValue}>
+                      {submissionDetails.coachingType === 'review-async' && 'Review on My Time'}
+                      {submissionDetails.coachingType === 'vod-review' && 'VOD Review'}
+                      {submissionDetails.coachingType === 'live-coaching' && 'Live Coaching'}
+                    </td>
                   </tr>
                   <tr>
                     <td style={detailLabel}>Rank:</td>
@@ -79,15 +83,39 @@ export default function SubmissionConfirmation({
                   </tr>
                 </tbody>
               </table>
+            </Section>
 
-              {submissionDetails.notes && (
-                <>
+            <Section style={infoBox}>
+              <Heading as="h2" style={h2}>
+                Replay Codes ({submissionDetails.replays.length})
+              </Heading>
+              <Hr style={divider} />
+
+              {submissionDetails.replays.map((replay, index) => (
+                <Section key={index} style={replayItem}>
                   <Heading as="h3" style={h3}>
-                    Your Notes:
+                    Replay {index + 1}
                   </Heading>
-                  <Text style={notesText}>{submissionDetails.notes}</Text>
-                </>
-              )}
+                  <table style={detailsTable}>
+                    <tbody>
+                      <tr>
+                        <td style={detailLabel}>Code:</td>
+                        <td style={highlightValue}>{replay.code}</td>
+                      </tr>
+                      <tr>
+                        <td style={detailLabel}>Map:</td>
+                        <td style={detailValue}>{replay.mapName}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {replay.notes && (
+                    <>
+                      <Text style={detailLabel}>Notes:</Text>
+                      <Text style={notesText}>{replay.notes}</Text>
+                    </>
+                  )}
+                </Section>
+              ))}
             </Section>
 
             <Section style={nextSteps}>
@@ -220,6 +248,21 @@ const notesText = {
   padding: '12px',
   borderRadius: '6px',
   margin: '8px 0 0 0',
+};
+
+const highlightValue = {
+  color: '#a78bfa',
+  fontSize: '16px',
+  padding: '8px 0',
+  fontWeight: '700',
+  fontFamily: 'monospace',
+};
+
+const replayItem = {
+  backgroundColor: '#1a1a2e',
+  borderRadius: '6px',
+  padding: '16px',
+  margin: '12px 0',
 };
 
 const nextSteps = {
