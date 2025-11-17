@@ -88,7 +88,7 @@ async function main() {
     }
 
     // Get name from command line args or prompt (optional)
-    let name = process.argv[4];
+    let name: string | null = process.argv[4];
     if (!name) {
       name = await prompt('Name (optional, press Enter to skip): ');
     }

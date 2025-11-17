@@ -144,7 +144,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
             {/* Mobile CTA Buttons */}
             <div className="mt-4 flex flex-col gap-2 px-4">
               <Link href="/booking" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button variant="ghost" size="md" className="w-full">
+                <Button variant="outline" size="md" className="w-full">
                   Submit Replay
                 </Button>
               </Link>

@@ -154,7 +154,7 @@ export default function ContactPage() {
                       variant="primary"
                       size="lg"
                       className="w-full"
-                      isLoading={isSubmitting}
+                      loading={isSubmitting}
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? 'Sending...' : 'Send Message'}

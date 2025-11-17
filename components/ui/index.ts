@@ -14,7 +14,7 @@ export type { SelectProps, SelectOption } from './Select';
 
 // Textarea
 export { default as Textarea } from './Textarea';
-export type { TextareaProps } from './Textarea';
+export type { TextAreaProps } from './Textarea';
 
 // Card
 export {

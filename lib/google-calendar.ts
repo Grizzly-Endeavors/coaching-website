@@ -48,21 +48,21 @@ import { OAuth2Client } from 'google-auth-library';
 export interface CalendarEvent {
   id: string;
   summary: string;
-  description?: string;
+  description?: string | null;
   start: {
     dateTime: string;
-    timeZone?: string;
+    timeZone?: string | null;
   };
   end: {
     dateTime: string;
-    timeZone?: string;
+    timeZone?: string | null;
   };
   attendees?: Array<{
     email: string;
-    displayName?: string;
-    responseStatus?: string;
+    displayName?: string | null;
+    responseStatus?: string | null;
   }>;
-  status?: string;
+  status?: string | null;
 }
 
 export interface CreateBookingParams {
@@ -197,7 +197,7 @@ export async function fetchUpcomingBookings(
       .map((event) => ({
         id: event.id!,
         summary: event.summary || 'Untitled Event',
-        description: event.description,
+        description: event.description || undefined,
         start: {
           dateTime: event.start!.dateTime!,
           timeZone: event.start!.timeZone,

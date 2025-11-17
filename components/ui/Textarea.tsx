@@ -3,52 +3,94 @@ import React from 'react';
 /**
  * TextArea component props interface
  */
-export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+export interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   /** TextArea label */
   label?: string;
   /** Error message */
   error?: string;
   /** Helper text */
   helperText?: string;
+  /** Full width textarea */
+  fullWidth?: boolean;
 }
 
 /**
  * Multi-line text input component with label and error state
  *
  * @example
- * <Textarea
+ * <TextArea
  *   label="Additional Notes"
  *   placeholder="Tell us more..."
  *   rows={5}
  *   error={errors.notes}
  * />
  */
-const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ label, error, helperText, className = '', ...props }, ref) => {
+const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
+  ({ label, error, helperText, fullWidth = true, className = '', id, rows = 4, ...props }, ref) => {
+    // Generate ID if not provided (for accessibility)
+    const textareaId = id || `textarea-${label?.toLowerCase().replace(/\s+/g, '-')}`;
+
+    const textareaClassName = `
+      ${fullWidth ? 'w-full' : ''}
+      bg-background-elevated
+      border ${error ? 'border-status-error' : 'border-border'}
+      rounded-lg
+      px-4 py-3
+      text-text-primary
+      placeholder:text-text-muted
+      focus:outline-none
+      focus:ring-2
+      ${error ? 'focus:ring-status-error' : 'focus:ring-purple-primary'}
+      focus:border-transparent
+      transition-all
+      resize-vertical
+      min-h-[120px]
+      disabled:opacity-50
+      disabled:cursor-not-allowed
+      ${className}
+    `.trim();
+
     return (
-      <div className="w-full">
+      <div className={fullWidth ? 'w-full' : ''}>
         {label && (
-          <label className="block text-text-primary font-medium mb-2">
+          <label
+            htmlFor={textareaId}
+            className="block text-text-primary font-medium mb-2"
+          >
             {label}
-            {props.required && <span className="text-status-error ml-1">*</span>}
           </label>
         )}
         <textarea
           ref={ref}
-          className={`w-full input-field min-h-[120px] resize-vertical ${error ? 'border-status-error' : ''} ${className}`}
+          id={textareaId}
+          rows={rows}
+          className={textareaClassName}
+          aria-invalid={!!error}
+          aria-describedby={error ? `${textareaId}-error` : helperText ? `${textareaId}-helper` : undefined}
           {...props}
         />
         {error && (
-          <p className="mt-1 text-sm text-status-error">{error}</p>
+          <p
+            id={`${textareaId}-error`}
+            className="mt-2 text-sm text-status-error"
+            role="alert"
+          >
+            {error}
+          </p>
         )}
         {!error && helperText && (
-          <p className="mt-1 text-sm text-text-secondary">{helperText}</p>
+          <p
+            id={`${textareaId}-helper`}
+            className="mt-2 text-sm text-text-secondary"
+          >
+            {helperText}
+          </p>
         )}
       </div>
     );
   }
 );
 
-Textarea.displayName = 'Textarea';
+TextArea.displayName = 'TextArea';
 
-export default Textarea;
+export default TextArea;

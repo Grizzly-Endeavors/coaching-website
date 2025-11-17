@@ -97,7 +97,7 @@ export async function syncEventToDatabase(
     const scheduledAt = new Date(event.start.dateTime);
     const sessionType = event.summary || 'Coaching Session';
     const notes = event.description || null;
-    const status = mapEventStatusToBookingStatus(event.status);
+    const status = mapEventStatusToBookingStatus(event.status || undefined);
 
     // Check if booking already exists
     const existingBooking = await prisma.booking.findUnique({

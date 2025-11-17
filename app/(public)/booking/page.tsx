@@ -383,7 +383,7 @@ export default function BookingPage() {
                       variant="primary"
                       size="lg"
                       className="w-full"
-                      isLoading={isSubmitting}
+                      loading={isSubmitting}
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? 'Submitting...' : 'Submit Replay Code'}

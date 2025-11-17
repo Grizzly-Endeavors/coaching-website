@@ -107,7 +107,7 @@ export default async function HomePage() {
                   </li>
                 </ul>
                 <Link href="/services">
-                  <Button variant="ghost" size="sm" className="w-full">
+                  <Button variant="outline" size="sm" className="w-full">
                     Learn More
                   </Button>
                 </Link>
@@ -149,7 +149,7 @@ export default async function HomePage() {
                   </li>
                 </ul>
                 <Link href="/services">
-                  <Button variant="ghost" size="sm" className="w-full">
+                  <Button variant="outline" size="sm" className="w-full">
                     Learn More
                   </Button>
                 </Link>
@@ -191,7 +191,7 @@ export default async function HomePage() {
                   </li>
                 </ul>
                 <Link href="/services">
-                  <Button variant="ghost" size="sm" className="w-full">
+                  <Button variant="outline" size="sm" className="w-full">
                     Learn More
                   </Button>
                 </Link>
@@ -382,7 +382,7 @@ export default async function HomePage() {
                       </div>
                     )}
                     <Link href={`/blog/${post.slug}`}>
-                      <Button variant="ghost" size="sm" className="w-full">
+                      <Button variant="outline" size="sm" className="w-full">
                         Read More
                       </Button>
                     </Link>

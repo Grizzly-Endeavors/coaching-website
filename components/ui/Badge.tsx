@@ -60,11 +60,11 @@ export const getStatusBadgeVariant = (status: string): BadgeProps['variant'] => 
     PENDING: 'pending',
     IN_PROGRESS: 'in_progress',
     COMPLETED: 'completed',
-    SCHEDULED: 'default',
+    SCHEDULED: 'purple',
     CANCELLED: 'error',
     NO_SHOW: 'warning',
-    ARCHIVED: 'default',
+    ARCHIVED: 'purple',
   };
 
-  return statusMap[status] || 'default';
+  return statusMap[status] || 'purple';
 };

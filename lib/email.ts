@@ -228,7 +228,7 @@ export async function sendContactFormEmail(
       subject,
       react: ContactForm({ contactDetails }),
       // Set reply-to as the contact's email for easy responses
-      replyTo: contactDetails.email,
+      reply_to: contactDetails.email,
     });
 
     if (error) {
