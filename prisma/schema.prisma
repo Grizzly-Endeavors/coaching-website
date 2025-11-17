@@ -1,0 +1,111 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Replay code submissions
+model ReplaySubmission {
+  id          String   @id @default(cuid())
+  email       String
+  discordTag  String?  @map("discord_tag")
+  replayCode  String   @map("replay_code")
+  rank        String   // e.g., "Gold 3", "Diamond 1"
+  role        String   // Tank, DPS, Support
+  hero        String?  // Specific hero played
+  notes       String?  @db.Text
+  status      SubmissionStatus @default(PENDING)
+  reviewNotes String?  @map("review_notes") @db.Text
+  reviewUrl   String?  @map("review_url") // Link to review video
+  submittedAt DateTime @default(now()) @map("submitted_at")
+  reviewedAt  DateTime? @map("reviewed_at")
+
+  @@map("replay_submissions")
+}
+
+enum SubmissionStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+// Calendar bookings synced from Google Calendar
+model Booking {
+  id            String   @id @default(cuid())
+  email         String
+  googleEventId String   @unique @map("google_event_id")
+  sessionType   String   @map("session_type") // e.g., "1-on-1 Coaching", "VOD Review"
+  scheduledAt   DateTime @map("scheduled_at")
+  status        BookingStatus @default(SCHEDULED)
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("bookings")
+}
+
+enum BookingStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+// Blog posts
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String   @db.Text // Markdown content
+  excerpt     String?
+  tags        String[] // Array of tags
+  published   Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  publishedAt DateTime? @map("published_at")
+
+  @@map("blog_posts")
+}
+
+// Admin users
+model Admin {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // Hashed with bcrypt
+  name      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  @@map("admins")
+}
+
+// Email notification log (optional but recommended)
+model EmailLog {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  type      EmailType
+  status    EmailStatus
+  sentAt    DateTime @default(now()) @map("sent_at")
+  error     String?
+
+  @@map("email_logs")
+}
+
+enum EmailType {
+  SUBMISSION_RECEIVED
+  REVIEW_READY
+  BOOKING_CONFIRMED
+  BOOKING_REMINDER
+}
+
+enum EmailStatus {
+  SENT
+  FAILED
+  PENDING
+}

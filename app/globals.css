@@ -1,0 +1,508 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* CSS Custom Properties for Design System */
+:root {
+  /* Backgrounds */
+  --bg-primary: #0f0f23;
+  --bg-surface: #1a1a2e;
+  --bg-elevated: #2a2a40;
+
+  /* Purple Accents */
+  --purple-primary: #8b5cf6;
+  --purple-hover: #a78bfa;
+  --purple-glow: rgba(139, 92, 246, 0.3);
+
+  /* Text */
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+
+  /* Status Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+
+  /* Borders */
+  --border-color: #2a2a40;
+
+  /* Spacing */
+  --content-max-width: 1280px;
+  --section-padding: 4rem;
+}
+
+@layer base {
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background-primary text-text-primary antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Headings with consistent styling */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight text-text-primary;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl lg:text-3xl;
+  }
+
+  h5 {
+    @apply text-lg md:text-xl lg:text-2xl;
+  }
+
+  h6 {
+    @apply text-base md:text-lg lg:text-xl;
+  }
+
+  p {
+    @apply leading-relaxed text-text-secondary;
+  }
+
+  /* Links with purple accent and smooth transitions */
+  a {
+    @apply text-purple-primary transition-all duration-200 hover:text-purple-hover;
+  }
+
+  /* Inline code styling with monospace font */
+  code {
+    @apply font-mono bg-background-elevated px-1.5 py-0.5 rounded text-sm text-purple-300;
+  }
+
+  /* Pre-formatted code blocks */
+  pre {
+    @apply bg-background-elevated rounded-lg p-4 overflow-x-auto my-4;
+  }
+
+  pre code {
+    @apply bg-transparent p-0 text-text-primary;
+  }
+
+  /* Blockquotes */
+  blockquote {
+    @apply border-l-4 border-purple-primary pl-4 italic text-text-secondary my-4;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    @apply list-inside my-4 text-text-secondary;
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+
+  li {
+    @apply mb-2;
+  }
+
+  /* Tables */
+  table {
+    @apply w-full border-collapse my-4;
+  }
+
+  th {
+    @apply bg-background-surface text-text-primary font-semibold p-3 text-left border border-border;
+  }
+
+  td {
+    @apply p-3 border border-border text-text-secondary;
+  }
+
+  /* Horizontal rule */
+  hr {
+    @apply border-border my-8;
+  }
+
+  /* Focus states */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply outline-none ring-2 ring-purple-primary ring-offset-2 ring-offset-background-primary;
+  }
+
+  /* Selection styling */
+  ::selection {
+    @apply bg-purple-primary/30 text-text-primary;
+  }
+}
+
+@layer components {
+  /* Primary button with purple glow effect */
+  .btn-primary {
+    @apply bg-purple-primary hover:bg-purple-hover text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-purple-glow active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    box-shadow: 0 0 25px var(--purple-glow);
+  }
+
+  /* Secondary button with border */
+  .btn-secondary {
+    @apply bg-background-elevated hover:bg-background-elevated/80 text-text-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 border border-border hover:border-purple-primary/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Outline button */
+  .btn-outline {
+    @apply bg-transparent hover:bg-purple-primary/10 text-purple-primary border-2 border-purple-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Card component with hover effect */
+  .card {
+    @apply bg-background-surface border border-border rounded-lg p-6 transition-all duration-200 hover:border-purple-primary/50 hover:shadow-purple-glow/20;
+  }
+
+  /* Card with elevated effect */
+  .card-elevated {
+    @apply card bg-background-elevated shadow-lg;
+  }
+
+  /* Form input field */
+  .input {
+    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Textarea field */
+  .textarea {
+    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all resize-vertical min-h-[120px] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Select dropdown */
+  .select {
+    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  /* Form label */
+  .label {
+    @apply block text-text-primary font-medium mb-2 text-sm;
+  }
+
+  /* Error message */
+  .error-message {
+    @apply text-status-error text-sm mt-1;
+  }
+
+  /* Glow effect utility */
+  .glow-effect {
+    box-shadow: 0 0 20px var(--purple-glow);
+  }
+
+  .glow-effect-lg {
+    box-shadow: 0 0 30px var(--purple-glow);
+  }
+
+  .glow-effect-xl {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.5);
+  }
+
+  /* Status badges */
+  .status-badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
+  }
+
+  .status-pending {
+    @apply status-badge bg-status-warning/10 text-status-warning border border-status-warning/20;
+  }
+
+  .status-in-progress {
+    @apply status-badge bg-purple-primary/10 text-purple-primary border border-purple-primary/20;
+  }
+
+  .status-completed {
+    @apply status-badge bg-status-success/10 text-status-success border border-status-success/20;
+  }
+
+  .status-error {
+    @apply status-badge bg-status-error/10 text-status-error border border-status-error/20;
+  }
+
+  .status-archived {
+    @apply status-badge bg-text-muted/10 text-text-muted border border-text-muted/20;
+  }
+
+  /* Section container */
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16;
+  }
+
+  /* Replay code display */
+  .replay-code {
+    @apply font-mono text-lg tracking-wider bg-background-elevated px-4 py-2 rounded border border-purple-primary/30 text-purple-300 inline-block;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    @apply animate-spin h-5 w-5 border-2 border-purple-primary border-t-transparent rounded-full;
+  }
+
+  /* Hero gradient background */
+  .hero-gradient {
+    background: linear-gradient(
+      135deg,
+      var(--bg-primary) 0%,
+      var(--bg-surface) 50%,
+      var(--bg-primary) 100%
+    );
+  }
+
+  /* Content max width container */
+  .content-container {
+    max-width: var(--content-max-width);
+    @apply mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@layer utilities {
+  /* Text utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Animation delays */
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Custom scrollbar */
+  .scrollbar-custom {
+    scrollbar-width: thin;
+    scrollbar-color: var(--purple-primary) var(--bg-elevated);
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: var(--bg-elevated);
+    border-radius: 4px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: var(--purple-primary);
+    border-radius: 4px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: var(--purple-hover);
+  }
+}
+
+/* Syntax highlighting for code blocks (highlight.js) */
+.hljs {
+  @apply bg-background-elevated rounded-lg p-4 overflow-x-auto scrollbar-custom;
+}
+
+.hljs-comment,
+.hljs-quote {
+  @apply text-text-muted italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-addition {
+  @apply text-purple-400;
+}
+
+.hljs-number,
+.hljs-string,
+.hljs-meta .hljs-meta-string,
+.hljs-literal,
+.hljs-doctag,
+.hljs-regexp {
+  @apply text-status-success;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  @apply text-purple-300;
+}
+
+.hljs-attribute,
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-class .hljs-title,
+.hljs-type {
+  @apply text-text-primary;
+}
+
+.hljs-symbol,
+.hljs-bullet,
+.hljs-subst,
+.hljs-meta,
+.hljs-meta .hljs-keyword,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-link {
+  @apply text-purple-200;
+}
+
+.hljs-built_in,
+.hljs-deletion {
+  @apply text-status-error;
+}
+
+.hljs-formula {
+  @apply bg-background-surface;
+}
+
+.hljs-emphasis {
+  @apply italic;
+}
+
+.hljs-strong {
+  @apply font-bold;
+}
+
+/* Additional animation utilities not in Tailwind config */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(139, 92, 246, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+}
+
+/* Skeleton loader */
+.skeleton {
+  @apply animate-shimmer bg-background-elevated rounded;
+}
+
+/* Page transitions */
+.page-transition {
+  @apply animate-fade-in;
+}
+
+/* Hover lift effect */
+.hover-lift {
+  @apply transition-transform duration-200 hover:-translate-y-1;
+}
+
+/* Interactive card effect */
+.interactive-card {
+  @apply card hover:scale-[1.02] transition-transform duration-200;
+}
+
+/* Focus ring for accessibility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-purple-primary focus:ring-offset-2 focus:ring-offset-background-primary;
+}
+
+/* Container queries support (if needed) */
+@supports (container-type: inline-size) {
+  .container-query {
+    container-type: inline-size;
+  }
+}
+
+/* Print styles */
+@media print {
+  body {
+    @apply bg-white text-black;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+
+  a {
+    @apply text-black underline;
+  }
+
+  .card {
+    @apply border border-gray-300;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
