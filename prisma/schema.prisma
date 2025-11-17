@@ -12,21 +12,35 @@ datasource db {
 
 // Replay code submissions
 model ReplaySubmission {
-  id          String   @id @default(cuid())
-  email       String
-  discordTag  String?  @map("discord_tag")
-  replayCode  String   @map("replay_code")
-  rank        String   // e.g., "Gold 3", "Diamond 1"
-  role        String   // Tank, DPS, Support
-  hero        String?  // Specific hero played
-  notes       String?  @db.Text
-  status      SubmissionStatus @default(PENDING)
-  reviewNotes String?  @map("review_notes") @db.Text
-  reviewUrl   String?  @map("review_url") // Link to review video
-  submittedAt DateTime @default(now()) @map("submitted_at")
-  reviewedAt  DateTime? @map("reviewed_at")
+  id           String   @id @default(cuid())
+  email        String
+  discordTag   String?  @map("discord_tag")
+  coachingType String   @map("coaching_type") // review-async, vod-review, live-coaching
+  rank         String   // e.g., "Gold", "Diamond"
+  role         String   // Tank, DPS, Support
+  hero         String?  // Specific hero played
+  status       SubmissionStatus @default(PENDING)
+  reviewNotes  String?  @map("review_notes") @db.Text
+  reviewUrl    String?  @map("review_url") // Link to review video
+  submittedAt  DateTime @default(now()) @map("submitted_at")
+  reviewedAt   DateTime? @map("reviewed_at")
+
+  replays      ReplayCode[] // One-to-many relationship
 
   @@map("replay_submissions")
+}
+
+// Individual replay codes
+model ReplayCode {
+  id           String   @id @default(cuid())
+  code         String   // The replay code
+  mapName      String   @map("map_name") // Map where the game was played
+  notes        String?  @db.Text // Player's notes for this specific replay
+
+  submissionId String   @map("submission_id")
+  submission   ReplaySubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@map("replay_codes")
 }
 
 enum SubmissionStatus {

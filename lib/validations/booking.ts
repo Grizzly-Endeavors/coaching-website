@@ -1,27 +1,40 @@
 import { z } from 'zod';
 
-// Rank options for Overwatch
+// Rank options for Overwatch (consolidated tiers)
 export const rankOptions = [
-  'Bronze 5', 'Bronze 4', 'Bronze 3', 'Bronze 2', 'Bronze 1',
-  'Silver 5', 'Silver 4', 'Silver 3', 'Silver 2', 'Silver 1',
-  'Gold 5', 'Gold 4', 'Gold 3', 'Gold 2', 'Gold 1',
-  'Platinum 5', 'Platinum 4', 'Platinum 3', 'Platinum 2', 'Platinum 1',
-  'Diamond 5', 'Diamond 4', 'Diamond 3', 'Diamond 2', 'Diamond 1',
-  'Master 5', 'Master 4', 'Master 3', 'Master 2', 'Master 1',
-  'Grandmaster 5', 'Grandmaster 4', 'Grandmaster 3', 'Grandmaster 2', 'Grandmaster 1',
+  'Bronze',
+  'Silver',
+  'Gold',
+  'Platinum',
+  'Diamond',
+  'Master',
+  'Grandmaster',
   'Top 500',
 ] as const;
 
 export const roleOptions = ['Tank', 'DPS', 'Support'] as const;
 
-// Replay code validation schema
-export const replaySubmissionSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-  discordTag: z.string().optional(),
-  replayCode: z.string()
+export const coachingTypes = ['review-async', 'vod-review', 'live-coaching'] as const;
+
+// Individual replay code schema
+export const replayCodeSchema = z.object({
+  code: z.string()
     .min(6, 'Replay code must be at least 6 characters')
     .max(10, 'Replay code is too long')
     .regex(/^[A-Z0-9]+$/, 'Replay code must contain only uppercase letters and numbers'),
+  mapName: z.string()
+    .min(2, 'Map name is required')
+    .max(100, 'Map name is too long'),
+  notes: z.string().max(500, 'Notes are too long (max 500 characters)').optional(),
+});
+
+// Replay submission schema with multiple codes
+export const replaySubmissionSchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  discordTag: z.string().optional(),
+  coachingType: z.enum(coachingTypes, {
+    errorMap: () => ({ message: 'Please select a coaching type' }),
+  }),
   rank: z.enum(rankOptions, {
     errorMap: () => ({ message: 'Please select your rank' }),
   }),
@@ -29,9 +42,12 @@ export const replaySubmissionSchema = z.object({
     errorMap: () => ({ message: 'Please select your role' }),
   }),
   hero: z.string().min(2, 'Please specify which hero you played').max(50, 'Hero name is too long').optional(),
-  notes: z.string().max(500, 'Notes are too long (max 500 characters)').optional(),
+  replays: z.array(replayCodeSchema)
+    .min(1, 'At least one replay code is required')
+    .max(5, 'Maximum 5 replay codes allowed'),
 });
 
 export type ReplaySubmissionData = z.infer<typeof replaySubmissionSchema>;
+export type ReplayCodeData = z.infer<typeof replayCodeSchema>;
 
 export const replayCodeRegex = /^[A-Z0-9]{6,10}$/;
