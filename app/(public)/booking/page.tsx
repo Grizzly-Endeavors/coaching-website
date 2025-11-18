@@ -26,8 +26,13 @@ export default function GetCoachingPage() {
     rank: undefined,
     role: undefined,
     hero: '',
-    replays: [{ code: '', mapName: '', notes: '' }],
+    replays: [
+      { code: '', mapName: '', notes: '' },
+      { code: '', mapName: '', notes: '' },
+      { code: '', mapName: '', notes: '' },
+    ],
   });
+  const [generalNotes, setGeneralNotes] = useState<string>('');
   const [errors, setErrors] = useState<any>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -97,31 +102,6 @@ export default function GetCoachingPage() {
     }
   };
 
-  const addReplay = () => {
-    if ((formData.replays?.length || 0) < 5) {
-      setFormData((prev) => ({
-        ...prev,
-        replays: [...(prev.replays || []), { code: '', mapName: '', notes: '' }],
-      }));
-    }
-  };
-
-  const removeReplay = (index: number) => {
-    if ((formData.replays?.length || 0) > 1) {
-      const newReplays = formData.replays?.filter((_, i) => i !== index) || [];
-      setFormData((prev) => ({ ...prev, replays: newReplays }));
-
-      // Clear errors for removed replay
-      if (errors.replays?.[index]) {
-        const newErrors = { ...errors };
-        if (newErrors.replays) {
-          newErrors.replays = newErrors.replays.filter((_: any, i: number) => i !== index);
-        }
-        setErrors(newErrors);
-      }
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
@@ -135,8 +115,21 @@ export default function GetCoachingPage() {
       return;
     }
 
+    // Filter out empty replays (only include replays that have a code)
+    const filledReplays = (formData.replays || []).filter(replay => replay.code.trim() !== '');
+
+    // Add general notes to the first replay if it exists
+    if (filledReplays.length > 0 && generalNotes.trim()) {
+      filledReplays[0].notes = generalNotes.trim();
+    }
+
+    const dataToValidate = {
+      ...formData,
+      replays: filledReplays,
+    };
+
     // Validate form data
-    const result = replaySubmissionSchema.safeParse(formData);
+    const result = replaySubmissionSchema.safeParse(dataToValidate);
     if (!result.success) {
       const fieldErrors: any = {};
       result.error.errors.forEach((error) => {
@@ -164,7 +157,7 @@ export default function GetCoachingPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...formData,
+          ...dataToValidate,
           scheduledAt: selectedTimeSlot || undefined,
         }),
       });
@@ -403,90 +396,60 @@ export default function GetCoachingPage() {
                   />
 
                   {/* Replay Codes Section */}
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-lg font-semibold text-gray-100">
-                        Replay Codes <span className="text-red-500">*</span>
-                      </h3>
-                      <span className="text-sm text-gray-400">
-                        {formData.replays?.length || 0} / 5 replays
-                      </span>
-                    </div>
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-100">
+                      Replay Codes <span className="text-red-500">*</span>
+                    </h3>
 
                     {errors.replays && typeof errors.replays === 'string' && (
                       <p className="text-sm text-red-400">{errors.replays}</p>
                     )}
 
-                    {formData.replays?.map((replay, index) => (
-                      <div key={index} className="p-4 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg space-y-3">
-                        <div className="flex items-center justify-between">
-                          <h4 className="text-sm font-semibold text-gray-300">Replay {index + 1}</h4>
-                          {(formData.replays?.length || 0) > 1 && (
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => removeReplay(index)}
-                              disabled={isSubmitting}
-                              className="text-red-400 hover:text-red-300 hover:bg-red-400/10 h-7 px-2"
-                            >
-                              Remove
-                            </Button>
-                          )}
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="space-y-3">
+                      {[0, 1, 2].map((index) => (
+                        <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <Input
-                            label="Replay Code"
+                            label={index === 0 ? "Replay Code" : `Replay Code ${index + 1} (optional)`}
                             name={`replay-code-${index}`}
                             type="text"
-                            value={replay.code}
+                            value={formData.replays?.[index]?.code || ''}
                             onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
                             error={errors.replays?.[index]?.code}
-                            required
+                            required={index === 0}
                             placeholder="ABC123"
                             disabled={isSubmitting}
                             className="font-mono"
                           />
 
                           <Input
-                            label="Map Name"
+                            label={index === 0 ? "Map Name" : `Map Name ${index + 1} (optional)`}
                             name={`map-name-${index}`}
                             type="text"
-                            value={replay.mapName}
+                            value={formData.replays?.[index]?.mapName || ''}
                             onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
                             error={errors.replays?.[index]?.mapName}
-                            required
+                            required={index === 0}
                             placeholder="e.g., King's Row, Ilios"
                             disabled={isSubmitting}
                           />
                         </div>
+                      ))}
+                    </div>
+                  </div>
 
-                        <Input
-                          label="Notes (optional)"
-                          name={`notes-${index}`}
-                          inputType="textarea"
-                          rows={2}
-                          value={replay.notes}
-                          onChange={(e) => handleReplayChange(index, 'notes', e.target.value)}
-                          error={errors.replays?.[index]?.notes}
-                          placeholder="Any specific moments or questions?"
-                          disabled={isSubmitting}
-                        />
-                      </div>
-                    ))}
-
-                    {(formData.replays?.length || 0) < 5 && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={addReplay}
-                        disabled={isSubmitting}
-                        className="w-full"
-                      >
-                        + Add Another Replay
-                      </Button>
-                    )}
+                  {/* General Notes Section */}
+                  <div>
+                    <Input
+                      label="Notes for Coach"
+                      name="general-notes"
+                      inputType="textarea"
+                      rows={3}
+                      value={generalNotes}
+                      onChange={(e) => setGeneralNotes(e.target.value)}
+                      placeholder="Any specific moments or questions about your replays? What would you like to focus on?"
+                      disabled={isSubmitting}
+                      helperText="Optional - help me understand what you'd like to work on"
+                    />
                   </div>
 
                   {submitStatus === 'error' && (
@@ -643,90 +606,60 @@ export default function GetCoachingPage() {
               />
 
               {/* Replay Codes Section */}
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-100">
-                    Replay Codes <span className="text-red-500">*</span>
-                  </h3>
-                  <span className="text-sm text-gray-400">
-                    {formData.replays?.length || 0} / 5 replays
-                  </span>
-                </div>
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-100">
+                  Replay Codes <span className="text-red-500">*</span>
+                </h3>
 
                 {errors.replays && typeof errors.replays === 'string' && (
                   <p className="text-sm text-red-400">{errors.replays}</p>
                 )}
 
-                {formData.replays?.map((replay, index) => (
-                  <div key={index} className="p-4 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h4 className="text-sm font-semibold text-gray-300">Replay {index + 1}</h4>
-                      {(formData.replays?.length || 0) > 1 && (
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeReplay(index)}
-                          disabled={isSubmitting}
-                          className="text-red-400 hover:text-red-300 hover:bg-red-400/10 h-7 px-2"
-                        >
-                          Remove
-                        </Button>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-3">
+                  {[0, 1, 2].map((index) => (
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <Input
-                        label="Replay Code"
+                        label={index === 0 ? "Replay Code" : `Replay Code ${index + 1} (optional)`}
                         name={`replay-code-${index}`}
                         type="text"
-                        value={replay.code}
+                        value={formData.replays?.[index]?.code || ''}
                         onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
                         error={errors.replays?.[index]?.code}
-                        required
+                        required={index === 0}
                         placeholder="ABC123"
                         disabled={isSubmitting}
                         className="font-mono"
                       />
 
                       <Input
-                        label="Map Name"
+                        label={index === 0 ? "Map Name" : `Map Name ${index + 1} (optional)`}
                         name={`map-name-${index}`}
                         type="text"
-                        value={replay.mapName}
+                        value={formData.replays?.[index]?.mapName || ''}
                         onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
                         error={errors.replays?.[index]?.mapName}
-                        required
+                        required={index === 0}
                         placeholder="e.g., King's Row, Ilios"
                         disabled={isSubmitting}
                       />
                     </div>
+                  ))}
+                </div>
+              </div>
 
-                    <Input
-                      label="Notes (optional)"
-                      name={`notes-${index}`}
-                      inputType="textarea"
-                      rows={2}
-                      value={replay.notes}
-                      onChange={(e) => handleReplayChange(index, 'notes', e.target.value)}
-                      error={errors.replays?.[index]?.notes}
-                      placeholder="Any specific moments or questions?"
-                      disabled={isSubmitting}
-                    />
-                  </div>
-                ))}
-
-                {(formData.replays?.length || 0) < 5 && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={addReplay}
-                    disabled={isSubmitting}
-                    className="w-full"
-                  >
-                    + Add Another Replay
-                  </Button>
-                )}
+              {/* General Notes Section */}
+              <div>
+                <Input
+                  label="Notes for Coach"
+                  name="general-notes"
+                  inputType="textarea"
+                  rows={3}
+                  value={generalNotes}
+                  onChange={(e) => setGeneralNotes(e.target.value)}
+                  placeholder="Any specific moments or questions about your replays? What would you like to focus on?"
+                  disabled={isSubmitting}
+                  helperText="Optional - help me understand what you'd like to work on"
+                />
               </div>
 
               {submitStatus === 'error' && (

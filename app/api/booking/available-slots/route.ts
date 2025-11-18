@@ -29,11 +29,10 @@ export async function GET(req: NextRequest) {
     const dateInEST = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 0, 0, 0)
     const dayOfWeek = dateInEST.getDay() // 0 = Sunday, 6 = Saturday
 
-    // Get all active availability slots for this day of week and session type
+    // Get all active availability slots for this day of week (both session types)
     const availabilitySlots = await prisma.availabilitySlot.findMany({
       where: {
         dayOfWeek,
-        sessionType,
         isActive: true,
       },
     })
