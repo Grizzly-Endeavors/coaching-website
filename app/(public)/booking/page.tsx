@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -15,6 +15,7 @@ export default function GetCoachingPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const typeParam = searchParams.get('type') as CoachingType | null;
+  const formRef = useRef<HTMLFormElement>(null);
 
   const [selectedType, setSelectedType] = useState<CoachingType | null>(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
@@ -280,7 +281,7 @@ export default function GetCoachingPage() {
 
           {/* Replay Submission Form - Applied to all coaching types */}
           {selectedType && (
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-7xl mx-auto">
               <div className="mb-6">
                 <Button variant="outline" size="sm" onClick={handleBack}>
                   ← Back to Selection
@@ -303,11 +304,12 @@ export default function GetCoachingPage() {
 
               {/* For VOD Review and Live Coaching: Show form and time picker side-by-side */}
               {(selectedType === 'vod-review' || selectedType === 'live-coaching') ? (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
                   {/* Left column: Form */}
                   <div>
                     <Card variant="surface" padding="lg">
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                   {/* Contact Information */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <Input
@@ -499,30 +501,6 @@ export default function GetCoachingPage() {
                     </div>
                   )}
 
-                  {errors.timeSlot && (
-                    <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-                      <p className="text-red-400 font-medium">
-                        {errors.timeSlot}
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="pt-4">
-                    <Button
-                      type="submit"
-                      variant="primary"
-                      size="lg"
-                      className="w-full"
-                      loading={isSubmitting}
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? 'Processing...' : 'Continue to Payment'}
-                    </Button>
-                  </div>
-
-                  <p className="text-sm text-gray-400 text-center">
-                    By submitting, you agree to our terms of service and privacy policy
-                  </p>
                 </form>
               </Card>
             </div>
@@ -536,6 +514,42 @@ export default function GetCoachingPage() {
               />
             </div>
           </div>
+
+          {/* Error and Submit Section - Below both columns */}
+          <div className="max-w-2xl mx-auto space-y-4">
+            {submitStatus === 'error' && (
+              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-center">
+                <p className="text-red-400 font-medium">
+                  Failed to submit. Please try again or contact me directly.
+                </p>
+              </div>
+            )}
+
+            {errors.timeSlot && (
+              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-center">
+                <p className="text-red-400 font-medium">
+                  {errors.timeSlot}
+                </p>
+              </div>
+            )}
+
+            <Button
+              type="button"
+              variant="primary"
+              size="lg"
+              className="w-full"
+              loading={isSubmitting}
+              disabled={isSubmitting}
+              onClick={() => formRef.current?.requestSubmit()}
+            >
+              {isSubmitting ? 'Processing...' : 'Continue to Payment'}
+            </Button>
+
+            <p className="text-sm text-gray-400 text-center">
+              By submitting, you agree to our terms of service and privacy policy
+            </p>
+          </div>
+        </>
         ) : (
           /* For Review Async: Show only the form */
           <Card variant="surface" padding="lg">
