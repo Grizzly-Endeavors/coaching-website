@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth-helpers'
 import { prisma } from '@/lib/prisma'
 
 // DELETE /api/admin/availability/exceptions/[id] - Delete availability exception
@@ -9,10 +8,7 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    await requireAuth()
 
     // Check if exception exists
     const existingException = await prisma.availabilityException.findUnique({
@@ -46,6 +42,9 @@ export async function DELETE(
 
     return NextResponse.json({ success: true })
   } catch (error) {
+    if (error instanceof Error && error.message.includes('Unauthorized')) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
     console.error('Error deleting availability exception:', error)
     return NextResponse.json(
       { error: 'Failed to delete availability exception' },
