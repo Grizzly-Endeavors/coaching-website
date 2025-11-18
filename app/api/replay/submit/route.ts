@@ -41,11 +41,29 @@ export async function POST(request: NextRequest) {
     // Consider using a rate limiting middleware or service like Upstash Redis
     // to prevent spam submissions from the same IP or email
 
+    // Check for Discord OAuth data in cookies
+    let discordData = null;
+    const discordCookie = request.cookies.get('discord_user_data')?.value;
+    if (discordCookie) {
+      try {
+        discordData = JSON.parse(discordCookie);
+        console.log(`Discord OAuth data found for user: ${discordData.discordUsername}`);
+      } catch (error) {
+        console.error('Failed to parse Discord cookie data:', error);
+      }
+    }
+
     // Create replay submission in database with nested replay codes
     const submission = await prisma.replaySubmission.create({
       data: {
         email: validatedData.email,
         discordTag: validatedData.discordTag || null,
+        // Save Discord OAuth data if available
+        discordId: discordData?.discordId || null,
+        discordUsername: discordData?.discordUsername || null,
+        discordAccessToken: discordData?.discordAccessToken || null,
+        discordRefreshToken: discordData?.discordRefreshToken || null,
+        discordTokenExpiry: discordData?.discordTokenExpiry ? new Date(discordData.discordTokenExpiry) : null,
         coachingType: validatedData.coachingType,
         rank: validatedData.rank,
         role: validatedData.role,

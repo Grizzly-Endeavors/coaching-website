@@ -14,7 +14,15 @@ datasource db {
 model ReplaySubmission {
   id           String   @id @default(cuid())
   email        String
-  discordTag   String?  @map("discord_tag")
+  discordTag   String?  @map("discord_tag") // Deprecated: Use discordId instead
+
+  // Discord OAuth fields
+  discordId           String?   @map("discord_id") // Discord user ID from OAuth
+  discordUsername     String?   @map("discord_username") // Discord username for display
+  discordAccessToken  String?   @map("discord_access_token") @db.Text // OAuth access token (encrypted in app)
+  discordRefreshToken String?   @map("discord_refresh_token") @db.Text // OAuth refresh token (encrypted in app)
+  discordTokenExpiry  DateTime? @map("discord_token_expiry") // When the access token expires
+
   coachingType String   @map("coaching_type") // review-async, vod-review, live-coaching
   rank         String   // e.g., "Gold", "Diamond"
   role         String   // Tank, DPS, Support
