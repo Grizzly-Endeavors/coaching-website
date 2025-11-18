@@ -14,6 +14,7 @@ const nextConfig = {
     // Fix for bcrypt issues
     if (isServer) {
       config.externals.push('bcrypt');
+      config.externals.push('zlib-sync');
     }
 
     // Ignore problematic files from bcrypt dependencies

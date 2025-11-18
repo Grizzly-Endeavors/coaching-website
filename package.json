@@ -50,6 +50,7 @@
     "remark-gfm": "^4.0.0",
     "stripe": "^19.3.1",
     "tailwind-merge": "^2.3.0",
+    "zlib-sync": "^0.1.10",
     "zod": "^3.23.0"
   },
   "devDependencies": {
