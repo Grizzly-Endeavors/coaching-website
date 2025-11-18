@@ -1,13 +1,10 @@
-import { 
-  ReplaySubmission, 
-  Booking, 
-  BlogPost, 
-  Admin, 
-  EmailLog,
+import {
+  ReplaySubmission,
+  Booking,
+  BlogPost,
+  Admin,
   SubmissionStatus,
-  BookingStatus,
-  EmailType,
-  EmailStatus
+  BookingStatus
 } from '@prisma/client';
 
 // Re-export Prisma types
@@ -16,11 +13,8 @@ export type {
   Booking,
   BlogPost,
   Admin,
-  EmailLog,
   SubmissionStatus,
   BookingStatus,
-  EmailType,
-  EmailStatus,
 };
 
 // Custom types for API responses
@@ -72,7 +66,7 @@ export interface UpdateSubmissionData {
   status?: SubmissionStatus;
   reviewNotes?: string;
   reviewUrl?: string;
-  sendEmail?: boolean;
+  sendDiscordNotification?: boolean;
 }
 
 export interface UpdateBlogPostData {

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { replaySubmissionSchema } from '@/lib/validations';
-import { sendSubmissionConfirmation, sendSubmissionNotification } from '@/lib/email';
+import { sendVodRequestNotification } from '@/lib/discord';
 import { ZodError } from 'zod';
 
 /**
@@ -63,6 +63,16 @@ export async function POST(request: NextRequest) {
         },
         { status: 402 } // 402 Payment Required
       );
+    // Check for Discord OAuth data in cookies
+    let discordData = null;
+    const discordCookie = request.cookies.get('discord_user_data')?.value;
+    if (discordCookie) {
+      try {
+        discordData = JSON.parse(discordCookie);
+        console.log(`Discord OAuth data found for user: ${discordData.discordUsername}`);
+      } catch (error) {
+        console.error('Failed to parse Discord cookie data:', error);
+      }
     }
 
     // Create replay submission in database with nested replay codes
@@ -70,6 +80,12 @@ export async function POST(request: NextRequest) {
       data: {
         email: validatedData.email,
         discordTag: validatedData.discordTag || null,
+        // Save Discord OAuth data if available
+        discordId: discordData?.discordId || null,
+        discordUsername: discordData?.discordUsername || null,
+        discordAccessToken: discordData?.discordAccessToken || null,
+        discordRefreshToken: discordData?.discordRefreshToken || null,
+        discordTokenExpiry: discordData?.discordTokenExpiry ? new Date(discordData.discordTokenExpiry) : null,
         coachingType: validatedData.coachingType,
         rank: validatedData.rank,
         role: validatedData.role,
@@ -97,9 +113,8 @@ export async function POST(request: NextRequest) {
     });
 
     console.log(`Payment ${payment.id} linked to submission ${submission.id}`);
-
-    // Send confirmation email to submitter (non-blocking)
-    sendSubmissionConfirmation(submission.email, {
+    // Send Discord notification to admin (non-blocking)
+    sendVodRequestNotification({
       id: submission.id,
       email: submission.email,
       discordTag: submission.discordTag,
@@ -112,42 +127,14 @@ export async function POST(request: NextRequest) {
     })
       .then((result) => {
         if (result.success) {
-          console.log(`Confirmation email sent to ${submission.email}`);
+          console.log('Discord notification sent to admin');
         } else {
-          console.error(`Failed to send confirmation email: ${result.error}`);
+          console.error(`Failed to send Discord notification: ${result.error}`);
         }
       })
       .catch((error) => {
-        console.error('Error sending confirmation email:', error);
+        console.error('Error sending Discord notification:', error);
       });
-
-    // Send notification email to admin (non-blocking)
-    const adminEmail = process.env.ADMIN_EMAIL;
-    if (adminEmail) {
-      sendSubmissionNotification(adminEmail, {
-        id: submission.id,
-        email: submission.email,
-        discordTag: submission.discordTag,
-        coachingType: submission.coachingType,
-        rank: submission.rank,
-        role: submission.role,
-        hero: submission.hero,
-        replays: submission.replays,
-        submittedAt: submission.submittedAt,
-      })
-        .then((result) => {
-          if (result.success) {
-            console.log('Admin notification email sent');
-          } else {
-            console.error(`Failed to send admin notification: ${result.error}`);
-          }
-        })
-        .catch((error) => {
-          console.error('Error sending admin notification:', error);
-        });
-    } else {
-      console.warn('ADMIN_EMAIL not configured, skipping admin notification');
-    }
 
     // Return success response
     return NextResponse.json(
