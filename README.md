@@ -5,7 +5,7 @@ A professional Overwatch coaching platform built with Next.js 14, TypeScript, an
 ## Features
 
 - **Replay Code Submissions**: Players can submit replay codes for VOD reviews
-- **Google Calendar Integration**: Book coaching sessions directly
+- **Custom Appointment System**: Book coaching sessions with custom availability management
 - **Blog System**: Markdown-based blog with syntax highlighting
 - **Admin Panel**: Manage submissions, bookings, and blog posts
 - **Email Notifications**: Automated emails via Resend
@@ -106,10 +106,11 @@ The application uses a dark theme with purple accents:
 The application includes the following models:
 
 - **ReplaySubmission**: Replay code submissions from players
-- **Booking**: Google Calendar coaching appointments
+- **Booking**: Custom appointment bookings for coaching sessions
 - **BlogPost**: Markdown blog posts
 - **Admin**: Admin user accounts
-- **EmailLog**: Email notification tracking
+- **AvailabilitySlot**: Weekly recurring availability schedule
+- **AvailabilityException**: Specific date exceptions (bookings, blocked dates, holidays)
 
 See `prisma/schema.prisma` for the complete schema.
 

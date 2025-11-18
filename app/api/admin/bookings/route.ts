@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { BookingStatus } from '@prisma/client';
+import { logger } from '@/lib/logger';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -68,7 +69,6 @@ export async function GET(request: NextRequest) {
       select: {
         id: true,
         email: true,
-        googleEventId: true,
         sessionType: true,
         scheduledAt: true,
         status: true,
@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
       bookings: bookingsWithMeta,
     });
   } catch (error) {
-    console.error('Error fetching bookings:', error);
+    logger.error('Error fetching bookings', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {

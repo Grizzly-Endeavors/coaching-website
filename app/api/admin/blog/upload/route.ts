@@ -3,6 +3,7 @@ import { z } from 'zod';
 import matter from 'gray-matter';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 // Validation schema for frontmatter
 const frontmatterSchema = z.object({
@@ -154,7 +155,7 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error('Error uploading blog post:', error);
+    logger.error('Error uploading blog post', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { format, addDays } from 'date-fns'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Alert, AlertDescription } from '@/components/ui/Alert'
 import { Badge } from '@/components/ui/Badge'
 
 interface TimeSlot {

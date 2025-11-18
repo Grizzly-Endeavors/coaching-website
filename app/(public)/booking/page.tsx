@@ -5,8 +5,14 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { replaySubmissionSchema, type ReplaySubmissionData, type ReplayCodeData } from '@/lib/validations/booking';
-import { rankOptions, roleOptions, coachingTypes } from '@/lib/validations/booking';
+import {
+  replaySubmissionSchema,
+  type ReplaySubmissionData,
+  type ReplayCodeData,
+  rankOptions,
+  roleOptions,
+  coachingTypes
+} from '@/lib/validations';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 
 type CoachingType = typeof coachingTypes[number];

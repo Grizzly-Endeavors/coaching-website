@@ -3,13 +3,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
-  AdminButton,
   AdminTable,
   AdminTableRow,
   AdminTableCell,
-  AdminBadge,
-  AdminLoading,
 } from '@/components/admin';
+import { Button, Badge, Loading } from '@/components/ui';
 
 interface BlogPost {
   id: string;
@@ -95,12 +93,12 @@ export default function BlogPostsPage() {
         <div className="flex items-center justify-between mb-2">
           <h1 className="text-3xl font-bold text-[#e5e7eb]">Blog Posts</h1>
           <Link href="/admin/blog/new">
-            <AdminButton variant="primary">
+            <Button variant="primary">
               <span className="flex items-center space-x-2">
                 <span>+</span>
                 <span>Create New Post</span>
               </span>
-            </AdminButton>
+            </Button>
           </Link>
         </div>
         <p className="text-[#9ca3af]">Manage your blog posts and content</p>
@@ -143,7 +141,7 @@ export default function BlogPostsPage() {
       {/* Posts Table */}
       <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6">
         {loading ? (
-          <AdminLoading message="Loading blog posts..." />
+          <Loading size="lg" message="Loading blog posts..." />
         ) : filteredPosts.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-[#9ca3af] text-lg mb-2">No posts found</p>
@@ -154,7 +152,7 @@ export default function BlogPostsPage() {
             </p>
             {filter === 'all' && (
               <Link href="/admin/blog/new">
-                <AdminButton variant="primary">Create Your First Post</AdminButton>
+                <Button variant="primary">Create Your First Post</Button>
               </Link>
             )}
           </div>
@@ -169,9 +167,9 @@ export default function BlogPostsPage() {
                   </div>
                 </AdminTableCell>
                 <AdminTableCell>
-                  <AdminBadge variant={post.published ? 'completed' : 'pending'}>
+                  <Badge variant={post.published ? 'completed' : 'pending'}>
                     {post.published ? 'Published' : 'Draft'}
-                  </AdminBadge>
+                  </Badge>
                 </AdminTableCell>
                 <AdminTableCell>
                   <div className="flex flex-wrap gap-1 max-w-[200px]">

@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { replaySubmissionSchema } from '@/lib/validations';
 import { sendVodRequestNotification } from '@/lib/discord';
-import { ZodError } from 'zod';
+import { handleApiError } from '@/lib/api-error-handler';
+import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
+import { logger } from '@/lib/logger';
 
 /**
  * POST /api/replay/submit
@@ -31,6 +33,19 @@ import { ZodError } from 'zod';
  */
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting: 10 requests per hour per IP
+    const rateLimitOptions = {
+      maxRequests: 10,
+      windowMs: 60 * 60 * 1000, // 1 hour
+      message: 'Too many replay submissions. Please try again later.',
+    };
+
+    const rateLimitResult = await rateLimit(request, rateLimitOptions);
+
+    if (!rateLimitResult.success) {
+      return rateLimitResult.response!;
+    }
+
     // Parse request body
     const body = await request.json();
 
@@ -40,19 +55,18 @@ export async function POST(request: NextRequest) {
     // Extract optional scheduledAt for VOD/Live coaching
     const scheduledAt = body.scheduledAt ? new Date(body.scheduledAt) : null;
 
-    // TODO: Add rate limiting
-    // Consider using a rate limiting middleware or service like Upstash Redis
-    // to prevent spam submissions from the same IP or email
-
     // Check for Discord OAuth data in cookies
     let discordData = null;
     const discordCookie = request.cookies.get('discord_user_data')?.value;
     if (discordCookie) {
       try {
         discordData = JSON.parse(discordCookie);
-        console.log(`Discord OAuth data found for user: ${discordData.discordUsername}`);
+        logger.debug('Discord OAuth data found', {
+          discordUsername: discordData.discordUsername,
+          hasAccessToken: !!discordData.discordAccessToken,
+        });
       } catch (error) {
-        console.error('Failed to parse Discord cookie data:', error);
+        logger.error('Failed to parse Discord cookie data', error instanceof Error ? error : new Error(String(error)));
       }
     }
 
@@ -123,10 +137,18 @@ export async function POST(request: NextRequest) {
         },
       });
 
-      console.log(`Time slot blocked for booking: ${submission.booking.id} at ${scheduledAt}`);
+      logger.info('Time slot blocked for booking', {
+        bookingId: submission.booking.id,
+        scheduledAt: scheduledAt.toISOString(),
+      });
     }
 
-    console.log(`New replay submission created: ${submission.id} with ${submission.replays.length} replays`);
+    logger.info('New replay submission created', {
+      submissionId: submission.id,
+      replayCount: submission.replays.length,
+      coachingType: submission.coachingType,
+      hasBooking: !!submission.booking,
+    });
 
     // Send Discord notification to admin (non-blocking)
     sendVodRequestNotification({
@@ -142,14 +164,22 @@ export async function POST(request: NextRequest) {
     })
       .then((result) => {
         if (result.success) {
-          console.log('Discord notification sent to admin');
+          logger.info('Discord notification sent to admin', {
+            submissionId: submission.id,
+          });
         } else {
-          console.error(`Failed to send Discord notification: ${result.error}`);
+          logger.error('Failed to send Discord notification', {
+            submissionId: submission.id,
+            error: result.error,
+          });
         }
       })
       .catch((error) => {
-        console.error('Error sending Discord notification:', error);
+        logger.error('Error sending Discord notification', error instanceof Error ? error : new Error(String(error)));
       });
+
+    // Get rate limit headers
+    const rateLimitHeaders = getRateLimitHeaders(request, rateLimitOptions);
 
     // Return success response
     return NextResponse.json(
@@ -157,49 +187,12 @@ export async function POST(request: NextRequest) {
         success: true,
         submissionId: submission.id,
       },
-      { status: 201 }
+      {
+        status: 201,
+        headers: rateLimitHeaders,
+      }
     );
   } catch (error) {
-    console.error('Error in replay submission:', error);
-
-    // Handle Zod validation errors
-    if (error instanceof ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Validation error',
-          details: error.errors.map((err) => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
-        },
-        { status: 400 }
-      );
-    }
-
-    // Handle Prisma errors
-    if (error instanceof Error) {
-      // Check for database connection errors
-      if (error.message.includes('database') || error.message.includes('connection')) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Database error',
-            message: 'Unable to process submission. Please try again later.',
-          },
-          { status: 503 }
-        );
-      }
-    }
-
-    // Generic error response
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: 'An unexpected error occurred. Please try again later.',
-      },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

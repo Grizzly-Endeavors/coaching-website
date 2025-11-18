@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { handleApiError } from '@/lib/api-error-handler';
 
 /**
  * GET /api/payment/details
@@ -66,10 +67,6 @@ export async function GET(request: NextRequest) {
       submission: payment.submission,
     });
   } catch (error) {
-    console.error('Error fetching payment details:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch payment details' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

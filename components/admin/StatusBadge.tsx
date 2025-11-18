@@ -3,7 +3,12 @@
  *
  * Displays a colored badge for different submission and booking statuses
  * with appropriate styling for each status type.
+ *
+ * This component now uses the base Badge component from /components/ui/Badge.tsx
+ * and the getStatusBadgeVariant helper function.
  */
+
+import { Badge, getStatusBadgeVariant } from '@/components/ui/Badge';
 
 interface StatusBadgeProps {
   status: string;
@@ -16,30 +21,6 @@ interface StatusBadgeProps {
  * @param className - Optional additional CSS classes
  */
 export function StatusBadge({ status, className = '' }: StatusBadgeProps) {
-  // Normalize status to lowercase for consistent variant matching
-  const normalizedStatus = status.toLowerCase().replace('_', '');
-
-  const getVariantStyles = () => {
-    switch (normalizedStatus) {
-      case 'pending':
-        return 'bg-[#f59e0b]/10 text-[#f59e0b] border-[#f59e0b]/20';
-      case 'inprogress':
-        return 'bg-[#3b82f6]/10 text-[#3b82f6] border-[#3b82f6]/20';
-      case 'completed':
-        return 'bg-[#10b981]/10 text-[#10b981] border-[#10b981]/20';
-      case 'archived':
-        return 'bg-[#6b7280]/10 text-[#6b7280] border-[#6b7280]/20';
-      case 'scheduled':
-        return 'bg-[#8b5cf6]/10 text-[#8b5cf6] border-[#8b5cf6]/20';
-      case 'cancelled':
-        return 'bg-[#ef4444]/10 text-[#ef4444] border-[#ef4444]/20';
-      case 'noshow':
-        return 'bg-[#ef4444]/10 text-[#ef4444] border-[#ef4444]/20';
-      default:
-        return 'bg-[#2a2a40] text-[#9ca3af] border-[#2a2a40]';
-    }
-  };
-
   // Format status text for display (e.g., "IN_PROGRESS" -> "In Progress")
   const formatStatus = (str: string) => {
     return str
@@ -48,11 +29,12 @@ export function StatusBadge({ status, className = '' }: StatusBadgeProps) {
       .join(' ');
   };
 
+  // Get the appropriate badge variant based on the status
+  const variant = getStatusBadgeVariant(status);
+
   return (
-    <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getVariantStyles()} ${className}`}
-    >
+    <Badge variant={variant} className={className}>
       {formatStatus(status)}
-    </span>
+    </Badge>
   );
 }

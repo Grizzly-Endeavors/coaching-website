@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -13,11 +14,20 @@ export const dynamic = 'force-dynamic';
  *   tags: string[]
  * }
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // TODO: Add rate limiting
-    // TODO: Add caching layer (Redis or Next.js cache)
-    // Tags are relatively static and can be cached for improved performance
+    // Rate limiting: 100 requests per minute per IP
+    const rateLimitOptions = {
+      maxRequests: 100,
+      windowMs: 60 * 1000, // 1 minute
+      message: 'Too many requests. Please try again later.',
+    };
+
+    const rateLimitResult = await rateLimit(request, rateLimitOptions);
+
+    if (!rateLimitResult.success) {
+      return rateLimitResult.response!;
+    }
 
     // Fetch all published blog posts with their tags
     const posts = await prisma.blogPost.findMany({
@@ -42,6 +52,9 @@ export async function GET() {
       a.toLowerCase().localeCompare(b.toLowerCase())
     );
 
+    // Get rate limit headers
+    const rateLimitHeaders = getRateLimitHeaders(request, rateLimitOptions);
+
     // Return response
     return NextResponse.json(
       {
@@ -52,6 +65,7 @@ export async function GET() {
         headers: {
           // Cache for 5 minutes with stale-while-revalidate
           'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+          ...rateLimitHeaders,
         },
       }
     );

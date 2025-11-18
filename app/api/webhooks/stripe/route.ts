@@ -4,6 +4,7 @@ import { headers } from 'next/headers';
 import Stripe from 'stripe';
 import { stripe } from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -19,7 +20,7 @@ export async function POST(req: NextRequest) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
   if (!webhookSecret) {
-    console.error('STRIPE_WEBHOOK_SECRET is not set');
+    logger.error('STRIPE_WEBHOOK_SECRET is not set');
     return NextResponse.json(
       { error: 'Webhook secret not configured' },
       { status: 500 }
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
-    console.error('Webhook signature verification failed:', err);
+    logger.error('Webhook signature verification failed', err instanceof Error ? err : new Error(String(err)));
     return NextResponse.json(
       { error: 'Invalid signature' },
       { status: 400 }
@@ -65,12 +66,14 @@ export async function POST(req: NextRequest) {
       }
 
       default:
-        console.log(`Unhandled event type: ${event.type}`);
+        logger.debug('Unhandled Stripe webhook event type', {
+          eventType: event.type,
+        });
     }
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Webhook handler error:', error);
+    logger.error('Webhook handler error', error instanceof Error ? error : new Error(String(error)));
     return NextResponse.json(
       { error: 'Webhook handler failed' },
       { status: 500 }
@@ -79,7 +82,10 @@ export async function POST(req: NextRequest) {
 }
 
 async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) {
-  console.log('Checkout session completed:', session.id);
+  logger.info('Checkout session completed', {
+    sessionId: session.id,
+    paymentStatus: session.payment_status,
+  });
 
   // Update payment status
   await prisma.payment.update({
@@ -92,7 +98,11 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 }
 
 async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent) {
-  console.log('Payment intent succeeded:', paymentIntent.id);
+  logger.info('Payment intent succeeded', {
+    paymentIntentId: paymentIntent.id,
+    amount: paymentIntent.amount,
+    currency: paymentIntent.currency,
+  });
 
   // Update payment status to succeeded and fetch related data
   const payment = await prisma.payment.update({
@@ -107,7 +117,10 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
     },
   });
 
-  console.log('Payment updated successfully:', payment.id);
+  logger.info('Payment updated successfully', {
+    paymentId: payment.id,
+    hasSubmission: !!payment.submission,
+  });
 
   // If payment is linked to a submission, update submission and booking status
   if (payment.submission) {
@@ -116,7 +129,9 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
       data: { status: 'PAYMENT_RECEIVED' },
     });
 
-    console.log(`Submission ${payment.submission.id} status updated to PAYMENT_RECEIVED`);
+    logger.info('Submission status updated to PAYMENT_RECEIVED', {
+      submissionId: payment.submission.id,
+    });
 
     // If submission has a booking, confirm it
     if (payment.submission.booking) {
@@ -125,13 +140,18 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
         data: { status: 'CONFIRMED' },
       });
 
-      console.log(`Booking ${payment.submission.booking.id} status updated to CONFIRMED`);
+      logger.info('Booking status updated to CONFIRMED', {
+        bookingId: payment.submission.booking.id,
+      });
     }
   }
 }
 
 async function handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
-  console.log('Payment intent failed:', paymentIntent.id);
+  logger.warn('Payment intent failed', {
+    paymentIntentId: paymentIntent.id,
+    failureReason: paymentIntent.last_payment_error?.message,
+  });
 
   // Update payment status to failed and fetch related data
   const payment = await prisma.payment.update({
@@ -146,7 +166,10 @@ async function handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
     },
   });
 
-  console.log('Payment failed:', payment.id);
+  logger.info('Payment marked as failed', {
+    paymentId: payment.id,
+    hasSubmission: !!payment.submission,
+  });
 
   // If payment is linked to a submission, update submission and booking status
   if (payment.submission) {
@@ -155,7 +178,9 @@ async function handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
       data: { status: 'PAYMENT_FAILED' },
     });
 
-    console.log(`Submission ${payment.submission.id} status updated to PAYMENT_FAILED`);
+    logger.info('Submission status updated to PAYMENT_FAILED', {
+      submissionId: payment.submission.id,
+    });
 
     // If submission has a booking, cancel it and free up the slot
     if (payment.submission.booking) {
@@ -165,7 +190,9 @@ async function handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
         data: { status: 'CANCELLED' },
       });
 
-      console.log(`Booking ${payment.submission.booking.id} status updated to CANCELLED`);
+      logger.info('Booking status updated to CANCELLED', {
+        bookingId: payment.submission.booking.id,
+      });
 
       // Delete the availability exception to free up the time slot
       await prisma.availabilityException.deleteMany({
@@ -175,13 +202,19 @@ async function handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
         },
       });
 
-      console.log(`Time slot freed for cancelled booking: ${payment.submission.booking.id}`);
+      logger.info('Time slot freed for cancelled booking', {
+        bookingId: payment.submission.booking.id,
+      });
     }
   }
 }
 
 async function handleChargeRefunded(charge: Stripe.Charge) {
-  console.log('Charge refunded:', charge.id);
+  logger.info('Charge refunded', {
+    chargeId: charge.id,
+    amount: charge.amount_refunded,
+    currency: charge.currency,
+  });
 
   // Find payment by payment intent ID
   if (charge.payment_intent) {

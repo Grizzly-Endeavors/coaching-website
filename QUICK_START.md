@@ -190,11 +190,6 @@ DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your-secret-here"
 
-# Google Calendar (for booking integration)
-GOOGLE_CALENDAR_CLIENT_ID="your-client-id"
-GOOGLE_CALENDAR_CLIENT_SECRET="your-client-secret"
-GOOGLE_CALENDAR_CALENDAR_ID="your-calendar-id@group.calendar.google.com"
-
 # Resend (for emails)
 RESEND_API_KEY="re_your_api_key"
 
@@ -226,7 +221,6 @@ ADMIN_EMAIL="your-email@example.com"
    - Markdown rendering with syntax highlighting
 
 5. **Integrate External Services**
-   - Google Calendar API for bookings
    - Resend for email notifications
    - Cloudflare Tunnel for deployment
 

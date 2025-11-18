@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 // Validation schema for PATCH request body
 const updateSchema = z.object({
@@ -62,7 +63,7 @@ export async function GET(
       post,
     });
   } catch (error) {
-    console.error('Error fetching blog post:', error);
+    logger.error('Error fetching blog post', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {
@@ -206,7 +207,7 @@ export async function PATCH(
       post: updatedPost,
     });
   } catch (error) {
-    console.error('Error updating blog post:', error);
+    logger.error('Error updating blog post', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {
@@ -275,7 +276,7 @@ export async function DELETE(
       message: 'Blog post deleted successfully',
     });
   } catch (error) {
-    console.error('Error deleting blog post:', error);
+    logger.error('Error deleting blog post', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {

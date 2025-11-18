@@ -13,6 +13,7 @@
 
 import { Client, GatewayIntentBits, Events } from 'discord.js';
 import { prisma } from './prisma';
+import { logger } from './logger';
 
 interface SubmissionDetails {
   id: string;
@@ -100,13 +101,15 @@ async function getDiscordClient(): Promise<Client> {
       // Wait for client to be ready
       await new Promise<void>((resolve, reject) => {
         discordClient!.once(Events.ClientReady, () => {
-          console.log(`Discord bot logged in as ${discordClient!.user?.tag}`);
+          logger.info('Discord bot logged in', {
+            botTag: discordClient!.user?.tag,
+          });
           isClientReady = true;
           resolve();
         });
 
         discordClient!.once(Events.Error, (error) => {
-          console.error('Discord client error:', error);
+          logger.error('Discord client error', error);
           reject(error);
         });
 
@@ -150,7 +153,7 @@ export async function sendVodRequestNotification(
     const adminDiscordId = process.env.ADMIN_DISCORD_USER_ID;
 
     if (!adminDiscordId) {
-      console.warn('ADMIN_DISCORD_USER_ID not configured, skipping Discord notification');
+      logger.warn('ADMIN_DISCORD_USER_ID not configured, skipping Discord notification');
       return { success: false, error: 'ADMIN_DISCORD_USER_ID not configured' };
     }
 
@@ -191,10 +194,12 @@ ${replayList}
 
     await user.send(message);
 
-    console.log(`Discord notification sent to admin for submission ${details.id}`);
+    logger.info('Discord notification sent to admin', {
+      submissionId: details.id,
+    });
     return { success: true };
   } catch (error) {
-    console.error('Error sending Discord notification:', error);
+    logger.error('Error sending Discord notification', error instanceof Error ? error : new Error(String(error)));
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -285,7 +290,7 @@ async function sendDMViaOAuth(
 
     return { success: true };
   } catch (error) {
-    console.error('Error sending OAuth DM:', error);
+    logger.error('Error sending OAuth DM', error instanceof Error ? error : new Error(String(error)));
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -320,13 +325,15 @@ Thank you for submitting your replay! If you have any questions, feel free to re
 
     // PRIORITY 1: Try OAuth method if user has connected Discord via OAuth
     if (details.discordId && details.discordAccessToken && details.discordRefreshToken) {
-      console.log(`Attempting OAuth DM to ${details.discordUsername || details.discordId}`);
+      logger.debug('Attempting OAuth DM', {
+        discordUsername: details.discordUsername || details.discordId,
+      });
 
       let accessToken = details.discordAccessToken;
 
       // Check if token is expired and refresh if needed
       if (details.discordTokenExpiry && new Date() > details.discordTokenExpiry) {
-        console.log('Access token expired, refreshing...');
+        logger.debug('Access token expired, refreshing...');
         try {
           const newTokens = await refreshDiscordToken(details.discordRefreshToken);
           accessToken = newTokens.access_token;
@@ -341,9 +348,9 @@ Thank you for submitting your replay! If you have any questions, feel free to re
             },
           });
 
-          console.log('Token refreshed successfully');
+          logger.debug('Token refreshed successfully');
         } catch (refreshError) {
-          console.error('Failed to refresh token:', refreshError);
+          logger.error('Failed to refresh token', refreshError instanceof Error ? refreshError : new Error(String(refreshError)));
           // Token refresh failed, fall through to bot method
         }
       }
@@ -352,16 +359,20 @@ Thank you for submitting your replay! If you have any questions, feel free to re
       const oauthResult = await sendDMViaOAuth(details.discordId, message, accessToken);
 
       if (oauthResult.success) {
-        console.log(`OAuth DM sent successfully to ${details.discordUsername || details.discordId}`);
+        logger.info('OAuth DM sent successfully', {
+          discordUsername: details.discordUsername || details.discordId,
+        });
         return { success: true };
       } else {
-        console.log(`OAuth DM failed: ${oauthResult.error}, falling back to bot method`);
+        logger.warn('OAuth DM failed, falling back to bot method', {
+          error: oauthResult.error,
+        });
       }
     }
 
     // PRIORITY 2: Fall back to bot method if OAuth not available or failed
     if (details.discordTag) {
-      console.log('Attempting bot DM (fallback method)');
+      logger.debug('Attempting bot DM (fallback method)');
 
       // Parse Discord tag to get user ID
       const discordUserId = details.discordTag.replace(/[<@!>]/g, ''); // Remove mention markers if present
@@ -372,7 +383,10 @@ Thank you for submitting your replay! If you have any questions, feel free to re
       try {
         user = await client.users.fetch(discordUserId);
       } catch (error) {
-        console.error(`Failed to fetch Discord user ${discordUserId}:`, error);
+        logger.error('Failed to fetch Discord user', {
+          discordUserId,
+          error: error instanceof Error ? error.message : String(error),
+        });
         return {
           success: false,
           error: `Could not find Discord user. Please ensure the user has connected their Discord account or is in a server with the bot.`,
@@ -381,18 +395,21 @@ Thank you for submitting your replay! If you have any questions, feel free to re
 
       await user.send(message);
 
-      console.log(`Bot DM sent to ${details.discordTag} for submission ${details.id}`);
+      logger.info('Bot DM sent', {
+        discordTag: details.discordTag,
+        submissionId: details.id,
+      });
       return { success: true };
     }
 
     // No Discord connection method available
-    console.log('No Discord connection available for user');
+    logger.debug('No Discord connection available for user');
     return {
       success: false,
       error: 'User has not connected Discord account',
     };
   } catch (error) {
-    console.error('Error sending Discord notification to user:', error);
+    logger.error('Error sending Discord notification to user', error instanceof Error ? error : new Error(String(error)));
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
@@ -410,6 +427,6 @@ export async function shutdownDiscordClient(): Promise<void> {
     discordClient = null;
     isClientReady = false;
     clientInitPromise = null;
-    console.log('Discord client shut down');
+    logger.info('Discord client shut down');
   }
 }

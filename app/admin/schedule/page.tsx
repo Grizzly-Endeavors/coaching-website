@@ -5,11 +5,8 @@ import {
   AdminTable,
   AdminTableRow,
   AdminTableCell,
-  AdminBadge,
-  AdminSelect,
-  AdminButton,
-  AdminLoading,
 } from '@/components/admin';
+import { Badge, Button, Loading } from '@/components/ui';
 
 type BookingStatus = 'ALL' | 'SCHEDULED' | 'COMPLETED' | 'CANCELLED' | 'NO_SHOW';
 
@@ -20,7 +17,6 @@ interface Booking {
   scheduledAt: string;
   status: string;
   notes: string | null;
-  googleEventId: string;
 }
 
 export default function SchedulePage() {
@@ -97,18 +93,18 @@ export default function SchedulePage() {
       <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 mb-6">
         <div className="flex flex-wrap items-end gap-4">
           <div className="flex-1 min-w-[200px]">
-            <AdminSelect
-              label="Filter by Status"
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Filter by Status</label>
+            <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as BookingStatus)}
-              options={[
-                { value: 'ALL', label: 'All Bookings' },
-                { value: 'SCHEDULED', label: 'Scheduled' },
-                { value: 'COMPLETED', label: 'Completed' },
-                { value: 'CANCELLED', label: 'Cancelled' },
-                { value: 'NO_SHOW', label: 'No Show' },
-              ]}
-            />
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all appearance-none"
+            >
+              <option value="ALL">All Bookings</option>
+              <option value="SCHEDULED">Scheduled</option>
+              <option value="COMPLETED">Completed</option>
+              <option value="CANCELLED">Cancelled</option>
+              <option value="NO_SHOW">No Show</option>
+            </select>
           </div>
           <div className="text-[#9ca3af] text-sm">
             {filteredBookings.length} booking{filteredBookings.length !== 1 ? 's' : ''}
@@ -119,15 +115,15 @@ export default function SchedulePage() {
             rel="noopener noreferrer"
             className="ml-auto"
           >
-            <AdminButton variant="secondary" size="sm">
+            <Button variant="secondary" size="sm">
               Open Google Calendar →
-            </AdminButton>
+            </Button>
           </a>
         </div>
       </div>
 
       {loading ? (
-        <AdminLoading message="Loading bookings..." />
+        <Loading size="lg" message="Loading bookings..." />
       ) : (
         <div className="space-y-6">
           {/* Upcoming Bookings */}
@@ -168,9 +164,9 @@ export default function SchedulePage() {
                     </AdminTableCell>
                     <AdminTableCell>{booking.sessionType}</AdminTableCell>
                     <AdminTableCell>
-                      <AdminBadge variant={booking.status.toLowerCase() as any}>
+                      <Badge variant={booking.status.toLowerCase() as any}>
                         {booking.status}
-                      </AdminBadge>
+                      </Badge>
                     </AdminTableCell>
                     <AdminTableCell>
                       <div className="max-w-[150px] truncate text-[#9ca3af] text-sm">
@@ -239,9 +235,9 @@ export default function SchedulePage() {
                     </AdminTableCell>
                     <AdminTableCell>{booking.sessionType}</AdminTableCell>
                     <AdminTableCell>
-                      <AdminBadge variant={booking.status.toLowerCase() as any}>
+                      <Badge variant={booking.status.toLowerCase() as any}>
                         {booking.status}
-                      </AdminBadge>
+                      </Badge>
                     </AdminTableCell>
                     <AdminTableCell>
                       <div className="max-w-[150px] truncate text-[#9ca3af] text-sm">
