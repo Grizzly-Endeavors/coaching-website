@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Find payment by session ID
+    // Find payment by session ID with submission and booking details
     const payment = await prisma.payment.findUnique({
       where: {
         stripeSessionId: sessionId,
@@ -36,6 +36,19 @@ export async function GET(request: NextRequest) {
         coachingType: true,
         customerEmail: true,
         status: true,
+        submission: {
+          select: {
+            id: true,
+            booking: {
+              select: {
+                id: true,
+                scheduledAt: true,
+                sessionType: true,
+                status: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -50,6 +63,7 @@ export async function GET(request: NextRequest) {
       coachingType: payment.coachingType,
       email: payment.customerEmail,
       status: payment.status,
+      submission: payment.submission,
     });
   } catch (error) {
     console.error('Error fetching payment details:', error);

@@ -37,6 +37,9 @@ export async function POST(request: NextRequest) {
     // Validate request body with Zod
     const validatedData = replaySubmissionSchema.parse(body);
 
+    // Extract optional scheduledAt for VOD/Live coaching
+    const scheduledAt = body.scheduledAt ? new Date(body.scheduledAt) : null;
+
     // TODO: Add rate limiting
     // Consider using a rate limiting middleware or service like Upstash Redis
     // to prevent spam submissions from the same IP or email
@@ -53,7 +56,19 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Create replay submission in database with nested replay codes
+    // Validate that VOD Review and Live Coaching have scheduledAt
+    if ((validatedData.coachingType === 'vod-review' || validatedData.coachingType === 'live-coaching') && !scheduledAt) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Validation error',
+          message: 'Scheduled time is required for VOD Review and Live Coaching',
+        },
+        { status: 400 }
+      );
+    }
+
+    // Create replay submission in database with nested replay codes and optional booking
     const submission = await prisma.replaySubmission.create({
       data: {
         email: validatedData.email,
@@ -68,7 +83,7 @@ export async function POST(request: NextRequest) {
         rank: validatedData.rank,
         role: validatedData.role,
         hero: validatedData.hero || null,
-        status: 'PENDING',
+        status: 'AWAITING_PAYMENT', // Changed from PENDING to AWAITING_PAYMENT
         replays: {
           create: validatedData.replays.map((replay) => ({
             code: replay.code.toUpperCase(), // Normalize to uppercase
@@ -76,11 +91,40 @@ export async function POST(request: NextRequest) {
             notes: replay.notes || null,
           })),
         },
+        // If scheduledAt is provided, create linked booking
+        ...(scheduledAt && {
+          booking: {
+            create: {
+              email: validatedData.email,
+              sessionType: validatedData.coachingType,
+              scheduledAt: scheduledAt,
+              status: 'PENDING',
+            },
+          },
+        }),
       },
       include: {
         replays: true,
+        booking: true,
       },
     });
+
+    // If a booking was created, block the time slot
+    if (submission.booking && scheduledAt) {
+      const slotEndTime = new Date(scheduledAt.getTime() + 60 * 60 * 1000); // 60 minutes later
+
+      await prisma.availabilityException.create({
+        data: {
+          date: scheduledAt,
+          endDate: slotEndTime,
+          reason: 'booked',
+          notes: `Booking ID: ${submission.booking.id}`,
+          bookingId: submission.booking.id,
+        },
+      });
+
+      console.log(`Time slot blocked for booking: ${submission.booking.id} at ${scheduledAt}`);
+    }
 
     console.log(`New replay submission created: ${submission.id} with ${submission.replays.length} replays`);
 

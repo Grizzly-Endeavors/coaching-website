@@ -27,7 +27,7 @@ model ReplaySubmission {
   discordRefreshToken String?   @map("discord_refresh_token") @db.Text // OAuth refresh token (encrypted in app)
   discordTokenExpiry  DateTime? @map("discord_token_expiry") // When the access token expires
 
-  status       SubmissionStatus @default(PENDING)
+  status       SubmissionStatus @default(AWAITING_PAYMENT)
   reviewNotes  String?          @map("review_notes") @db.Text
   reviewUrl    String?          @map("review_url") // Link to review video
   submittedAt  DateTime         @default(now()) @map("submitted_at")
@@ -35,6 +35,7 @@ model ReplaySubmission {
 
   replays ReplayCode[] // One-to-many relationship
   payment Payment? // One-to-one relationship with payment
+  booking Booking? // One-to-one relationship with booking (for scheduled sessions)
 
   @@map("replay_submissions")
 }
@@ -82,32 +83,74 @@ enum PaymentStatus {
 }
 
 enum SubmissionStatus {
-  PENDING
+  AWAITING_PAYMENT
+  PAYMENT_RECEIVED
+  PAYMENT_FAILED
   IN_PROGRESS
   COMPLETED
   ARCHIVED
 }
 
-// Calendar bookings synced from Google Calendar
+// Calendar bookings for scheduled coaching sessions
 model Booking {
-  id            String        @id @default(cuid())
-  email         String
-  googleEventId String        @unique @map("google_event_id")
-  sessionType   String        @map("session_type") // e.g., "1-on-1 Coaching", "VOD Review"
-  scheduledAt   DateTime      @map("scheduled_at")
-  status        BookingStatus @default(SCHEDULED)
-  notes         String?       @db.Text
-  createdAt     DateTime      @default(now()) @map("created_at")
-  updatedAt     DateTime      @updatedAt @map("updated_at")
+  id          String        @id @default(cuid())
+  email       String
+  sessionType String        @map("session_type") // vod-review, live-coaching
+  scheduledAt DateTime      @map("scheduled_at")
+  status      BookingStatus @default(PENDING)
+  notes       String?       @db.Text
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  submissionId String?           @unique @map("submission_id")
+  submission   ReplaySubmission? @relation(fields: [submissionId], references: [id])
+
+  exception AvailabilityException? // Link to availability exception that blocks this slot
 
   @@map("bookings")
 }
 
 enum BookingStatus {
-  SCHEDULED
-  COMPLETED
-  CANCELLED
-  NO_SHOW
+  PENDING    // Awaiting payment
+  CONFIRMED  // Payment succeeded
+  COMPLETED  // Session finished
+  CANCELLED  // Payment failed or manually cancelled
+  NO_SHOW    // User didn't attend
+}
+
+// Availability slots for scheduling (recurring weekly schedule)
+model AvailabilitySlot {
+  id           String   @id @default(cuid())
+  dayOfWeek    Int // 0-6 (Sunday-Saturday)
+  startTime    String // "09:00" format (24-hour)
+  endTime      String // "17:00" format (24-hour)
+  slotDuration Int      @default(60) @map("slot_duration") // Minutes per appointment
+  isActive     Boolean  @default(true) @map("is_active")
+  sessionType  String   @map("session_type") // vod-review, live-coaching
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  exceptions AvailabilityException[] // Specific dates when this slot is blocked or booked
+
+  @@map("availability_slots")
+}
+
+// Exceptions to availability (bookings, blocked dates, holidays)
+model AvailabilityException {
+  id        String   @id @default(cuid())
+  date      DateTime // Specific date and time
+  endDate   DateTime @map("end_date") // End time of the exception
+  reason    String // "booked", "blocked", "holiday"
+  notes     String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  slotId String?           @map("slot_id")
+  slot   AvailabilitySlot? @relation(fields: [slotId], references: [id], onDelete: Cascade)
+
+  bookingId String?  @unique @map("booking_id")
+  booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@map("availability_exceptions")
 }
 
 // Blog posts

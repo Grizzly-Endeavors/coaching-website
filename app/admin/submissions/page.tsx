@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AdminTable, AdminTableRow, AdminTableCell, AdminBadge, AdminSelect, AdminInput, AdminLoading } from '@/components/admin';
 
-type SubmissionStatus = 'ALL' | 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
+type SubmissionStatus = 'ALL' | 'AWAITING_PAYMENT' | 'PAYMENT_RECEIVED' | 'PAYMENT_FAILED' | 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
 
 interface ReplayCode {
   id: string;
@@ -99,7 +99,9 @@ export default function SubmissionsPage() {
               onChange={(e) => setStatusFilter(e.target.value as SubmissionStatus)}
               options={[
                 { value: 'ALL', label: 'All Submissions' },
-                { value: 'PENDING', label: 'Pending' },
+                { value: 'AWAITING_PAYMENT', label: 'Awaiting Payment' },
+                { value: 'PAYMENT_RECEIVED', label: 'Payment Received' },
+                { value: 'PAYMENT_FAILED', label: 'Payment Failed' },
                 { value: 'IN_PROGRESS', label: 'In Progress' },
                 { value: 'COMPLETED', label: 'Completed' },
                 { value: 'ARCHIVED', label: 'Archived' },

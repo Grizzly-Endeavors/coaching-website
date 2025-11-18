@@ -81,20 +81,28 @@ export function AdminLayoutClient({ children, userEmail }: AdminLayoutClientProp
             Submissions
           </NavLink>
           <NavLink
-            href="/admin/blog"
-            icon="📝"
-            active={isActive('/admin/blog')}
-            onClick={() => setSidebarOpen(false)}
-          >
-            Blog Posts
-          </NavLink>
-          <NavLink
             href="/admin/schedule"
             icon="📅"
             active={isActive('/admin/schedule')}
             onClick={() => setSidebarOpen(false)}
           >
             Schedule
+          </NavLink>
+          <NavLink
+            href="/admin/availability"
+            icon="🕐"
+            active={isActive('/admin/availability')}
+            onClick={() => setSidebarOpen(false)}
+          >
+            Availability
+          </NavLink>
+          <NavLink
+            href="/admin/blog"
+            icon="📝"
+            active={isActive('/admin/blog')}
+            onClick={() => setSidebarOpen(false)}
+          >
+            Blog Posts
           </NavLink>
         </nav>
 

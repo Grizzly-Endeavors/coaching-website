@@ -94,23 +94,90 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
 async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent) {
   console.log('Payment intent succeeded:', paymentIntent.id);
 
-  // Update payment status to succeeded
+  // Update payment status to succeeded and fetch related data
   const payment = await prisma.payment.update({
     where: { stripePaymentId: paymentIntent.id },
     data: { status: 'SUCCEEDED' },
+    include: {
+      submission: {
+        include: {
+          booking: true,
+        },
+      },
+    },
   });
 
   console.log('Payment updated successfully:', payment.id);
+
+  // If payment is linked to a submission, update submission and booking status
+  if (payment.submission) {
+    await prisma.replaySubmission.update({
+      where: { id: payment.submission.id },
+      data: { status: 'PAYMENT_RECEIVED' },
+    });
+
+    console.log(`Submission ${payment.submission.id} status updated to PAYMENT_RECEIVED`);
+
+    // If submission has a booking, confirm it
+    if (payment.submission.booking) {
+      await prisma.booking.update({
+        where: { id: payment.submission.booking.id },
+        data: { status: 'CONFIRMED' },
+      });
+
+      console.log(`Booking ${payment.submission.booking.id} status updated to CONFIRMED`);
+    }
+  }
 }
 
 async function handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
   console.log('Payment intent failed:', paymentIntent.id);
 
-  // Update payment status to failed
-  await prisma.payment.update({
+  // Update payment status to failed and fetch related data
+  const payment = await prisma.payment.update({
     where: { stripePaymentId: paymentIntent.id },
     data: { status: 'FAILED' },
+    include: {
+      submission: {
+        include: {
+          booking: true,
+        },
+      },
+    },
   });
+
+  console.log('Payment failed:', payment.id);
+
+  // If payment is linked to a submission, update submission and booking status
+  if (payment.submission) {
+    await prisma.replaySubmission.update({
+      where: { id: payment.submission.id },
+      data: { status: 'PAYMENT_FAILED' },
+    });
+
+    console.log(`Submission ${payment.submission.id} status updated to PAYMENT_FAILED`);
+
+    // If submission has a booking, cancel it and free up the slot
+    if (payment.submission.booking) {
+      // Update booking status to cancelled
+      await prisma.booking.update({
+        where: { id: payment.submission.booking.id },
+        data: { status: 'CANCELLED' },
+      });
+
+      console.log(`Booking ${payment.submission.booking.id} status updated to CANCELLED`);
+
+      // Delete the availability exception to free up the time slot
+      await prisma.availabilityException.deleteMany({
+        where: {
+          bookingId: payment.submission.booking.id,
+          reason: 'booked',
+        },
+      });
+
+      console.log(`Time slot freed for cancelled booking: ${payment.submission.booking.id}`);
+    }
+  }
 }
 
 async function handleChargeRefunded(charge: Stripe.Charge) {

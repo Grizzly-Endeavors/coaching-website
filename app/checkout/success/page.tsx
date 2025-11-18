@@ -51,14 +51,14 @@ export default function SuccessPage() {
         return [
           'You'll receive a confirmation email shortly',
           'Your VOD review session has been booked',
-          'Check your email for the Google Calendar invite with session details',
+          'A Discord notification has been sent - I'll reach out closer to your session time',
           'I'll see you at the scheduled time on Discord!'
         ];
       case 'live-coaching':
         return [
           'You'll receive a confirmation email shortly',
           'Your live coaching session has been booked',
-          'Check your email for the Google Calendar invite with session details',
+          'A Discord notification has been sent - I'll reach out closer to your session time',
           'Make sure you're ready to stream your gameplay on Discord!'
         ];
       default:
@@ -85,6 +85,20 @@ export default function SuccessPage() {
       default:
         return 'Booking Confirmed!';
     }
+  };
+
+  const formatAppointmentTime = (dateTime: string) => {
+    const date = new Date(dateTime);
+    return new Intl.DateTimeFormat('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+      timeZone: 'America/New_York',
+    }).format(date);
   };
 
   return (
@@ -118,6 +132,21 @@ export default function SuccessPage() {
               <p className="text-gray-300 mb-6 text-lg">
                 Thank you for your purchase! Your payment has been processed successfully.
               </p>
+
+              {/* Show scheduled time for VOD/Live coaching */}
+              {paymentDetails?.submission?.booking?.scheduledAt && (
+                <div className="bg-purple-600/10 border border-purple-600/30 rounded-lg p-6 mb-6">
+                  <h3 className="text-xl font-bold text-gray-100 mb-2">
+                    Your Session is Scheduled
+                  </h3>
+                  <p className="text-2xl font-semibold text-purple-400">
+                    {formatAppointmentTime(paymentDetails.submission.booking.scheduledAt)}
+                  </p>
+                  <p className="text-gray-400 mt-2 text-sm">
+                    Make sure to be available on Discord at this time!
+                  </p>
+                </div>
+              )}
 
               <div className="bg-[#1a1a2e] rounded-lg p-6 mb-8">
                 <h3 className="text-xl font-bold text-gray-100 mb-4">
