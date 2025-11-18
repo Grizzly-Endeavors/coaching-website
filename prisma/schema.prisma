@@ -95,32 +95,6 @@ model Admin {
   password  String   // Hashed with bcrypt
   name      String?
   createdAt DateTime @default(now()) @map("created_at")
-  
+
   @@map("admins")
-}
-
-// Email notification log (optional but recommended)
-model EmailLog {
-  id        String   @id @default(cuid())
-  to        String
-  subject   String
-  type      EmailType
-  status    EmailStatus
-  sentAt    DateTime @default(now()) @map("sent_at")
-  error     String?
-
-  @@map("email_logs")
-}
-
-enum EmailType {
-  SUBMISSION_RECEIVED
-  REVIEW_READY
-  BOOKING_CONFIRMED
-  BOOKING_REMINDER
-}
-
-enum EmailStatus {
-  SENT
-  FAILED
-  PENDING
 }

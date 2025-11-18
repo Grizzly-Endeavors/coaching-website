@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
-import { sendReviewReady } from '@/lib/email';
+import { sendReviewReadyNotification } from '@/lib/discord';
 import { SubmissionStatus } from '@prisma/client';
 
 // Validation schema for PATCH request body
@@ -10,7 +10,7 @@ const updateSchema = z.object({
   status: z.nativeEnum(SubmissionStatus).optional(),
   reviewNotes: z.string().optional(),
   reviewUrl: z.string().url().optional().or(z.literal('')),
-  sendEmail: z.boolean().optional().default(false),
+  sendDiscordNotification: z.boolean().optional().default(false),
 });
 
 /**
@@ -103,7 +103,7 @@ export async function GET(
  * - status: SubmissionStatus (optional)
  * - reviewNotes: string (optional)
  * - reviewUrl: string (optional)
- * - sendEmail: boolean (optional, default: false) - Send review ready email to user
+ * - sendDiscordNotification: boolean (optional, default: false) - Send Discord DM to user when review is ready
  *
  * Requires authentication
  */
@@ -192,15 +192,16 @@ export async function PATCH(
       notes: updatedSubmission.replays[0]?.notes || '',
     };
 
-    // Send email if requested and status is COMPLETED
-    let emailSent = false;
+    // Send Discord notification if requested and status is COMPLETED
+    let notificationSent = false;
     if (
-      validatedData.sendEmail &&
+      validatedData.sendDiscordNotification &&
       transformedSubmission.status === SubmissionStatus.COMPLETED
     ) {
-      const emailResult = await sendReviewReady(transformedSubmission.email, {
+      const notificationResult = await sendReviewReadyNotification({
         id: transformedSubmission.id,
         email: transformedSubmission.email,
+        discordTag: transformedSubmission.discordTag,
         replayCode: transformedSubmission.replayCode,
         rank: transformedSubmission.rank,
         role: transformedSubmission.role,
@@ -210,17 +211,17 @@ export async function PATCH(
         reviewedAt: transformedSubmission.reviewedAt,
       });
 
-      emailSent = emailResult.success;
+      notificationSent = notificationResult.success;
 
-      if (!emailResult.success) {
-        console.error('Failed to send review ready email:', emailResult.error);
+      if (!notificationResult.success) {
+        console.error('Failed to send Discord notification:', notificationResult.error);
       }
     }
 
     return NextResponse.json({
       success: true,
       submission: transformedSubmission,
-      emailSent,
+      notificationSent,
     });
   } catch (error) {
     console.error('Error updating submission:', error);

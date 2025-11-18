@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { replaySubmissionSchema } from '@/lib/validations';
-import { sendSubmissionConfirmation, sendSubmissionNotification } from '@/lib/email';
+import { sendVodRequestNotification } from '@/lib/discord';
 import { ZodError } from 'zod';
 
 /**
@@ -66,8 +66,8 @@ export async function POST(request: NextRequest) {
 
     console.log(`New replay submission created: ${submission.id} with ${submission.replays.length} replays`);
 
-    // Send confirmation email to submitter (non-blocking)
-    sendSubmissionConfirmation(submission.email, {
+    // Send Discord notification to admin (non-blocking)
+    sendVodRequestNotification({
       id: submission.id,
       email: submission.email,
       discordTag: submission.discordTag,
@@ -80,42 +80,14 @@ export async function POST(request: NextRequest) {
     })
       .then((result) => {
         if (result.success) {
-          console.log(`Confirmation email sent to ${submission.email}`);
+          console.log('Discord notification sent to admin');
         } else {
-          console.error(`Failed to send confirmation email: ${result.error}`);
+          console.error(`Failed to send Discord notification: ${result.error}`);
         }
       })
       .catch((error) => {
-        console.error('Error sending confirmation email:', error);
+        console.error('Error sending Discord notification:', error);
       });
-
-    // Send notification email to admin (non-blocking)
-    const adminEmail = process.env.ADMIN_EMAIL;
-    if (adminEmail) {
-      sendSubmissionNotification(adminEmail, {
-        id: submission.id,
-        email: submission.email,
-        discordTag: submission.discordTag,
-        coachingType: submission.coachingType,
-        rank: submission.rank,
-        role: submission.role,
-        hero: submission.hero,
-        replays: submission.replays,
-        submittedAt: submission.submittedAt,
-      })
-        .then((result) => {
-          if (result.success) {
-            console.log('Admin notification email sent');
-          } else {
-            console.error(`Failed to send admin notification: ${result.error}`);
-          }
-        })
-        .catch((error) => {
-          console.error('Error sending admin notification:', error);
-        });
-    } else {
-      console.warn('ADMIN_EMAIL not configured, skipping admin notification');
-    }
 
     // Return success response
     return NextResponse.json(

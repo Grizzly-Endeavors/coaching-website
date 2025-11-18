@@ -46,7 +46,7 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
   const [status, setStatus] = useState('');
   const [reviewNotes, setReviewNotes] = useState('');
   const [reviewUrl, setReviewUrl] = useState('');
-  const [sendEmail, setSendEmail] = useState(false);
+  const [sendDiscordNotification, setSendDiscordNotification] = useState(false);
   const [copiedId, setCopiedId] = useState(false);
 
   useEffect(() => {
@@ -83,15 +83,15 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
           status,
           reviewNotes,
           reviewUrl,
-          sendEmail,
+          sendDiscordNotification,
         }),
       });
 
       if (!response.ok) throw new Error('Failed to update submission');
 
       alert('Submission updated successfully!');
-      if (sendEmail) {
-        alert('Review email sent to the user!');
+      if (sendDiscordNotification) {
+        alert('Discord notification sent to the user!');
       }
       fetchSubmission();
     } catch (error) {
@@ -330,13 +330,13 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
               <div className="flex items-center space-x-3">
                 <input
                   type="checkbox"
-                  id="sendEmail"
-                  checked={sendEmail}
-                  onChange={(e) => setSendEmail(e.target.checked)}
+                  id="sendDiscordNotification"
+                  checked={sendDiscordNotification}
+                  onChange={(e) => setSendDiscordNotification(e.target.checked)}
                   className="w-4 h-4 bg-[#0f0f23] border-[#2a2a40] rounded text-[#8b5cf6] focus:ring-2 focus:ring-[#8b5cf6] focus:ring-offset-0"
                 />
-                <label htmlFor="sendEmail" className="text-sm text-[#e5e7eb] cursor-pointer">
-                  Send email notification to user
+                <label htmlFor="sendDiscordNotification" className="text-sm text-[#e5e7eb] cursor-pointer">
+                  Send Discord notification to user
                 </label>
               </div>
 
