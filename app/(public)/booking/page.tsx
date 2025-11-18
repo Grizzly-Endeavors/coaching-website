@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
@@ -10,6 +11,10 @@ import { rankOptions, roleOptions, coachingTypes } from '@/lib/validations/booki
 type CoachingType = typeof coachingTypes[number];
 
 export default function GetCoachingPage() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const typeParam = searchParams.get('type') as CoachingType | null;
+
   const [selectedType, setSelectedType] = useState<CoachingType | null>(null);
   const [formData, setFormData] = useState<Partial<ReplaySubmissionData>>({
     email: '',
@@ -24,6 +29,14 @@ export default function GetCoachingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [submissionId, setSubmissionId] = useState<string>('');
+
+  // Pre-select coaching type from URL parameter
+  useEffect(() => {
+    if (typeParam && coachingTypes.includes(typeParam)) {
+      setSelectedType(typeParam);
+      setFormData((prev) => ({ ...prev, coachingType: typeParam }));
+    }
+  }, [typeParam]);
 
   const coachingTypesList = [
     {
@@ -480,11 +493,21 @@ export default function GetCoachingPage() {
                           {submissionId}
                         </p>
                       </div>
-                      <p className="text-green-300 text-sm">
+                      <p className="text-green-300 text-sm mb-3">
                         {selectedType === 'review-async'
-                          ? 'You\'ll receive your review within 2-3 business days at the email provided.'
-                          : 'Please use this ID when scheduling your session below.'}
+                          ? 'Next step: Complete payment to confirm your booking.'
+                          : 'Next step: Pick a time slot below, then complete payment.'}
                       </p>
+                      {selectedType === 'review-async' && (
+                        <Button
+                          variant="primary"
+                          size="md"
+                          onClick={() => router.push(`/checkout?submissionId=${submissionId}`)}
+                          className="w-full"
+                        >
+                          Continue to Payment
+                        </Button>
+                      )}
                     </div>
                   )}
 
@@ -633,6 +656,25 @@ export default function GetCoachingPage() {
                       )}
                     </CardContent>
                   </Card>
+
+                  {/* Continue to Payment Button */}
+                  <div className="mt-8">
+                    <Card variant="surface" padding="lg">
+                      <div className="text-center">
+                        <p className="text-gray-300 mb-4">
+                          Once you've selected your preferred time slot, proceed to payment to confirm your booking.
+                        </p>
+                        <Button
+                          variant="primary"
+                          size="lg"
+                          onClick={() => router.push(`/checkout?submissionId=${submissionId}`)}
+                          className="w-full"
+                        >
+                          Continue to Payment
+                        </Button>
+                      </div>
+                    </Card>
+                  </div>
                 </div>
               )}
             </div>

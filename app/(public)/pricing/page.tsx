@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
@@ -72,90 +70,29 @@ const pricingOptions = [
 const coachingProcess = [
   {
     step: 1,
-    title: 'Choose & Pay',
-    description: 'Select your preferred coaching package and complete secure payment via Stripe.',
+    title: 'Choose Package',
+    description: 'Select your preferred coaching package and submit your details.',
   },
   {
     step: 2,
-    title: 'Submit Details',
+    title: 'Schedule & Book',
     description: 'Submit your replay codes or schedule your live session via Google Calendar.',
   },
   {
     step: 3,
-    title: 'Get Coached',
-    description: 'Receive detailed feedback via video review or live session with actionable tips.',
+    title: 'Complete Payment',
+    description: 'After booking your time, complete secure payment via Stripe.',
   },
   {
     step: 4,
-    title: 'Improve',
-    description: 'Apply the feedback and strategies to your games and see measurable improvement.',
+    title: 'Get Coached',
+    description: 'Receive detailed feedback and coaching, then apply it to improve your gameplay.',
   },
 ];
 
 export default function PricingPage() {
-  const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
-  const [showEmailModal, setShowEmailModal] = useState(false);
-
-  const handlePurchase = (packageId: string) => {
-    setSelectedPackage(packageId);
-    setShowEmailModal(true);
-  };
-
-  const handleCheckout = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email || !selectedPackage) return;
-
-    // Redirect to checkout with package and email
-    router.push(`/checkout?type=${selectedPackage}&email=${encodeURIComponent(email)}`);
-  };
-
   return (
     <div className="flex flex-col">
-      {/* Email Modal */}
-      {showEmailModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <Card variant="surface" padding="lg" className="max-w-md w-full">
-            <CardHeader>
-              <CardTitle className="text-2xl">Enter Your Email</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleCheckout}>
-                <p className="text-gray-300 mb-4">
-                  We'll send your receipt and booking details to this email.
-                </p>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your.email@example.com"
-                  required
-                  className="w-full px-4 py-3 bg-[#0f0f23] border border-[#2a2a40] rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4"
-                />
-                <div className="flex gap-3">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => {
-                      setShowEmailModal(false);
-                      setEmail('');
-                      setSelectedPackage(null);
-                    }}
-                    className="flex-1"
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" variant="primary" className="flex-1">
-                    Continue to Payment
-                  </Button>
-                </div>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      )}
 
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-[#0f0f23] via-[#1a1a2e] to-[#0f0f23] py-20">
@@ -229,14 +166,15 @@ export default function PricingPage() {
                       ))}
                     </ul>
 
-                    <Button
-                      variant={option.highlight ? 'primary' : 'outline'}
-                      size="lg"
-                      className="w-full"
-                      onClick={() => handlePurchase(option.id)}
-                    >
-                      Buy Now
-                    </Button>
+                    <Link href={`/booking?type=${option.id}`} className="block">
+                      <Button
+                        variant={option.highlight ? 'primary' : 'outline'}
+                        size="lg"
+                        className="w-full"
+                      >
+                        Select Package
+                      </Button>
+                    </Link>
                   </CardContent>
                 </Card>
               ))}
@@ -352,7 +290,7 @@ export default function PricingPage() {
                   How do I get started?
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Click the "Buy Now" button on your preferred package, complete the secure payment, and then submit your replay codes or schedule your session.
+                  Select your preferred package, submit your replay codes or schedule your session, and then complete the secure payment.
                 </p>
               </Card>
 

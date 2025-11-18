@@ -6,20 +6,60 @@ import { prisma } from '@/lib/prisma';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { coachingType, email } = body;
+    const { submissionId, coachingType: directCoachingType, email: directEmail } = body;
 
-    // Validate coaching type
-    if (!coachingType || !isValidCoachingType(coachingType)) {
+    let coachingType: string;
+    let email: string;
+    let submissionToLink: string | undefined;
+
+    // Handle two cases: with submissionId or with direct coachingType/email
+    if (submissionId) {
+      // Fetch submission from database
+      const submission = await prisma.replaySubmission.findUnique({
+        where: { id: submissionId },
+        select: {
+          id: true,
+          coachingType: true,
+          email: true,
+          payment: {
+            select: { id: true }
+          }
+        }
+      });
+
+      if (!submission) {
+        return NextResponse.json(
+          { error: 'Submission not found' },
+          { status: 404 }
+        );
+      }
+
+      // Check if payment already exists for this submission
+      if (submission.payment) {
+        return NextResponse.json(
+          { error: 'Payment already exists for this submission' },
+          { status: 400 }
+        );
+      }
+
+      coachingType = submission.coachingType;
+      email = submission.email;
+      submissionToLink = submission.id;
+    } else if (directCoachingType && directEmail) {
+      // Backward compatibility: direct coaching type and email
+      coachingType = directCoachingType;
+      email = directEmail;
+    } else {
       return NextResponse.json(
-        { error: 'Invalid coaching type' },
+        { error: 'Either submissionId or (coachingType and email) is required' },
         { status: 400 }
       );
     }
 
-    // Validate email
-    if (!email || typeof email !== 'string' || !email.includes('@')) {
+    // Validate coaching type
+    if (!isValidCoachingType(coachingType)) {
       return NextResponse.json(
-        { error: 'Valid email is required' },
+        { error: 'Invalid coaching type' },
         { status: 400 }
       );
     }
@@ -52,11 +92,12 @@ export async function POST(req: NextRequest) {
       metadata: {
         coachingType,
         email,
+        ...(submissionToLink && { submissionId: submissionToLink }),
       },
     });
 
     // Create a pending payment record
-    await prisma.payment.create({
+    const payment = await prisma.payment.create({
       data: {
         stripePaymentId: session.payment_intent as string,
         stripeSessionId: session.id,
@@ -65,6 +106,7 @@ export async function POST(req: NextRequest) {
         status: 'PENDING',
         coachingType,
         customerEmail: email,
+        ...(submissionToLink && { submissionId: submissionToLink }),
       },
     });
 

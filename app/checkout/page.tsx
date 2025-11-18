@@ -11,22 +11,23 @@ export default function CheckoutPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const submissionId = searchParams.get('submissionId');
   const coachingType = searchParams.get('type');
   const email = searchParams.get('email');
 
   useEffect(() => {
-    // Validate required parameters
-    if (!coachingType || !email) {
-      setError('Missing required parameters. Please start from the pricing page.');
+    // Validate required parameters - either submissionId OR (coachingType AND email)
+    if (!submissionId && (!coachingType || !email)) {
+      setError('Missing required parameters. Please start from the booking page.');
       return;
     }
 
     // Auto-redirect to Stripe Checkout
     handleCheckout();
-  }, [coachingType, email]);
+  }, [submissionId, coachingType, email]);
 
   const handleCheckout = async () => {
-    if (!coachingType || !email) {
+    if (!submissionId && (!coachingType || !email)) {
       setError('Missing required information');
       return;
     }
@@ -35,15 +36,16 @@ export default function CheckoutPage() {
     setError(null);
 
     try {
+      const body = submissionId
+        ? { submissionId }
+        : { coachingType, email };
+
       const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          coachingType,
-          email,
-        }),
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
