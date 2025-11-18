@@ -51,10 +51,6 @@ export type { BadgeProps } from './Badge';
 export { default as Loading } from './Loading';
 export type { LoadingProps } from './Loading';
 
-// Modal
-export { Modal, ModalFooter } from './Modal';
-export type { ModalProps, ModalFooterProps } from './Modal';
-
 // Toast
 export { ToastProvider, useToast, useToastHelpers } from './Toast';
 export type { Toast, ToastType } from './Toast';

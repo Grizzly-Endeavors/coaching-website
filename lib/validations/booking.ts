@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { emailSchema, replayCodeSchema as replayCodePrimitive, shortTextSchema } from './primitives';
+import { emailSchema, replayCodeSchema as replayCodeStringSchema, shortTextSchema } from './primitives';
 
 /**
  * Validation schemas for booking and replay submission
@@ -21,9 +21,10 @@ export const roleOptions = ['Tank', 'DPS', 'Support'] as const;
 
 export const coachingTypes = ['review-async', 'vod-review', 'live-coaching'] as const;
 
-// Individual replay code schema with map and notes
-export const replayCodeSchema = z.object({
-  code: replayCodePrimitive,
+// Individual replay code object schema with map and notes
+// Note: The string validator (replayCodeStringSchema) is available from '@/lib/validations/primitives'
+export const replayCodeObjectSchema = z.object({
+  code: replayCodeStringSchema,
   mapName: z.string()
     .min(2, 'Map name is required')
     .max(100, 'Map name is too long'),
@@ -49,13 +50,13 @@ export const replaySubmissionSchema = z.object({
     .min(2, 'Please specify which hero you played')
     .max(50, 'Hero name is too long')
     .optional(),
-  replays: z.array(replayCodeSchema)
+  replays: z.array(replayCodeObjectSchema)
     .min(1, 'At least one replay code is required')
     .max(5, 'Maximum 5 replay codes allowed'),
 });
 
 export type ReplaySubmissionData = z.infer<typeof replaySubmissionSchema>;
-export type ReplayCodeData = z.infer<typeof replayCodeSchema>;
+export type ReplayCodeData = z.infer<typeof replayCodeObjectSchema>;
 
 // Regex pattern for quick replay code validation
 export const replayCodeRegex = /^[A-Z0-9]{6,10}$/;
