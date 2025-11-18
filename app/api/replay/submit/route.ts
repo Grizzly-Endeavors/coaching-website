@@ -41,6 +41,30 @@ export async function POST(request: NextRequest) {
     // Consider using a rate limiting middleware or service like Upstash Redis
     // to prevent spam submissions from the same IP or email
 
+    // Verify payment before allowing submission
+    const payment = await prisma.payment.findFirst({
+      where: {
+        customerEmail: validatedData.email,
+        coachingType: validatedData.coachingType,
+        status: 'SUCCEEDED',
+        submissionId: null, // Not yet linked to a submission
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!payment) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Payment required',
+          message: 'No valid payment found. Please complete payment before submitting.',
+        },
+        { status: 402 } // 402 Payment Required
+      );
+    }
+
     // Create replay submission in database with nested replay codes
     const submission = await prisma.replaySubmission.create({
       data: {
@@ -65,6 +89,14 @@ export async function POST(request: NextRequest) {
     });
 
     console.log(`New replay submission created: ${submission.id} with ${submission.replays.length} replays`);
+
+    // Link payment to submission
+    await prisma.payment.update({
+      where: { id: payment.id },
+      data: { submissionId: submission.id },
+    });
+
+    console.log(`Payment ${payment.id} linked to submission ${submission.id}`);
 
     // Send confirmation email to submitter (non-blocking)
     sendSubmissionConfirmation(submission.email, {
