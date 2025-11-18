@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { contactFormSchema } from '@/lib/validations';
-import { sendContactFormEmail } from '@/lib/email';
 import { ZodError } from 'zod';
 
 /**
@@ -43,41 +42,7 @@ export async function POST(request: NextRequest) {
     const sanitizedMessage = validatedData.message.trim();
 
     console.log(`Contact form submission from: ${sanitizedName} (${sanitizedEmail})`);
-
-    // Send email to admin
-    const adminEmail = process.env.ADMIN_EMAIL;
-    if (!adminEmail) {
-      console.error('ADMIN_EMAIL environment variable is not set');
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Configuration error',
-          message: 'Contact form is not properly configured. Please try again later.',
-        },
-        { status: 503 }
-      );
-    }
-
-    const emailResult = await sendContactFormEmail(adminEmail, {
-      name: sanitizedName,
-      email: sanitizedEmail,
-      message: sanitizedMessage,
-      submittedAt: new Date(),
-    });
-
-    if (!emailResult.success) {
-      console.error('Failed to send contact form email:', emailResult.error);
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Email delivery failed',
-          message: 'Unable to send your message. Please try again later or contact us directly.',
-        },
-        { status: 500 }
-      );
-    }
-
-    console.log(`Contact form email sent successfully to admin`);
+    console.log(`Message: ${sanitizedMessage}`);
 
     // Return success response
     return NextResponse.json(

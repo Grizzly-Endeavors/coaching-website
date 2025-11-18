@@ -16,7 +16,6 @@
 import { prisma } from './prisma';
 import { BookingStatus } from '@prisma/client';
 import { CalendarEvent, fetchUpcomingBookings, getEventById } from './google-calendar';
-import { sendBookingConfirmation } from './email';
 
 /**
  * Extract client email from calendar event attendees
@@ -69,13 +68,11 @@ function mapEventStatusToBookingStatus(calendarStatus?: string): BookingStatus {
  * Returns the booking record.
  *
  * @param event Calendar event to sync
- * @param sendEmail Whether to send confirmation email for new bookings
  * @returns Created or updated booking record
  * @throws Error if required data is missing or database operation fails
  */
 export async function syncEventToDatabase(
-  event: CalendarEvent,
-  sendEmail: boolean = false
+  event: CalendarEvent
 ): Promise<{
   id: string;
   email: string;
@@ -138,28 +135,6 @@ export async function syncEventToDatabase(
       });
 
       console.log(`Created booking in database: ${newBooking.id} (Event: ${event.id})`);
-
-      // Send confirmation email if requested and booking is scheduled
-      if (sendEmail && status === BookingStatus.SCHEDULED) {
-        sendBookingConfirmation(clientEmail, {
-          id: newBooking.id,
-          email: newBooking.email,
-          sessionType: newBooking.sessionType,
-          scheduledAt: newBooking.scheduledAt,
-          notes: newBooking.notes,
-        })
-          .then((result) => {
-            if (result.success) {
-              console.log(`Booking confirmation email sent to ${clientEmail}`);
-            } else {
-              console.error(`Failed to send booking confirmation: ${result.error}`);
-            }
-          })
-          .catch((error) => {
-            console.error('Error sending booking confirmation:', error);
-          });
-      }
-
       return newBooking;
     }
   } catch (error) {
@@ -177,12 +152,10 @@ export async function syncEventToDatabase(
  * This is useful for initial sync or periodic reconciliation.
  *
  * @param maxResults Maximum number of events to sync (default: 100)
- * @param sendEmails Whether to send confirmation emails for new bookings
  * @returns Object with sync statistics
  */
 export async function syncAllUpcomingEvents(
-  maxResults: number = 100,
-  sendEmails: boolean = false
+  maxResults: number = 100
 ): Promise<{
   success: boolean;
   synced: number;
@@ -219,7 +192,7 @@ export async function syncAllUpcomingEvents(
         const isNew = !existingBooking;
 
         // Sync the event
-        await syncEventToDatabase(event, sendEmails && isNew);
+        await syncEventToDatabase(event);
 
         stats.synced++;
         if (isNew) {
@@ -263,7 +236,7 @@ export async function syncAllUpcomingEvents(
  * Handle calendar event creation from webhook
  *
  * Processes a webhook notification for a newly created calendar event.
- * Creates a corresponding booking in the database and sends confirmation email.
+ * Creates a corresponding booking in the database.
  *
  * @param eventId Google Calendar event ID
  * @returns Created booking or null if failed
@@ -284,8 +257,8 @@ export async function handleEventCreated(
     // Fetch the event details from Google Calendar
     const event = await getEventById(eventId);
 
-    // Sync to database with email notification
-    const booking = await syncEventToDatabase(event, true);
+    // Sync to database
+    const booking = await syncEventToDatabase(event);
 
     console.log(`Successfully processed event creation: ${eventId}`);
     return booking;
@@ -320,8 +293,8 @@ export async function handleEventUpdated(
     // Fetch the updated event details from Google Calendar
     const event = await getEventById(eventId);
 
-    // Sync to database (don't send email for updates)
-    const booking = await syncEventToDatabase(event, false);
+    // Sync to database
+    const booking = await syncEventToDatabase(event);
 
     console.log(`Successfully processed event update: ${eventId}`);
     return booking;

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { sendBookingConfirmation } from '@/lib/email';
 import { BookingStatus } from '@prisma/client';
 
 /**
@@ -164,27 +163,6 @@ export async function POST(request: NextRequest) {
       });
 
       console.log(`Created booking: ${newBooking.id} (Google Event: ${googleEventId})`);
-
-      // Send confirmation email to client (non-blocking)
-      if (bookingStatus === BookingStatus.SCHEDULED) {
-        sendBookingConfirmation(clientEmail, {
-          id: newBooking.id,
-          email: newBooking.email,
-          sessionType: newBooking.sessionType,
-          scheduledAt: newBooking.scheduledAt,
-          notes: newBooking.notes,
-        })
-          .then((result) => {
-            if (result.success) {
-              console.log(`Booking confirmation email sent to ${clientEmail}`);
-            } else {
-              console.error(`Failed to send booking confirmation: ${result.error}`);
-            }
-          })
-          .catch((error) => {
-            console.error('Error sending booking confirmation:', error);
-          });
-      }
     }
 
     // Always return 200 to acknowledge receipt
