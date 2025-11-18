@@ -58,7 +58,6 @@ export async function POST(req: NextRequest) {
     // Create a pending payment record
     await prisma.payment.create({
       data: {
-        stripePaymentId: session.payment_intent as string,
         stripeSessionId: session.id,
         amount: formatAmountForStripe(packageDetails.price),
         currency: 'usd',

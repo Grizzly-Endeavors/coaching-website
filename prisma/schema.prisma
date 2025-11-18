@@ -55,7 +55,7 @@ model ReplayCode {
 // Payment records for Stripe transactions
 model Payment {
   id              String        @id @default(cuid())
-  stripePaymentId String        @unique @map("stripe_payment_id") // Stripe PaymentIntent ID
+  stripePaymentId String?       @unique @map("stripe_payment_id") // Stripe PaymentIntent ID
   stripeSessionId String?       @unique @map("stripe_session_id") // Stripe Checkout Session ID
   amount          Int // Amount in cents
   currency        String        @default("usd")

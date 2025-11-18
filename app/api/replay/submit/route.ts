@@ -63,6 +63,8 @@ export async function POST(request: NextRequest) {
         },
         { status: 402 } // 402 Payment Required
       );
+    }
+
     // Check for Discord OAuth data in cookies
     let discordData = null;
     const discordCookie = request.cookies.get('discord_user_data')?.value;
