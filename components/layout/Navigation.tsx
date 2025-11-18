@@ -61,8 +61,8 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                 href={link.href}
                 className={`text-sm font-medium transition-colors duration-200 ${
                   isActivePath(link.href)
-                    ? 'text-purple-400'
-                    : 'text-gray-300 hover:text-purple-400'
+                    ? 'text-teal-400'
+                    : 'text-gray-300 hover:text-cyan-400'
                 }`}
                 aria-current={isActivePath(link.href) ? 'page' : undefined}
               >
@@ -76,7 +76,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
       {/* Mobile Navigation Trigger */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="md:hidden p-2 text-gray-300 hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg transition-colors"
+        className="md:hidden p-2 text-gray-300 hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded-lg transition-colors"
         aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
         aria-expanded={isMobileMenuOpen}
       >
@@ -103,7 +103,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
 
           {/* Menu Panel */}
           <div
-            className="fixed top-16 right-0 z-50 h-[calc(100vh-4rem)] w-full max-w-sm bg-[#1a1a2e] border-l border-[#2a2a40] shadow-[0_0_50px_rgba(139,92,246,0.2)] md:hidden overflow-y-auto"
+            className="fixed top-16 right-0 z-50 h-[calc(100vh-4rem)] w-full max-w-sm bg-[#1a1a2e] border-l border-[#2a2a40] shadow-[0_0_50px_rgba(6,182,212,0.2)] md:hidden overflow-y-auto"
             role="dialog"
             aria-label="Mobile navigation"
           >
@@ -115,8 +115,8 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                       href={link.href}
                       className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
                         isActivePath(link.href)
-                          ? 'bg-purple-600/20 text-purple-400 border border-purple-600/30'
-                          : 'text-gray-300 hover:text-purple-400 hover:bg-[#2a2a40]'
+                          ? 'bg-teal-600/20 text-teal-400 border border-teal-600/30'
+                          : 'text-gray-300 hover:text-cyan-400 hover:bg-[#2a2a40]'
                       }`}
                       aria-current={isActivePath(link.href) ? 'page' : undefined}
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -133,7 +133,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                 <div className="space-y-3">
                   <Link
                     href="/pricing"
-                    className="block w-full px-4 py-3 text-center text-sm font-medium text-purple-400 bg-transparent border border-purple-600/30 rounded-lg hover:bg-purple-600/10 transition-all duration-200"
+                    className="block w-full px-4 py-3 text-center text-sm font-medium text-cyan-400 bg-transparent border border-cyan-600/30 rounded-lg hover:bg-cyan-600/10 transition-all duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     Pricing

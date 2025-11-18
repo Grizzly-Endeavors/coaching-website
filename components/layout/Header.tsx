@@ -55,7 +55,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   return (
     <header className={`sticky top-0 z-40 w-full transition-all duration-300 ${
       scrolled
-        ? 'border-b border-[#2a2a40] bg-[#0f0f23]/80 backdrop-blur-md shadow-lg shadow-purple-600/10'
+        ? 'border-b border-[#2a2a40] bg-[#0f0f23]/80 backdrop-blur-md shadow-lg shadow-cyan-600/10'
         : 'border-b border-[#2a2a40] bg-[#0f0f23]/95 backdrop-blur-sm'
     } ${className}`}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
@@ -81,8 +81,8 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                     href={link.href}
                     className={`text-sm font-medium transition-colors duration-200 ${
                       isActive(link.href)
-                        ? 'text-purple-400'
-                        : 'text-gray-300 hover:text-purple-400'
+                        ? 'text-teal-400'
+                        : 'text-gray-300 hover:text-cyan-400'
                     }`}
                     aria-current={isActive(link.href) ? 'page' : undefined}
                   >
@@ -101,7 +101,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-gray-300 hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg transition-colors"
+            className="md:hidden p-2 text-gray-300 hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded-lg transition-colors"
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
           >
@@ -125,7 +125,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="block px-4 py-2 text-base font-medium text-gray-300 hover:text-purple-400 hover:bg-[#1a1a2e] rounded-lg transition-colors duration-200"
+                    className="block px-4 py-2 text-base font-medium text-gray-300 hover:text-cyan-400 hover:bg-[#1a1a2e] rounded-lg transition-colors duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}

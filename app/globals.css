@@ -14,6 +14,16 @@
   --purple-hover: #a78bfa;
   --purple-glow: rgba(139, 92, 246, 0.3);
 
+  /* Cyan Accents */
+  --cyan-primary: #06b6d4;
+  --cyan-hover: #22d3ee;
+  --cyan-glow: rgba(6, 182, 212, 0.3);
+
+  /* Teal Accents */
+  --teal-primary: #14b8a6;
+  --teal-hover: #2dd4bf;
+  --teal-glow: rgba(20, 184, 166, 0.3);
+
   /* Text */
   --text-primary: #e5e7eb;
   --text-secondary: #9ca3af;
@@ -85,9 +95,9 @@
     @apply leading-relaxed text-text-secondary;
   }
 
-  /* Links with purple accent and smooth transitions */
+  /* Links with cyan accent and smooth transitions */
   a {
-    @apply text-purple-primary transition-all duration-200 hover:text-purple-hover;
+    @apply text-cyan-primary transition-all duration-200 hover:text-cyan-hover;
   }
 
   /* Inline code styling with monospace font */
@@ -151,7 +161,7 @@
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    @apply outline-none ring-2 ring-purple-primary ring-offset-2 ring-offset-background-primary;
+    @apply outline-none ring-2 ring-cyan-primary ring-offset-2 ring-offset-background-primary;
   }
 
   /* Selection styling */
@@ -172,17 +182,17 @@
 
   /* Secondary button with border */
   .btn-secondary {
-    @apply bg-background-elevated hover:bg-background-elevated/80 text-text-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 border border-border hover:border-purple-primary/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-background-elevated hover:bg-background-elevated/80 text-text-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 border border-border hover:border-cyan-primary/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Outline button */
   .btn-outline {
-    @apply bg-transparent hover:bg-purple-primary/10 text-purple-primary border-2 border-purple-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-transparent hover:bg-cyan-primary/10 text-cyan-primary border-2 border-cyan-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Card component with hover effect */
   .card {
-    @apply bg-background-surface border border-border rounded-lg p-6 transition-all duration-200 hover:border-purple-primary/50 hover:shadow-purple-glow/20;
+    @apply bg-background-surface border border-border rounded-lg p-6 transition-all duration-200 hover:border-cyan-primary/50 hover:shadow-cyan-glow/20;
   }
 
   /* Card with elevated effect */
@@ -192,17 +202,17 @@
 
   /* Form input field */
   .input {
-    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Textarea field */
   .textarea {
-    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all resize-y min-h-[120px] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-primary focus:border-transparent transition-all resize-y min-h-[120px] disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Select dropdown */
   .select {
-    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-cyan-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Form label */
@@ -228,6 +238,22 @@
     box-shadow: 0 0 40px rgba(139, 92, 246, 0.5);
   }
 
+  .glow-effect-cyan {
+    box-shadow: 0 0 20px var(--cyan-glow);
+  }
+
+  .glow-effect-cyan-lg {
+    box-shadow: 0 0 30px var(--cyan-glow);
+  }
+
+  .glow-effect-teal {
+    box-shadow: 0 0 20px var(--teal-glow);
+  }
+
+  .glow-effect-teal-lg {
+    box-shadow: 0 0 30px var(--teal-glow);
+  }
+
   /* Status badges */
   .status-badge {
     @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium;
@@ -238,7 +264,7 @@
   }
 
   .status-in-progress {
-    @apply status-badge bg-purple-primary/10 text-purple-primary border border-purple-primary/20;
+    @apply status-badge bg-teal-primary/10 text-teal-primary border border-teal-primary/20;
   }
 
   .status-completed {
@@ -314,7 +340,7 @@
 
   /* Gradient text */
   .gradient-text {
-    @apply bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-purple-400 via-cyan-400 to-teal-500 bg-clip-text text-transparent;
   }
 
   /* Hide scrollbar but keep functionality */
@@ -330,7 +356,7 @@
   /* Custom scrollbar */
   .scrollbar-custom {
     scrollbar-width: thin;
-    scrollbar-color: var(--purple-primary) var(--bg-elevated);
+    scrollbar-color: var(--cyan-primary) var(--bg-elevated);
   }
 
   .scrollbar-custom::-webkit-scrollbar {
@@ -344,12 +370,12 @@
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb {
-    background: var(--purple-primary);
+    background: var(--cyan-primary);
     border-radius: 4px;
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-    background: var(--purple-hover);
+    background: var(--cyan-hover);
   }
 }
 
@@ -466,7 +492,7 @@
 
 /* Focus ring for accessibility */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-purple-primary focus:ring-offset-2 focus:ring-offset-background-primary;
+  @apply focus:outline-none focus:ring-2 focus:ring-cyan-primary focus:ring-offset-2 focus:ring-offset-background-primary;
 }
 
 /* Container queries support (if needed) */
