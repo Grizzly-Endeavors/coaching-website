@@ -4,6 +4,7 @@ import { compare } from 'bcryptjs';
 import { prisma } from './prisma';
 import { z } from 'zod';
 import { loginRateLimiter } from './rate-limit';
+import { logger } from './logger';
 
 // Extend the built-in session types
 declare module 'next-auth' {
@@ -49,7 +50,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           const { isLimited, remaining } = loginRateLimiter.check(normalizedEmail);
 
           if (isLimited) {
-            console.warn(`Rate limit exceeded for email: ${normalizedEmail}`);
+            logger.warn('Login rate limit exceeded', {
+              email: normalizedEmail,
+            });
             return null;
           }
 
@@ -81,7 +84,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             name: admin.name,
           };
         } catch (error) {
-          console.error('Authorization error:', error);
+          logger.error('Authorization error', error instanceof Error ? error : new Error(String(error)));
           return null;
         }
       },

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { SubmissionStatus } from '@prisma/client';
+import { handleApiError } from '@/lib/api-error-handler';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -101,8 +102,6 @@ export async function GET(request: NextRequest) {
       submissions: transformedSubmissions,
     });
   } catch (error) {
-    console.error('Error fetching submissions:', error);
-
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {
       return NextResponse.json(
@@ -111,22 +110,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Handle validation errors
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Invalid query parameters',
-          details: error.errors,
-        },
-        { status: 400 }
-      );
-    }
-
-    // Handle other errors
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

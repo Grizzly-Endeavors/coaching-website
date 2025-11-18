@@ -3,14 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import {
-  AdminButton,
-  AdminInput,
-  AdminTextarea,
-  AdminSelect,
-  AdminBadge,
-  AdminLoading,
-} from '@/components/admin';
+import { Button, Badge, Loading } from '@/components/ui';
 
 interface ReplayCode {
   id: string;
@@ -147,7 +140,7 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
   };
 
   if (loading) {
-    return <AdminLoading message="Loading submission details..." />;
+    return <Loading size="lg" message="Loading submission details..." />;
   }
 
   if (!submission) {
@@ -155,7 +148,7 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
       <div className="text-center py-12">
         <p className="text-[#ef4444] text-lg mb-4">Submission not found</p>
         <Link href="/admin/submissions">
-          <AdminButton variant="secondary">Back to Submissions</AdminButton>
+          <Button variant="secondary">Back to Submissions</Button>
         </Link>
       </div>
     );
@@ -190,9 +183,9 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
               </button>
             </div>
           </div>
-          <AdminBadge variant={(submission.status || 'pending').toLowerCase() as any}>
+          <Badge variant={(submission.status || 'pending').toLowerCase() as any}>
             {submission.status || 'Pending'}
-          </AdminBadge>
+          </Badge>
         </div>
       </div>
 
@@ -299,33 +292,41 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
           <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6">
             <h2 className="text-lg font-bold text-[#e5e7eb] mb-6">Review & Update</h2>
             <div className="space-y-6">
-              <AdminSelect
-                label="Status"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-                options={[
-                  { value: 'PENDING', label: 'Pending' },
-                  { value: 'IN_PROGRESS', label: 'In Progress' },
-                  { value: 'COMPLETED', label: 'Completed' },
-                  { value: 'ARCHIVED', label: 'Archived' },
-                ]}
-              />
+              <div className="w-full">
+                <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Status</label>
+                <select
+                  value={status}
+                  onChange={(e) => setStatus(e.target.value)}
+                  className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all appearance-none"
+                >
+                  <option value="PENDING">Pending</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="COMPLETED">Completed</option>
+                  <option value="ARCHIVED">Archived</option>
+                </select>
+              </div>
 
-              <AdminTextarea
-                label="Review Notes"
-                placeholder="Enter your coaching notes and feedback..."
-                value={reviewNotes}
-                onChange={(e) => setReviewNotes(e.target.value)}
-                rows={8}
-              />
+              <div className="w-full">
+                <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Review Notes</label>
+                <textarea
+                  placeholder="Enter your coaching notes and feedback..."
+                  value={reviewNotes}
+                  onChange={(e) => setReviewNotes(e.target.value)}
+                  rows={8}
+                  className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all resize-vertical min-h-[100px]"
+                />
+              </div>
 
-              <AdminInput
-                label="Review Video URL"
-                placeholder="https://youtube.com/watch?v=..."
-                type="url"
-                value={reviewUrl}
-                onChange={(e) => setReviewUrl(e.target.value)}
-              />
+              <div className="w-full">
+                <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Review Video URL</label>
+                <input
+                  type="url"
+                  placeholder="https://youtube.com/watch?v=..."
+                  value={reviewUrl}
+                  onChange={(e) => setReviewUrl(e.target.value)}
+                  className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+                />
+              </div>
 
               <div className="flex items-center space-x-3">
                 <input
@@ -341,20 +342,21 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
               </div>
 
               <div className="flex items-center justify-between pt-4 border-t border-[#2a2a40]">
-                <AdminButton
-                  variant="danger"
+                <Button
+                  variant="secondary"
                   onClick={handleDelete}
                   disabled={deleting || saving}
+                  className="bg-[#ef4444] text-white hover:bg-[#dc2626] border-0"
                 >
                   {deleting ? 'Deleting...' : 'Delete Submission'}
-                </AdminButton>
-                <AdminButton
+                </Button>
+                <Button
                   variant="primary"
                   onClick={handleSave}
                   disabled={saving || deleting}
                 >
                   {saving ? 'Saving...' : 'Save Changes'}
-                </AdminButton>
+                </Button>
               </div>
             </div>
           </div>

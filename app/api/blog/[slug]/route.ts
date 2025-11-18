@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -36,6 +37,19 @@ export async function GET(
   { params }: { params: { slug: string } }
 ) {
   try {
+    // Rate limiting: 100 requests per minute per IP
+    const rateLimitOptions = {
+      maxRequests: 100,
+      windowMs: 60 * 1000, // 1 minute
+      message: 'Too many requests. Please try again later.',
+    };
+
+    const rateLimitResult = await rateLimit(request, rateLimitOptions);
+
+    if (!rateLimitResult.success) {
+      return rateLimitResult.response!;
+    }
+
     const { slug } = params;
 
     // Validate slug parameter
@@ -52,10 +66,6 @@ export async function GET(
 
     // Sanitize slug to prevent injection attacks
     const sanitizedSlug = slug.trim().toLowerCase();
-
-    // TODO: Add rate limiting
-    // TODO: Add caching layer (Redis or Next.js cache)
-    // Blog posts are mostly static and can be cached for improved performance
 
     // Fetch blog post from database
     const post = await prisma.blogPost.findUnique({
@@ -100,6 +110,9 @@ export async function GET(
       );
     }
 
+    // Get rate limit headers
+    const rateLimitHeaders = getRateLimitHeaders(request, rateLimitOptions);
+
     // Return post data
     return NextResponse.json(
       {
@@ -118,6 +131,7 @@ export async function GET(
         headers: {
           // Cache for 5 minutes with stale-while-revalidate for better performance
           'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+          ...rateLimitHeaders,
         },
       }
     );

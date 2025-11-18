@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
+import { logger } from '@/lib/logger';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -100,7 +101,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Error fetching blog posts:', error);
+    logger.error('Error fetching blog posts', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {

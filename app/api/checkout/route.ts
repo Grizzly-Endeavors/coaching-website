@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { stripe, getCoachingPackage, isValidCoachingType, formatAmountForStripe } from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export async function POST(req: NextRequest) {
   try {
@@ -111,7 +112,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ sessionId: session.id, url: session.url });
   } catch (error) {
-    console.error('Checkout session creation error:', error);
+    logger.error('Checkout session creation error', error instanceof Error ? error : new Error(String(error)));
     return NextResponse.json(
       { error: 'Failed to create checkout session' },
       { status: 500 }

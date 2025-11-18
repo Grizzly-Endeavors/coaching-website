@@ -1,4 +1,9 @@
 import { z } from 'zod';
+import { emailSchema, replayCodeSchema as replayCodeStringSchema, shortTextSchema } from './primitives';
+
+/**
+ * Validation schemas for booking and replay submission
+ */
 
 // Rank options for Overwatch (consolidated tiers)
 export const rankOptions = [
@@ -16,21 +21,21 @@ export const roleOptions = ['Tank', 'DPS', 'Support'] as const;
 
 export const coachingTypes = ['review-async', 'vod-review', 'live-coaching'] as const;
 
-// Individual replay code schema
-export const replayCodeSchema = z.object({
-  code: z.string()
-    .min(6, 'Replay code must be at least 6 characters')
-    .max(10, 'Replay code is too long')
-    .regex(/^[A-Z0-9]+$/, 'Replay code must contain only uppercase letters and numbers'),
+// Individual replay code object schema with map and notes
+// Note: The string validator (replayCodeStringSchema) is available from '@/lib/validations/primitives'
+export const replayCodeObjectSchema = z.object({
+  code: replayCodeStringSchema,
   mapName: z.string()
     .min(2, 'Map name is required')
     .max(100, 'Map name is too long'),
-  notes: z.string().max(500, 'Notes are too long (max 500 characters)').optional(),
+  notes: z.string()
+    .max(500, 'Notes are too long (max 500 characters)')
+    .optional(),
 });
 
 // Replay submission schema with multiple codes
 export const replaySubmissionSchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
+  email: emailSchema,
   discordTag: z.string().optional(),
   coachingType: z.enum(coachingTypes, {
     errorMap: () => ({ message: 'Please select a coaching type' }),
@@ -41,13 +46,17 @@ export const replaySubmissionSchema = z.object({
   role: z.enum(roleOptions, {
     errorMap: () => ({ message: 'Please select your role' }),
   }),
-  hero: z.string().min(2, 'Please specify which hero you played').max(50, 'Hero name is too long').optional(),
-  replays: z.array(replayCodeSchema)
+  hero: z.string()
+    .min(2, 'Please specify which hero you played')
+    .max(50, 'Hero name is too long')
+    .optional(),
+  replays: z.array(replayCodeObjectSchema)
     .min(1, 'At least one replay code is required')
     .max(5, 'Maximum 5 replay codes allowed'),
 });
 
 export type ReplaySubmissionData = z.infer<typeof replaySubmissionSchema>;
-export type ReplayCodeData = z.infer<typeof replayCodeSchema>;
+export type ReplayCodeData = z.infer<typeof replayCodeObjectSchema>;
 
+// Regex pattern for quick replay code validation
 export const replayCodeRegex = /^[A-Z0-9]{6,10}$/;

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { AdminButton, AdminInput, AdminTextarea, AdminLoading } from '@/components/admin';
+import { Button, Loading } from '@/components/ui';
 
 interface BlogPost {
   id: string;
@@ -122,7 +122,7 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
   }
 
   if (loading) {
-    return <AdminLoading message="Loading post..." />;
+    return <Loading size="lg" message="Loading post..." />;
   }
 
   return (
@@ -139,36 +139,55 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
       {/* Form */}
       <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 mb-6">
         <div className="space-y-6">
-          <AdminInput
-            label="Title"
-            placeholder="Enter post title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">
+              Title <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Enter post title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+            />
+          </div>
 
-          <AdminInput
-            label="Slug"
-            placeholder="post-url-slug"
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-            required
-          />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">
+              Slug <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="post-url-slug"
+              value={slug}
+              onChange={(e) => setSlug(e.target.value)}
+              required
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+            />
+          </div>
 
-          <AdminTextarea
-            label="Excerpt"
-            placeholder="Brief description of the post (optional)"
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
-            rows={3}
-          />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Excerpt</label>
+            <textarea
+              placeholder="Brief description of the post (optional)"
+              value={excerpt}
+              onChange={(e) => setExcerpt(e.target.value)}
+              rows={3}
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all resize-vertical min-h-[100px]"
+            />
+          </div>
 
-          <AdminInput
-            label="Tags"
-            placeholder="support, guides, tips (comma-separated)"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-          />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Tags</label>
+            <input
+              type="text"
+              placeholder="support, guides, tips (comma-separated)"
+              value={tags}
+              onChange={(e) => setTags(e.target.value)}
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+            />
+          </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
@@ -229,35 +248,36 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
 
       {/* Actions */}
       <div className="flex items-center justify-between bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6">
-        <AdminButton
-          variant="danger"
+        <Button
+          variant="secondary"
           onClick={handleDelete}
           disabled={saving}
+          className="bg-[#ef4444] text-white hover:bg-[#dc2626] border-0"
         >
           Delete Post
-        </AdminButton>
+        </Button>
         <div className="flex items-center space-x-3">
           <Link href="/admin/blog">
-            <AdminButton variant="ghost" disabled={saving}>
+            <Button variant="secondary" disabled={saving} className="bg-transparent hover:bg-[#2a2a40]">
               Cancel
-            </AdminButton>
+            </Button>
           </Link>
           {!published && (
-            <AdminButton
+            <Button
               variant="secondary"
               onClick={() => handleSave(false)}
               disabled={saving}
             >
               {saving ? 'Saving...' : 'Save as Draft'}
-            </AdminButton>
+            </Button>
           )}
-          <AdminButton
+          <Button
             variant="primary"
             onClick={() => handleSave(true)}
             disabled={saving}
           >
             {saving ? 'Saving...' : published ? 'Update Post' : 'Publish Post'}
-          </AdminButton>
+          </Button>
         </div>
       </div>
     </div>

@@ -42,9 +42,6 @@ All required dependencies from PROJECT_SPEC.md have been installed:
 - clsx@^2.1.0
 - tailwind-merge@^2.3.0
 
-**Google APIs:**
-- googleapis@^134.0.0
-
 **State Management:**
 - @tanstack/react-query@^5.29.0
 
@@ -127,7 +124,6 @@ All required dependencies from PROJECT_SPEC.md have been installed:
 │   │   ├── replay/            # Replay submission API
 │   │   ├── blog/              # Blog API
 │   │   ├── contact/           # Contact form API
-│   │   ├── webhooks/          # Google Calendar webhooks
 │   │   └── admin/             # Admin API routes
 │   ├── layout.tsx             # Root layout with Inter font
 │   ├── page.tsx               # Homepage
@@ -220,7 +216,6 @@ All required dependencies from PROJECT_SPEC.md have been installed:
 ✅ **.env.example** created with all required variables:
 - Database configuration (PostgreSQL)
 - NextAuth configuration
-- Google Calendar API credentials
 - Resend API key
 - Admin email
 - Cloudflare Tunnel token

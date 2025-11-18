@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { sendReviewReadyNotification } from '@/lib/discord';
 import { SubmissionStatus } from '@prisma/client';
+import { logger } from '@/lib/logger';
 
 // Validation schema for PATCH request body
 const updateSchema = z.object({
@@ -76,7 +77,7 @@ export async function GET(
       submission: transformedSubmission,
     });
   } catch (error) {
-    console.error('Error fetching submission:', error);
+    logger.error('Error fetching submission', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {
@@ -224,7 +225,10 @@ export async function PATCH(
       notificationSent = notificationResult.success;
 
       if (!notificationResult.success) {
-        console.error('Failed to send Discord notification:', notificationResult.error);
+        logger.error('Failed to send Discord notification', {
+          submissionId: transformedSubmission.id,
+          error: notificationResult.error,
+        });
       }
     }
 
@@ -234,7 +238,7 @@ export async function PATCH(
       notificationSent,
     });
   } catch (error) {
-    console.error('Error updating submission:', error);
+    logger.error('Error updating submission', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {
@@ -308,7 +312,7 @@ export async function DELETE(
       message: 'Submission archived successfully',
     });
   } catch (error) {
-    console.error('Error deleting submission:', error);
+    logger.error('Error deleting submission', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {

@@ -51,20 +51,12 @@ export type { BadgeProps } from './Badge';
 export { default as Loading } from './Loading';
 export type { LoadingProps } from './Loading';
 
-// Modal
-export { Modal, ModalFooter } from './Modal';
-export type { ModalProps, ModalFooterProps } from './Modal';
-
-// LoadingSpinner (legacy)
-export { LoadingSpinner, LoadingOverlay } from './LoadingSpinner';
-export type { LoadingSpinnerProps } from './LoadingSpinner';
-
 // Toast
 export { ToastProvider, useToast, useToastHelpers } from './Toast';
 export type { Toast, ToastType } from './Toast';
 
 // Alert
-export { Alert, AlertTitle, AlertDescription } from './alert';
+export { Alert, AlertTitle, AlertDescription } from './Alert';
 
 // Dialog
 export {
@@ -78,4 +70,4 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-} from './dialog';
+} from './Dialog';

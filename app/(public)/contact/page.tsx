@@ -1,50 +1,43 @@
 'use client';
 
-import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { contactFormSchema, type ContactFormInput } from '@/lib/validations';
+import { useFormState } from '@/hooks';
 
 type ContactFormData = ContactFormInput;
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState<ContactFormData>({
-    name: '',
-    email: '',
-    message: '',
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    submitStatus,
+    handleChange,
+    validate,
+    setIsSubmitting,
+    setSubmitStatus,
+    reset,
+  } = useFormState<ContactFormData>({
+    initialData: {
+      name: '',
+      email: '',
+      message: '',
+    },
+    schema: contactFormSchema,
   });
-  const [errors, setErrors] = useState<Partial<Record<keyof ContactFormData, string>>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
-    if (errors[name as keyof ContactFormData]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrors({});
-    setSubmitStatus('idle');
 
     // Validate form data
-    const result = contactFormSchema.safeParse(formData);
-    if (!result.success) {
-      const fieldErrors: Partial<Record<keyof ContactFormData, string>> = {};
-      result.error.errors.forEach((error) => {
-        const field = error.path[0] as keyof ContactFormData;
-        fieldErrors[field] = error.message;
-      });
-      setErrors(fieldErrors);
+    if (!validate()) {
       return;
     }
 
     setIsSubmitting(true);
+    setSubmitStatus('idle');
 
     try {
       const response = await fetch('/api/contact', {
@@ -60,7 +53,7 @@ export default function ContactPage() {
       }
 
       setSubmitStatus('success');
-      setFormData({ name: '', email: '', message: '' });
+      reset();
     } catch (error) {
       console.error('Error submitting form:', error);
       setSubmitStatus('error');

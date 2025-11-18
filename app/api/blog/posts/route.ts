@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { blogPostQuerySchema } from '@/lib/validations';
-import { ZodError } from 'zod';
+import { handleApiError } from '@/lib/api-error-handler';
+import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -37,6 +38,19 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(request: NextRequest) {
   try {
+    // Rate limiting: 100 requests per minute per IP
+    const rateLimitOptions = {
+      maxRequests: 100,
+      windowMs: 60 * 1000, // 1 minute
+      message: 'Too many requests. Please try again later.',
+    };
+
+    const rateLimitResult = await rateLimit(request, rateLimitOptions);
+
+    if (!rateLimitResult.success) {
+      return rateLimitResult.response!;
+    }
+
     // Parse query parameters
     const searchParams = request.nextUrl.searchParams;
     const queryParams = {
@@ -47,10 +61,6 @@ export async function GET(request: NextRequest) {
 
     // Validate query parameters with Zod
     const { page, limit, tag } = blogPostQuerySchema.parse(queryParams);
-
-    // TODO: Add rate limiting
-    // Consider caching this endpoint with Redis or Next.js cache
-    // as blog posts are relatively static content
 
     // Build query conditions
     const whereConditions: any = {
@@ -95,6 +105,9 @@ export async function GET(request: NextRequest) {
     // Calculate total pages
     const totalPages = Math.ceil(totalCount / limit);
 
+    // Get rate limit headers
+    const rateLimitHeaders = getRateLimitHeaders(request, rateLimitOptions);
+
     // Return response
     return NextResponse.json(
       {
@@ -117,50 +130,11 @@ export async function GET(request: NextRequest) {
         status: 200,
         headers: {
           'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+          ...rateLimitHeaders,
         },
       }
     );
   } catch (error) {
-    console.error('Error fetching blog posts:', error);
-
-    // Handle Zod validation errors
-    if (error instanceof ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Invalid query parameters',
-          details: error.errors.map((err) => ({
-            field: err.path.join('.'),
-            message: err.message,
-          })),
-        },
-        { status: 400 }
-      );
-    }
-
-    // Handle Prisma errors
-    if (error instanceof Error) {
-      // Check for database connection errors
-      if (error.message.includes('database') || error.message.includes('connection')) {
-        return NextResponse.json(
-          {
-            success: false,
-            error: 'Database error',
-            message: 'Unable to fetch blog posts. Please try again later.',
-          },
-          { status: 503 }
-        );
-      }
-    }
-
-    // Generic error response
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Internal server error',
-        message: 'An unexpected error occurred. Please try again later.',
-      },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

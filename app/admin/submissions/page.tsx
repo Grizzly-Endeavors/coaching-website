@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { AdminTable, AdminTableRow, AdminTableCell, AdminBadge, AdminSelect, AdminInput, AdminLoading } from '@/components/admin';
+import { AdminTable, AdminTableRow, AdminTableCell } from '@/components/admin';
+import { Badge, Loading } from '@/components/ui';
 
 type SubmissionStatus = 'ALL' | 'AWAITING_PAYMENT' | 'PAYMENT_RECEIVED' | 'PAYMENT_FAILED' | 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
 
@@ -85,39 +86,41 @@ export default function SubmissionsPage() {
       <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 mb-6">
         <div className="flex flex-wrap items-end gap-4">
           <div className="flex-1 min-w-[200px]">
-            <AdminInput
-              label="Search by ID or Email"
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Search by ID or Email</label>
+            <input
+              type="text"
               placeholder="Enter submission ID or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
             />
           </div>
           <div className="flex-1 min-w-[200px]">
-            <AdminSelect
-              label="Filter by Status"
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Filter by Status</label>
+            <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as SubmissionStatus)}
-              options={[
-                { value: 'ALL', label: 'All Submissions' },
-                { value: 'AWAITING_PAYMENT', label: 'Awaiting Payment' },
-                { value: 'PAYMENT_RECEIVED', label: 'Payment Received' },
-                { value: 'PAYMENT_FAILED', label: 'Payment Failed' },
-                { value: 'IN_PROGRESS', label: 'In Progress' },
-                { value: 'COMPLETED', label: 'Completed' },
-                { value: 'ARCHIVED', label: 'Archived' },
-              ]}
-            />
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all appearance-none"
+            >
+              <option value="ALL">All Submissions</option>
+              <option value="AWAITING_PAYMENT">Awaiting Payment</option>
+              <option value="PAYMENT_RECEIVED">Payment Received</option>
+              <option value="PAYMENT_FAILED">Payment Failed</option>
+              <option value="IN_PROGRESS">In Progress</option>
+              <option value="COMPLETED">Completed</option>
+              <option value="ARCHIVED">Archived</option>
+            </select>
           </div>
           <div className="flex-1 min-w-[200px]">
-            <AdminSelect
-              label="Sort by Date"
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Sort by Date</label>
+            <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-              options={[
-                { value: 'desc', label: 'Newest First' },
-                { value: 'asc', label: 'Oldest First' },
-              ]}
-            />
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all appearance-none"
+            >
+              <option value="desc">Newest First</option>
+              <option value="asc">Oldest First</option>
+            </select>
           </div>
           <div className="text-[#9ca3af] text-sm">
             {filteredAndSortedSubmissions.length} submission{filteredAndSortedSubmissions.length !== 1 ? 's' : ''}
@@ -128,7 +131,7 @@ export default function SubmissionsPage() {
       {/* Table */}
       <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6">
         {loading ? (
-          <AdminLoading message="Loading submissions..." />
+          <Loading size="lg" message="Loading submissions..." />
         ) : filteredAndSortedSubmissions.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-[#9ca3af] text-lg mb-2">No submissions found</p>
@@ -176,9 +179,9 @@ export default function SubmissionsPage() {
                   </div>
                 </AdminTableCell>
                 <AdminTableCell>
-                  <AdminBadge variant={submission.status.toLowerCase() as any}>
+                  <Badge variant={submission.status.toLowerCase() as any}>
                     {submission.status}
-                  </AdminBadge>
+                  </Badge>
                 </AdminTableCell>
                 <AdminTableCell>
                   <Link

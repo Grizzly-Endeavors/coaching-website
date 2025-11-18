@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { BookingStatus } from '@prisma/client';
+import { logger } from '@/lib/logger';
 
 // Validation schema for PATCH request body
 const updateSchema = z.object({
@@ -66,7 +67,6 @@ export async function PATCH(
       select: {
         id: true,
         email: true,
-        googleEventId: true,
         sessionType: true,
         scheduledAt: true,
         status: true,
@@ -81,7 +81,7 @@ export async function PATCH(
       booking: updatedBooking,
     });
   } catch (error) {
-    console.error('Error updating booking:', error);
+    logger.error('Error updating booking', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {
@@ -134,7 +134,6 @@ export async function GET(
       select: {
         id: true,
         email: true,
-        googleEventId: true,
         sessionType: true,
         scheduledAt: true,
         status: true,
@@ -156,7 +155,7 @@ export async function GET(
       booking,
     });
   } catch (error) {
-    console.error('Error fetching booking:', error);
+    logger.error('Error fetching booking', error instanceof Error ? error : new Error(String(error)));
 
     // Handle authentication errors
     if (error instanceof Error && error.message === 'Unauthorized') {

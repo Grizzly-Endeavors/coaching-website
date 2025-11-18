@@ -3,20 +3,38 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { AdminButton, AdminInput, AdminTextarea } from '@/components/admin';
+import { Button } from '@/components/ui';
+import { useFormState } from '@/hooks';
+
+interface BlogFormData {
+  title: string;
+  slug: string;
+  excerpt: string;
+  tags: string;
+  content: string;
+}
 
 export default function NewBlogPostPage() {
   const router = useRouter();
   const [uploading, setUploading] = useState(false);
-  const [saving, setSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
-  // Form fields
-  const [title, setTitle] = useState('');
-  const [slug, setSlug] = useState('');
-  const [excerpt, setExcerpt] = useState('');
-  const [tags, setTags] = useState('');
-  const [content, setContent] = useState('');
+  const {
+    formData,
+    setFormData,
+    isSubmitting,
+    setIsSubmitting,
+    handleChange,
+    handleFieldChange,
+  } = useFormState<BlogFormData>({
+    initialData: {
+      title: '',
+      slug: '',
+      excerpt: '',
+      tags: '',
+      content: '',
+    },
+  });
 
   // Auto-generate slug from title
   function generateSlug(text: string) {
@@ -27,9 +45,9 @@ export default function NewBlogPostPage() {
   }
 
   function handleTitleChange(value: string) {
-    setTitle(value);
-    if (!slug) {
-      setSlug(generateSlug(value));
+    handleFieldChange('title', value);
+    if (!formData.slug) {
+      handleFieldChange('slug', generateSlug(value));
     }
   }
 
@@ -44,12 +62,12 @@ export default function NewBlogPostPage() {
 
     try {
       setUploading(true);
-      const formData = new FormData();
-      formData.append('file', file);
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', file);
 
       const response = await fetch('/api/admin/blog/upload', {
         method: 'POST',
-        body: formData,
+        body: uploadFormData,
       });
 
       if (!response.ok) throw new Error('Failed to upload file');
@@ -57,11 +75,13 @@ export default function NewBlogPostPage() {
       const data = await response.json();
 
       // Pre-fill form with parsed data
-      setTitle(data.title || '');
-      setSlug(data.slug || generateSlug(data.title || ''));
-      setExcerpt(data.excerpt || '');
-      setTags(data.tags?.join(', ') || '');
-      setContent(data.content || '');
+      setFormData({
+        title: data.title || '',
+        slug: data.slug || generateSlug(data.title || ''),
+        excerpt: data.excerpt || '',
+        tags: data.tags?.join(', ') || '',
+        content: data.content || '',
+      });
 
       alert('Markdown file loaded successfully!');
     } catch (error) {
@@ -73,33 +93,33 @@ export default function NewBlogPostPage() {
   }
 
   async function handleSave(publish: boolean) {
-    if (!title.trim()) {
+    if (!formData.title.trim()) {
       alert('Please enter a title');
       return;
     }
-    if (!slug.trim()) {
+    if (!formData.slug.trim()) {
       alert('Please enter a slug');
       return;
     }
-    if (!content.trim()) {
+    if (!formData.content.trim()) {
       alert('Please enter content');
       return;
     }
 
     try {
-      setSaving(true);
+      setIsSubmitting(true);
       const response = await fetch('/api/admin/blog/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          title: title.trim(),
-          slug: slug.trim(),
-          excerpt: excerpt.trim() || null,
-          tags: tags
+          title: formData.title.trim(),
+          slug: formData.slug.trim(),
+          excerpt: formData.excerpt.trim() || null,
+          tags: formData.tags
             .split(',')
             .map((t) => t.trim())
             .filter(Boolean),
-          content: content.trim(),
+          content: formData.content.trim(),
           published: publish,
         }),
       });
@@ -116,7 +136,7 @@ export default function NewBlogPostPage() {
       console.error('Error saving post:', error);
       alert(error.message || 'Failed to save post');
     } finally {
-      setSaving(false);
+      setIsSubmitting(false);
     }
   }
 
@@ -159,36 +179,58 @@ export default function NewBlogPostPage() {
       {/* Form */}
       <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 mb-6">
         <div className="space-y-6">
-          <AdminInput
-            label="Title"
-            placeholder="Enter post title"
-            value={title}
-            onChange={(e) => handleTitleChange(e.target.value)}
-            required
-          />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">
+              Title <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="Enter post title"
+              value={formData.title}
+              onChange={(e) => handleTitleChange(e.target.value)}
+              required
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+            />
+          </div>
 
-          <AdminInput
-            label="Slug"
-            placeholder="post-url-slug"
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-            required
-          />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">
+              Slug <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              placeholder="post-url-slug"
+              name="slug"
+              value={formData.slug}
+              onChange={handleChange}
+              required
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+            />
+          </div>
 
-          <AdminTextarea
-            label="Excerpt"
-            placeholder="Brief description of the post (optional)"
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
-            rows={3}
-          />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Excerpt</label>
+            <textarea
+              placeholder="Brief description of the post (optional)"
+              name="excerpt"
+              value={formData.excerpt}
+              onChange={handleChange}
+              rows={3}
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all resize-vertical min-h-[100px]"
+            />
+          </div>
 
-          <AdminInput
-            label="Tags"
-            placeholder="support, guides, tips (comma-separated)"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-          />
+          <div className="w-full">
+            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Tags</label>
+            <input
+              type="text"
+              placeholder="support, guides, tips (comma-separated)"
+              name="tags"
+              value={formData.tags}
+              onChange={handleChange}
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+            />
+          </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
@@ -204,7 +246,7 @@ export default function NewBlogPostPage() {
               <div className="w-full px-4 py-3 bg-[#0f0f23] border border-[#2a2a40] rounded-lg text-[#e5e7eb] min-h-[400px] prose prose-invert prose-purple max-w-none">
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: content
+                    __html: formData.content
                       .split('\n')
                       .map((line) => {
                         if (line.startsWith('# ')) return `<h1>${line.slice(2)}</h1>`;
@@ -220,8 +262,9 @@ export default function NewBlogPostPage() {
               </div>
             ) : (
               <textarea
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
+                name="content"
+                value={formData.content}
+                onChange={handleChange}
                 placeholder="# Your post title&#10;&#10;Your content goes here in markdown format..."
                 rows={20}
                 className="w-full px-4 py-3 bg-[#0f0f23] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all resize-vertical font-mono text-sm"
@@ -234,25 +277,25 @@ export default function NewBlogPostPage() {
       {/* Actions */}
       <div className="flex items-center justify-between bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6">
         <Link href="/admin/blog">
-          <AdminButton variant="ghost" disabled={saving}>
+          <Button variant="secondary" disabled={isSubmitting} className="bg-transparent hover:bg-[#2a2a40]">
             Cancel
-          </AdminButton>
+          </Button>
         </Link>
         <div className="flex items-center space-x-3">
-          <AdminButton
+          <Button
             variant="secondary"
             onClick={() => handleSave(false)}
-            disabled={saving}
+            disabled={isSubmitting}
           >
-            {saving ? 'Saving...' : 'Save Draft'}
-          </AdminButton>
-          <AdminButton
+            {isSubmitting ? 'Saving...' : 'Save Draft'}
+          </Button>
+          <Button
             variant="primary"
             onClick={() => handleSave(true)}
-            disabled={saving}
+            disabled={isSubmitting}
           >
-            {saving ? 'Publishing...' : 'Publish Post'}
-          </AdminButton>
+            {isSubmitting ? 'Publishing...' : 'Publish Post'}
+          </Button>
         </div>
       </div>
     </div>

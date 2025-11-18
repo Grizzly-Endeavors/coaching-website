@@ -18,12 +18,20 @@ export type {
 };
 
 // Custom types for API responses
-export interface ApiResponse<T = unknown> {
-  success: boolean;
-  data?: T;
-  error?: string;
+export interface ApiSuccessResponse<T = unknown> {
+  success: true;
+  data: T;
   message?: string;
 }
+
+export interface ApiErrorResponse {
+  success: false;
+  error: string;
+  message?: string;
+  details?: Array<{ field: string; message: string }>;
+}
+
+export type ApiResponse<T = unknown> = ApiSuccessResponse<T> | ApiErrorResponse;
 
 export interface PaginatedResponse<T> {
   data: T[];
