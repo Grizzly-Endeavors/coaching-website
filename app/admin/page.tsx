@@ -14,7 +14,7 @@ async function getDashboardData() {
     recentBookings,
     recentSubmissions,
   ] = await Promise.all([
-    prisma.replaySubmission.count({ where: { status: 'PENDING' } }),
+    prisma.replaySubmission.count({ where: { status: 'AWAITING_PAYMENT' } }),
     prisma.replaySubmission.count(),
     prisma.replaySubmission.count({ where: { status: 'COMPLETED' } }),
     prisma.booking.findMany({
@@ -84,7 +84,7 @@ async function DashboardContent() {
       <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6">
         <h2 className="text-xl font-bold text-[#e5e7eb] mb-4">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
-          <Link href="/admin/submissions?status=PENDING">
+          <Link href="/admin/submissions?status=AWAITING_PAYMENT">
             <AdminButton variant="primary">
               Review Pending Submissions
             </AdminButton>

@@ -9,8 +9,17 @@ export { Input } from './Input';
 export type { InputProps } from './Input';
 
 // Select
-export { default as Select } from './Select';
-export type { SelectProps, SelectOption } from './Select';
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+} from './Select';
+
 
 // Textarea
 export { default as Textarea } from './Textarea';
@@ -53,3 +62,20 @@ export type { LoadingSpinnerProps } from './LoadingSpinner';
 // Toast
 export { ToastProvider, useToast, useToastHelpers } from './Toast';
 export type { Toast, ToastType } from './Toast';
+
+// Alert
+export { Alert, AlertTitle, AlertDescription } from './alert';
+
+// Dialog
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogTrigger,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from './dialog';
