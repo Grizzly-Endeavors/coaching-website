@@ -110,12 +110,7 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
     return sessionType === 'vod-review' ? 'VOD Review' : 'Live Coaching'
   }
 
-  // Get all unique time slots across all 3 days
-  const allTimeSlots = new Set<string>()
-  Object.values(slotsData).forEach(slots => {
-    slots.forEach(slot => allTimeSlots.add(slot.time))
-  })
-  const sortedTimes = Array.from(allTimeSlots).sort()
+  const hasAnySlots = Object.values(slotsData).some(daySlots => daySlots.length > 0);
 
   return (
     <Card className="bg-[#1a1a2e] border-[#2a2a40]">
@@ -151,14 +146,10 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
             </svg>
           </Button>
 
-          <div className="flex gap-4">
-            {threeDays.map((day) => (
-              <div key={day.dateString} className="text-center flex-1 min-w-[100px]">
-                <div className="text-xs text-gray-500 uppercase">{day.dayName}</div>
-                <div className="text-2xl font-bold text-white">{day.dayNumber}</div>
-                <div className="text-xs text-gray-400">{day.month}</div>
-              </div>
-            ))}
+          <div className="text-center">
+            <div className="text-lg font-bold text-white">
+              {threeDays.length > 0 && format(threeDays[0].date, 'MMMM yyyy')}
+            </div>
           </div>
 
           <Button
@@ -180,43 +171,38 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent"></div>
             <p className="text-gray-400 mt-3">Loading available times...</p>
           </div>
-        ) : sortedTimes.length > 0 ? (
-          <div className="space-y-2">
-            {sortedTimes.map((time) => (
-              <div key={time} className="grid grid-cols-4 gap-3 items-center">
-                <div className="text-sm font-medium text-gray-400 text-right">
-                  {time}
+        ) : hasAnySlots ? (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+            {threeDays.map((day) => (
+              <div key={day.dateString} className="flex flex-col">
+                <div className="text-center mb-4">
+                  <div className="text-xs text-gray-500 uppercase">{day.dayName}</div>
+                  <div className="text-2xl font-bold text-white">{day.dayNumber}</div>
+                  <div className="text-xs text-gray-400">{day.month}</div>
                 </div>
-                <div className="col-span-3 grid grid-cols-3 gap-3">
-                  {threeDays.map((day) => {
-                    const slot = slotsData[day.dateString]?.find(s => s.time === time)
-
-                    if (slot) {
-                      return (
+                <div className="flex flex-col gap-2">
+                  {slotsData[day.dateString] && slotsData[day.dateString].length > 0 ? (
+                    slotsData[day.dateString]
+                      .sort((a, b) => a.datetime.localeCompare(b.datetime))
+                      .map((slot) => (
                         <button
                           key={slot.datetime}
                           type="button"
                           onClick={() => handleSlotClick(slot.datetime)}
-                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                          className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                             isSlotSelected(slot.datetime)
                               ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/50'
                               : 'bg-[#0f0f23] text-gray-300 border border-[#2a2a40] hover:border-purple-500 hover:bg-[#1a1a2e]'
                           }`}
                         >
-                          Available
+                          {slot.time}
                         </button>
-                      )
-                    } else {
-                      return (
-                        <div
-                          key={`${day.dateString}-${time}`}
-                          className="px-3 py-2 rounded-lg text-sm text-gray-600 bg-[#0f0f23]/30 border border-[#2a2a40]/30"
-                        >
-                          —
-                        </div>
-                      )
-                    }
-                  })}
+                      ))
+                  ) : (
+                    <div className="text-center text-gray-500 text-sm h-full flex items-center justify-center border border-dashed border-[#2a2a40] rounded-lg p-4">
+                      No slots
+                    </div>
+                  )}
                 </div>
               </div>
             ))}
