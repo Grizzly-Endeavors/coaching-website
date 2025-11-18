@@ -1,7 +1,7 @@
 // prisma/schema.prisma
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "debian-openssl-1.1.x"]
 }
 
@@ -12,8 +12,13 @@ datasource db {
 
 // Replay code submissions
 model ReplaySubmission {
-  id           String   @id @default(cuid())
+  id           String           @id @default(cuid())
   email        String
+  discordTag   String?          @map("discord_tag")
+  coachingType String           @map("coaching_type") // review-async, vod-review, live-coaching
+  rank         String // e.g., "Gold", "Diamond"
+  role         String // Tank, DPS, Support
+  hero         String? // Specific hero played
   discordTag   String?  @map("discord_tag") // Deprecated: Use discordId instead
 
   // Discord OAuth fields
@@ -28,27 +33,57 @@ model ReplaySubmission {
   role         String   // Tank, DPS, Support
   hero         String?  // Specific hero played
   status       SubmissionStatus @default(PENDING)
-  reviewNotes  String?  @map("review_notes") @db.Text
-  reviewUrl    String?  @map("review_url") // Link to review video
-  submittedAt  DateTime @default(now()) @map("submitted_at")
-  reviewedAt   DateTime? @map("reviewed_at")
+  reviewNotes  String?          @map("review_notes") @db.Text
+  reviewUrl    String?          @map("review_url") // Link to review video
+  submittedAt  DateTime         @default(now()) @map("submitted_at")
+  reviewedAt   DateTime?        @map("reviewed_at")
 
-  replays      ReplayCode[] // One-to-many relationship
+  replays ReplayCode[] // One-to-many relationship
+  payment Payment? // One-to-one relationship with payment
 
   @@map("replay_submissions")
 }
 
 // Individual replay codes
 model ReplayCode {
-  id           String   @id @default(cuid())
-  code         String   // The replay code
-  mapName      String   @map("map_name") // Map where the game was played
-  notes        String?  @db.Text // Player's notes for this specific replay
+  id      String  @id @default(cuid())
+  code    String // The replay code
+  mapName String  @map("map_name") // Map where the game was played
+  notes   String? @db.Text // Player's notes for this specific replay
 
-  submissionId String   @map("submission_id")
+  submissionId String           @map("submission_id")
   submission   ReplaySubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 
   @@map("replay_codes")
+}
+
+// Payment records for Stripe transactions
+model Payment {
+  id              String        @id @default(cuid())
+  stripePaymentId String        @unique @map("stripe_payment_id") // Stripe PaymentIntent ID
+  stripeSessionId String?       @unique @map("stripe_session_id") // Stripe Checkout Session ID
+  amount          Int // Amount in cents
+  currency        String        @default("usd")
+  status          PaymentStatus @default(PENDING)
+  coachingType    String        @map("coaching_type") // review-async, vod-review, live-coaching
+  customerEmail   String        @map("customer_email")
+
+  submissionId String?           @unique @map("submission_id")
+  submission   ReplaySubmission? @relation(fields: [submissionId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("payments")
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  SUCCEEDED
+  FAILED
+  REFUNDED
+  CANCELLED
 }
 
 enum SubmissionStatus {
@@ -60,15 +95,15 @@ enum SubmissionStatus {
 
 // Calendar bookings synced from Google Calendar
 model Booking {
-  id            String   @id @default(cuid())
+  id            String        @id @default(cuid())
   email         String
-  googleEventId String   @unique @map("google_event_id")
-  sessionType   String   @map("session_type") // e.g., "1-on-1 Coaching", "VOD Review"
-  scheduledAt   DateTime @map("scheduled_at")
+  googleEventId String        @unique @map("google_event_id")
+  sessionType   String        @map("session_type") // e.g., "1-on-1 Coaching", "VOD Review"
+  scheduledAt   DateTime      @map("scheduled_at")
   status        BookingStatus @default(SCHEDULED)
-  notes         String?  @db.Text
-  createdAt     DateTime @default(now()) @map("created_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  notes         String?       @db.Text
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
 
   @@map("bookings")
 }
@@ -82,15 +117,15 @@ enum BookingStatus {
 
 // Blog posts
 model BlogPost {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
-  slug        String   @unique
-  content     String   @db.Text // Markdown content
+  slug        String    @unique
+  content     String    @db.Text // Markdown content
   excerpt     String?
   tags        String[] // Array of tags
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  published   Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
   publishedAt DateTime? @map("published_at")
 
   @@map("blog_posts")
@@ -100,7 +135,7 @@ model BlogPost {
 model Admin {
   id        String   @id @default(cuid())
   email     String   @unique
-  password  String   // Hashed with bcrypt
+  password  String // Hashed with bcrypt
   name      String?
   createdAt DateTime @default(now()) @map("created_at")
 

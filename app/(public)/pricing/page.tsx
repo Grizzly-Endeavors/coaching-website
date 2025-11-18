@@ -1,23 +1,22 @@
+'use client';
+
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Pricing | Overwatch Coaching',
-  description: 'Choose the coaching package that fits your needs. From async VOD reviews to live coaching sessions.',
-};
 
 const pricingOptions = [
   {
+    id: 'review-async',
     name: 'Review on My Time',
-    price: 'Contact for pricing',
+    price: '$25',
     description: 'I review your replay code and send detailed notes via Discord or email',
     features: [
       'Detailed written analysis of your gameplay',
       'Timestamped feedback on key moments',
       'Notes delivered via Discord or email',
-      'Review your own pace',
+      'Review at your own pace',
       '2-3 day turnaround time',
       'Perfect for players who want detailed feedback they can reference anytime',
     ],
@@ -29,8 +28,9 @@ const pricingOptions = [
     highlight: false,
   },
   {
+    id: 'vod-review',
     name: 'VOD Review',
-    price: 'Contact for pricing',
+    price: '$40',
     description: 'I stream your replay over Discord and review it with you live',
     features: [
       'Live review session over Discord',
@@ -48,8 +48,9 @@ const pricingOptions = [
     highlight: true,
   },
   {
+    id: 'live-coaching',
     name: 'Live Coaching',
-    price: 'Contact for pricing',
+    price: '$50',
     description: 'You stream your game and I make corrections on the fly while you play',
     features: [
       'Real-time coaching during your gameplay',
@@ -71,17 +72,17 @@ const pricingOptions = [
 const coachingProcess = [
   {
     step: 1,
-    title: 'Book or Submit',
-    description: 'Choose between live coaching or VOD review. Submit your replay code or book a time slot.',
+    title: 'Choose & Pay',
+    description: 'Select your preferred coaching package and complete secure payment via Stripe.',
   },
   {
     step: 2,
-    title: 'Analysis',
-    description: 'I analyze your gameplay, identifying strengths, weaknesses, and improvement opportunities.',
+    title: 'Submit Details',
+    description: 'Submit your replay codes or schedule your live session via Google Calendar.',
   },
   {
     step: 3,
-    title: 'Delivery',
+    title: 'Get Coached',
     description: 'Receive detailed feedback via video review or live session with actionable tips.',
   },
   {
@@ -92,8 +93,70 @@ const coachingProcess = [
 ];
 
 export default function PricingPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [selectedPackage, setSelectedPackage] = useState<string | null>(null);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+
+  const handlePurchase = (packageId: string) => {
+    setSelectedPackage(packageId);
+    setShowEmailModal(true);
+  };
+
+  const handleCheckout = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!email || !selectedPackage) return;
+
+    // Redirect to checkout with package and email
+    router.push(`/checkout?type=${selectedPackage}&email=${encodeURIComponent(email)}`);
+  };
+
   return (
     <div className="flex flex-col">
+      {/* Email Modal */}
+      {showEmailModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <Card variant="surface" padding="lg" className="max-w-md w-full">
+            <CardHeader>
+              <CardTitle className="text-2xl">Enter Your Email</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleCheckout}>
+                <p className="text-gray-300 mb-4">
+                  We'll send your receipt and booking details to this email.
+                </p>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="your.email@example.com"
+                  required
+                  className="w-full px-4 py-3 bg-[#0f0f23] border border-[#2a2a40] rounded-lg text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 mb-4"
+                />
+                <div className="flex gap-3">
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={() => {
+                      setShowEmailModal(false);
+                      setEmail('');
+                      setSelectedPackage(null);
+                    }}
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" variant="primary" className="flex-1">
+                    Continue to Payment
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-[#0f0f23] via-[#1a1a2e] to-[#0f0f23] py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -166,15 +229,14 @@ export default function PricingPage() {
                       ))}
                     </ul>
 
-                    <Link href="/booking">
-                      <Button
-                        variant={option.highlight ? 'primary' : 'outline'}
-                        size="lg"
-                        className="w-full"
-                      >
-                        Get Started
-                      </Button>
-                    </Link>
+                    <Button
+                      variant={option.highlight ? 'primary' : 'outline'}
+                      size="lg"
+                      className="w-full"
+                      onClick={() => handlePurchase(option.id)}
+                    >
+                      Buy Now
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
@@ -290,7 +352,7 @@ export default function PricingPage() {
                   How do I get started?
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Click the "Get Coaching" button to select your preferred coaching style and either schedule a session (for VOD Review or Live Coaching) or submit your replay code (for Review on My Time).
+                  Click the "Buy Now" button on your preferred package, complete the secure payment, and then submit your replay codes or schedule your session.
                 </p>
               </Card>
 
@@ -320,6 +382,15 @@ export default function PricingPage() {
                   Absolutely! VOD Review and Live Coaching sessions are interactive - feel free to ask questions at any time. For Review on My Time, you can reach out with follow-up questions via Discord or email.
                 </p>
               </Card>
+
+              <Card variant="surface" padding="lg">
+                <h3 className="text-xl font-bold text-gray-100 mb-3">
+                  What payment methods do you accept?
+                </h3>
+                <p className="text-gray-400 leading-relaxed">
+                  We accept all major credit cards (Visa, Mastercard, American Express) through our secure Stripe payment processor.
+                </p>
+              </Card>
             </div>
           </div>
         </div>
@@ -336,11 +407,6 @@ export default function PricingPage() {
               Choose your coaching style and start improving today
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/booking">
-                <Button variant="primary" size="lg" className="w-full sm:w-auto">
-                  Get Coaching
-                </Button>
-              </Link>
               <Link href="/contact">
                 <Button variant="secondary" size="lg" className="w-full sm:w-auto">
                   Have Questions?
