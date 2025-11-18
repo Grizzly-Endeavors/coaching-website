@@ -108,13 +108,6 @@ export async function POST(request: NextRequest) {
 
     console.log(`New replay submission created: ${submission.id} with ${submission.replays.length} replays`);
 
-    // Link payment to submission
-    await prisma.payment.update({
-      where: { id: payment.id },
-      data: { submissionId: submission.id },
-    });
-
-    console.log(`Payment ${payment.id} linked to submission ${submission.id}`);
     // Send Discord notification to admin (non-blocking)
     sendVodRequestNotification({
       id: submission.id,

@@ -10,6 +10,82 @@ export default function SuccessPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get('session_id');
+  const [paymentDetails, setPaymentDetails] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (sessionId) {
+      // Fetch payment details to get coaching type
+      fetch(`/api/payment/details?session_id=${sessionId}`)
+        .then(res => res.json())
+        .then(data => {
+          setPaymentDetails(data);
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
+    } else {
+      setLoading(false);
+    }
+  }, [sessionId]);
+
+  const getNextSteps = () => {
+    if (!paymentDetails?.coachingType) {
+      return [
+        'You'll receive a confirmation email shortly',
+        'Your booking has been confirmed',
+        'Check your email for next steps'
+      ];
+    }
+
+    switch (paymentDetails.coachingType) {
+      case 'review-async':
+        return [
+          'You'll receive a confirmation email shortly',
+          'Your replay submission has been confirmed',
+          'I'll review your replays and send detailed feedback within 2-3 business days',
+          'Check your email or Discord for the review'
+        ];
+      case 'vod-review':
+        return [
+          'You'll receive a confirmation email shortly',
+          'Your VOD review session has been booked',
+          'Check your email for the Google Calendar invite with session details',
+          'I'll see you at the scheduled time on Discord!'
+        ];
+      case 'live-coaching':
+        return [
+          'You'll receive a confirmation email shortly',
+          'Your live coaching session has been booked',
+          'Check your email for the Google Calendar invite with session details',
+          'Make sure you're ready to stream your gameplay on Discord!'
+        ];
+      default:
+        return [
+          'You'll receive a confirmation email shortly',
+          'Your booking has been confirmed',
+          'Check your email for next steps'
+        ];
+    }
+  };
+
+  const getTitle = () => {
+    if (!paymentDetails?.coachingType) {
+      return 'Booking Confirmed!';
+    }
+
+    switch (paymentDetails.coachingType) {
+      case 'review-async':
+        return 'Replay Review Confirmed!';
+      case 'vod-review':
+        return 'VOD Session Booked!';
+      case 'live-coaching':
+        return 'Coaching Session Booked!';
+      default:
+        return 'Booking Confirmed!';
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0f0f23] py-20">
@@ -35,7 +111,7 @@ export default function SuccessPage() {
                 </div>
               </div>
               <CardTitle className="text-3xl mb-4 text-green-400">
-                Payment Successful!
+                {loading ? 'Payment Successful!' : getTitle()}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-center">
@@ -48,48 +124,22 @@ export default function SuccessPage() {
                   What's Next?
                 </h3>
                 <ul className="text-left space-y-3 text-gray-300">
-                  <li className="flex items-start">
-                    <svg
-                      className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>You'll receive a confirmation email shortly</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg
-                      className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>Submit your replay codes on the booking page</span>
-                  </li>
-                  <li className="flex items-start">
-                    <svg
-                      className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    <span>If applicable, schedule your session via the calendar</span>
-                  </li>
+                  {getNextSteps().map((step, index) => (
+                    <li key={index} className="flex items-start">
+                      <svg
+                        className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      <span>{step}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -100,14 +150,14 @@ export default function SuccessPage() {
               )}
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/booking">
+                <Link href="/">
                   <Button variant="primary" size="lg">
-                    Go to Booking
+                    Back to Home
                   </Button>
                 </Link>
-                <Link href="/">
+                <Link href="/contact">
                   <Button variant="secondary" size="lg">
-                    Back to Home
+                    Contact Me
                   </Button>
                 </Link>
               </div>
