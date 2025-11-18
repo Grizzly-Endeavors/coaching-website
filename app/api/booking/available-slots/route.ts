@@ -23,9 +23,11 @@ export async function GET(req: NextRequest) {
       )
     }
 
-    // Parse the date in EST timezone
-    const requestedDate = parse(dateParam, 'yyyy-MM-dd', new Date())
-    const dayOfWeek = requestedDate.getDay() // 0 = Sunday, 6 = Saturday
+    // Parse the date string as YYYY-MM-DD in EST timezone
+    // This ensures we're working with the correct day in EST
+    const dateParts = dateParam.split('-').map(Number)
+    const dateInEST = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 0, 0, 0)
+    const dayOfWeek = dateInEST.getDay() // 0 = Sunday, 6 = Saturday
 
     // Get all active availability slots for this day of week and session type
     const availabilitySlots = await prisma.availabilitySlot.findMany({
@@ -37,7 +39,14 @@ export async function GET(req: NextRequest) {
     })
 
     if (availabilitySlots.length === 0) {
-      return NextResponse.json({ availableSlots: [] })
+      return NextResponse.json({
+        availableSlots: [],
+        message: 'No availability configured for this day and session type',
+        date: dateParam,
+        dayOfWeek,
+        sessionType,
+        timezone: TIMEZONE,
+      })
     }
 
     // Generate all possible time slots from availability
@@ -47,12 +56,9 @@ export async function GET(req: NextRequest) {
       const [startHour, startMin] = slot.startTime.split(':').map(Number)
       const [endHour, endMin] = slot.endTime.split(':').map(Number)
 
-      // Create datetime objects in EST
-      let currentSlot = new Date(requestedDate)
-      currentSlot.setHours(startHour, startMin, 0, 0)
-
-      const endTime = new Date(requestedDate)
-      endTime.setHours(endHour, endMin, 0, 0)
+      // Create datetime objects for this specific date in EST
+      let currentSlot = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], startHour, startMin, 0)
+      const endTime = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], endHour, endMin, 0)
 
       // Generate slots until we reach the end time
       while (currentSlot < endTime) {
@@ -62,8 +68,9 @@ export async function GET(req: NextRequest) {
     }
 
     // Get all exceptions (blocked times and bookings) for this date
-    const dayStart = startOfDay(requestedDate)
-    const dayEnd = endOfDay(requestedDate)
+    // Create date range that covers the full day in EST
+    const dayStart = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 0, 0, 0)
+    const dayEnd = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 23, 59, 59)
 
     const exceptions = await prisma.availabilityException.findMany({
       where: {
@@ -79,8 +86,9 @@ export async function GET(req: NextRequest) {
     // 2. Blocked by exceptions
     const now = new Date()
     const availableSlots = possibleSlots.filter((slot) => {
-      // Skip past slots
-      if (isBefore(slot, now)) {
+      // Skip past slots (with a 15-minute buffer to prevent booking slots that are starting soon)
+      const slotWithBuffer = addMinutes(slot, -15)
+      if (isBefore(slotWithBuffer, now)) {
         return false
       }
 
@@ -112,11 +120,18 @@ export async function GET(req: NextRequest) {
       date: dateParam,
       sessionType,
       timezone: TIMEZONE,
+      debug: {
+        dayOfWeek,
+        configuredSlotsCount: availabilitySlots.length,
+        generatedSlotsCount: possibleSlots.length,
+        exceptionsCount: exceptions.length,
+        availableSlotsCount: formattedSlots.length,
+      }
     })
   } catch (error) {
     console.error('Error fetching available slots:', error)
     return NextResponse.json(
-      { error: 'Failed to fetch available slots' },
+      { error: 'Failed to fetch available slots', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

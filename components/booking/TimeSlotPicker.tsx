@@ -13,6 +13,18 @@ interface TimeSlot {
   date: string
 }
 
+interface AvailableSlotsResponse {
+  availableSlots: TimeSlot[]
+  message?: string
+  debug?: {
+    dayOfWeek: number
+    configuredSlotsCount: number
+    generatedSlotsCount: number
+    exceptionsCount: number
+    availableSlotsCount: number
+  }
+}
+
 interface TimeSlotPickerProps {
   sessionType: 'vod-review' | 'live-coaching'
   onSelectSlot: (datetime: string | null) => void
@@ -24,6 +36,8 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
   const [availableSlots, setAvailableSlots] = useState<TimeSlot[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [debugInfo, setDebugInfo] = useState<AvailableSlotsResponse['debug'] | null>(null)
+  const [noConfigMessage, setNoConfigMessage] = useState<string | null>(null)
 
   // Generate next 14 days for the dropdown
   const availableDates = Array.from({ length: 14 }, (_, i) => {
@@ -47,6 +61,8 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
 
     setLoading(true)
     setError(null)
+    setNoConfigMessage(null)
+    setDebugInfo(null)
 
     try {
       const response = await fetch(
@@ -57,8 +73,14 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
         throw new Error('Failed to fetch available slots')
       }
 
-      const data = await response.json()
+      const data: AvailableSlotsResponse = await response.json()
       setAvailableSlots(data.availableSlots || [])
+      setDebugInfo(data.debug || null)
+
+      // Check if there's a message indicating no configuration
+      if (data.message) {
+        setNoConfigMessage(data.message)
+      }
 
       // If the currently selected slot is not available anymore, clear it
       if (selectedSlot && !data.availableSlots.some((s: TimeSlot) => s.datetime === selectedSlot)) {
@@ -162,12 +184,38 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
                 <svg className="w-12 h-12 text-gray-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <p className="text-gray-400">
-                  No available time slots for this date
-                </p>
-                <p className="text-gray-500 text-sm mt-1">
-                  Please select a different date
-                </p>
+                {noConfigMessage ? (
+                  <>
+                    <p className="text-gray-400 font-medium mb-2">
+                      No availability configured
+                    </p>
+                    <p className="text-gray-500 text-sm">
+                      {noConfigMessage}
+                    </p>
+                    {debugInfo && (
+                      <div className="mt-4 text-xs text-gray-600">
+                        <p>Day of week: {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][debugInfo.dayOfWeek]}</p>
+                        <p>Configured slots: {debugInfo.configuredSlotsCount}</p>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <p className="text-gray-400">
+                      No available time slots for this date
+                    </p>
+                    <p className="text-gray-500 text-sm mt-1">
+                      {debugInfo && debugInfo.generatedSlotsCount > 0
+                        ? 'All slots are booked or in the past'
+                        : 'Please select a different date'}
+                    </p>
+                    {debugInfo && debugInfo.generatedSlotsCount > 0 && (
+                      <div className="mt-4 text-xs text-gray-600">
+                        <p>Generated: {debugInfo.generatedSlotsCount}, Blocked: {debugInfo.exceptionsCount}</p>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
             )}
           </div>

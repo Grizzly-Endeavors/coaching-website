@@ -403,7 +403,7 @@ export default function GetCoachingPage() {
                   />
 
                   {/* Replay Codes Section */}
-                  <div className="space-y-4">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold text-gray-100">
                         Replay Codes <span className="text-red-500">*</span>
@@ -418,66 +418,62 @@ export default function GetCoachingPage() {
                     )}
 
                     {formData.replays?.map((replay, index) => (
-                      <Card key={index} variant="surface" className="bg-[#1a1a2e] border border-[#2a2a40]">
-                        <CardContent className="p-6 space-y-4">
-                          <div className="flex items-center justify-between mb-4">
-                            <h4 className="text-md font-semibold text-gray-200">Replay {index + 1}</h4>
-                            {(formData.replays?.length || 0) > 1 && (
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => removeReplay(index)}
-                                disabled={isSubmitting}
-                                className="text-red-400 hover:text-red-300 border-red-400/30 hover:border-red-400"
-                              >
-                                Remove
-                              </Button>
-                            )}
-                          </div>
-
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <Input
-                              label="Replay Code"
-                              name={`replay-code-${index}`}
-                              type="text"
-                              value={replay.code}
-                              onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
-                              error={errors.replays?.[index]?.code}
-                              required
-                              placeholder="ABC123"
+                      <div key={index} className="p-4 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-semibold text-gray-300">Replay {index + 1}</h4>
+                          {(formData.replays?.length || 0) > 1 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeReplay(index)}
                               disabled={isSubmitting}
-                              helperText="6-10 character code"
-                              className="font-mono text-lg"
-                            />
+                              className="text-red-400 hover:text-red-300 hover:bg-red-400/10 h-7 px-2"
+                            >
+                              Remove
+                            </Button>
+                          )}
+                        </div>
 
-                            <Input
-                              label="Map Name"
-                              name={`map-name-${index}`}
-                              type="text"
-                              value={replay.mapName}
-                              onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
-                              error={errors.replays?.[index]?.mapName}
-                              required
-                              placeholder="e.g., King's Row, Ilios"
-                              disabled={isSubmitting}
-                            />
-                          </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <Input
+                            label="Replay Code"
+                            name={`replay-code-${index}`}
+                            type="text"
+                            value={replay.code}
+                            onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
+                            error={errors.replays?.[index]?.code}
+                            required
+                            placeholder="ABC123"
+                            disabled={isSubmitting}
+                            className="font-mono"
+                          />
 
                           <Input
-                            label="Notes for this Replay"
-                            name={`notes-${index}`}
-                            inputType="textarea"
-                            rows={3}
-                            value={replay.notes}
-                            onChange={(e) => handleReplayChange(index, 'notes', e.target.value)}
-                            error={errors.replays?.[index]?.notes}
-                            placeholder="Any specific moments or questions about this game?"
+                            label="Map Name"
+                            name={`map-name-${index}`}
+                            type="text"
+                            value={replay.mapName}
+                            onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
+                            error={errors.replays?.[index]?.mapName}
+                            required
+                            placeholder="e.g., King's Row, Ilios"
                             disabled={isSubmitting}
-                            helperText="Optional - max 500 characters"
                           />
-                        </CardContent>
-                      </Card>
+                        </div>
+
+                        <Input
+                          label="Notes (optional)"
+                          name={`notes-${index}`}
+                          inputType="textarea"
+                          rows={2}
+                          value={replay.notes}
+                          onChange={(e) => handleReplayChange(index, 'notes', e.target.value)}
+                          error={errors.replays?.[index]?.notes}
+                          placeholder="Any specific moments or questions?"
+                          disabled={isSubmitting}
+                        />
+                      </div>
                     ))}
 
                     {(formData.replays?.length || 0) < 5 && (
@@ -647,7 +643,7 @@ export default function GetCoachingPage() {
               />
 
               {/* Replay Codes Section */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-gray-100">
                     Replay Codes <span className="text-red-500">*</span>
@@ -662,66 +658,62 @@ export default function GetCoachingPage() {
                 )}
 
                 {formData.replays?.map((replay, index) => (
-                  <Card key={index} variant="surface" className="bg-[#1a1a2e] border border-[#2a2a40]">
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-md font-semibold text-gray-200">Replay {index + 1}</h4>
-                        {(formData.replays?.length || 0) > 1 && (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            onClick={() => removeReplay(index)}
-                            disabled={isSubmitting}
-                            className="text-red-400 hover:text-red-300 border-red-400/30 hover:border-red-400"
-                          >
-                            Remove
-                          </Button>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Input
-                          label="Replay Code"
-                          name={`replay-code-${index}`}
-                          type="text"
-                          value={replay.code}
-                          onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
-                          error={errors.replays?.[index]?.code}
-                          required
-                          placeholder="ABC123"
+                  <div key={index} className="p-4 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-sm font-semibold text-gray-300">Replay {index + 1}</h4>
+                      {(formData.replays?.length || 0) > 1 && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => removeReplay(index)}
                           disabled={isSubmitting}
-                          helperText="6-10 character code"
-                          className="font-mono text-lg"
-                        />
+                          className="text-red-400 hover:text-red-300 hover:bg-red-400/10 h-7 px-2"
+                        >
+                          Remove
+                        </Button>
+                      )}
+                    </div>
 
-                        <Input
-                          label="Map Name"
-                          name={`map-name-${index}`}
-                          type="text"
-                          value={replay.mapName}
-                          onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
-                          error={errors.replays?.[index]?.mapName}
-                          required
-                          placeholder="e.g., King's Row, Ilios"
-                          disabled={isSubmitting}
-                        />
-                      </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <Input
+                        label="Replay Code"
+                        name={`replay-code-${index}`}
+                        type="text"
+                        value={replay.code}
+                        onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
+                        error={errors.replays?.[index]?.code}
+                        required
+                        placeholder="ABC123"
+                        disabled={isSubmitting}
+                        className="font-mono"
+                      />
 
                       <Input
-                        label="Notes for this Replay"
-                        name={`notes-${index}`}
-                        inputType="textarea"
-                        rows={3}
-                        value={replay.notes}
-                        onChange={(e) => handleReplayChange(index, 'notes', e.target.value)}
-                        error={errors.replays?.[index]?.notes}
-                        placeholder="Any specific moments or questions about this game?"
+                        label="Map Name"
+                        name={`map-name-${index}`}
+                        type="text"
+                        value={replay.mapName}
+                        onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
+                        error={errors.replays?.[index]?.mapName}
+                        required
+                        placeholder="e.g., King's Row, Ilios"
                         disabled={isSubmitting}
-                        helperText="Optional - max 500 characters"
                       />
-                    </CardContent>
-                  </Card>
+                    </div>
+
+                    <Input
+                      label="Notes (optional)"
+                      name={`notes-${index}`}
+                      inputType="textarea"
+                      rows={2}
+                      value={replay.notes}
+                      onChange={(e) => handleReplayChange(index, 'notes', e.target.value)}
+                      error={errors.replays?.[index]?.notes}
+                      placeholder="Any specific moments or questions?"
+                      disabled={isSubmitting}
+                    />
+                  </div>
                 ))}
 
                 {(formData.replays?.length || 0) < 5 && (
