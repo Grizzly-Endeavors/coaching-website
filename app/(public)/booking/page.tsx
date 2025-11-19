@@ -14,6 +14,8 @@ import {
   coachingTypes
 } from '@/lib/validations';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
+import { DiscordConnection } from '@/components/booking/DiscordConnection';
+import { FriendCodeDialog } from '@/components/booking/FriendCodeDialog';
 import { logger } from '@/lib/logger';
 
 type CoachingType = typeof coachingTypes[number];
@@ -60,6 +62,28 @@ function BookingContent() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [friendCodeDialogOpen, setFriendCodeDialogOpen] = useState(false);
+  const [discordConnected, setDiscordConnected] = useState(false);
+
+  // Check Discord connection status
+  useEffect(() => {
+    const checkDiscordStatus = async () => {
+      try {
+        const response = await fetch('/api/auth/discord/status');
+        const data = await response.json();
+        setDiscordConnected(data.connected);
+      } catch (error) {
+        logger.error('Failed to check Discord status', error instanceof Error ? error : new Error(String(error)));
+      }
+    };
+
+    checkDiscordStatus();
+
+    // Re-check if the URL indicates successful Discord connection
+    if (searchParams.get('discord_connected') === 'true') {
+      checkDiscordStatus();
+    }
+  }, [searchParams]);
 
   // Pre-select coaching type from URL parameter
   useEffect(() => {
@@ -131,6 +155,15 @@ function BookingContent() {
     e.preventDefault();
     setErrors({});
     setSubmitStatus('idle');
+
+    // Check Discord connection (required for all bookings)
+    // This should never happen since the form is only shown when Discord is connected
+    // but keeping it as a safety check
+    if (!discordConnected) {
+      setSubmitStatus('error');
+      alert('Please connect your Discord account first.');
+      return;
+    }
 
     // For VOD Review and Live Coaching, require time slot selection
     if ((selectedType === 'vod-review' || selectedType === 'live-coaching') && !selectedTimeSlot) {
@@ -260,7 +293,11 @@ function BookingContent() {
               Get Coaching
             </h1>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              {selectedType ? 'Submit your replay codes' : 'Choose your coaching style to get started'}
+              {!discordConnected
+                ? 'First, connect your Discord account to get started'
+                : selectedType
+                  ? 'Submit your replay codes'
+                  : 'Choose your coaching style to get started'}
             </p>
           </div>
         </div>
@@ -269,11 +306,24 @@ function BookingContent() {
       {/* Content Section */}
       <section className="py-20 bg-[#0f0f23] flex-grow">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Discord Connection - Always show first if not connected */}
+          {!discordConnected && (
+            <div className="max-w-2xl mx-auto mb-12">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-100 mb-4">Step 1: Connect Discord</h2>
+                <p className="text-gray-400 leading-relaxed">
+                  All coaching sessions are conducted over Discord. You'll join our coaching server where we'll schedule sessions, conduct reviews, and I'll send you notifications when your review is ready.
+                </p>
+              </div>
+              <DiscordConnection />
+            </div>
+          )}
+
           {/* Coaching Type Selection */}
-          {!selectedType && (
+          {discordConnected && !selectedType && (
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-100 mb-4">Select Your Coaching Style</h2>
+                <h2 className="text-3xl font-bold text-gray-100 mb-4">Step 2: Select Your Coaching Style</h2>
                 <p className="text-gray-400 leading-relaxed">
                   Not sure which one to choose? <a href="/pricing" className="text-purple-400 hover:text-purple-300 underline">View detailed pricing and comparisons</a>
                 </p>
@@ -534,6 +584,16 @@ function BookingContent() {
               {isSubmitting ? 'Processing...' : 'Continue to Payment'}
             </Button>
 
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => setFriendCodeDialogOpen(true)}
+                className="text-xs text-gray-500 hover:text-gray-400 underline transition-colors"
+              >
+                or use a code
+              </button>
+            </div>
+
             <p className="text-sm text-gray-400 text-center">
               By submitting, you agree to our terms of service and privacy policy
             </p>
@@ -709,6 +769,16 @@ function BookingContent() {
                 </Button>
               </div>
 
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => setFriendCodeDialogOpen(true)}
+                  className="text-xs text-gray-500 hover:text-gray-400 underline transition-colors"
+                >
+                  or use a code
+                </button>
+              </div>
+
               <p className="text-sm text-gray-400 text-center">
                 By submitting, you agree to our terms of service and privacy policy
               </p>
@@ -719,6 +789,27 @@ function BookingContent() {
           )}
         </div>
       </section>
+
+      {/* Friend Code Dialog */}
+      {selectedType && (
+        <FriendCodeDialog
+          open={friendCodeDialogOpen}
+          onOpenChange={setFriendCodeDialogOpen}
+          submissionData={{
+            email: formData.email,
+            discordTag: formData.discordTag,
+            coachingType: formData.coachingType,
+            rank: formData.rank,
+            role: formData.role,
+            hero: formData.hero,
+            replays: (formData.replays || []).filter(replay => replay.code.trim() !== '').map(replay => ({
+              ...replay,
+              notes: replay === formData.replays?.[0] && generalNotes.trim() ? generalNotes.trim() : replay.notes
+            })),
+          }}
+          selectedTimeSlot={selectedTimeSlot}
+        />
+      )}
     </div>
   );
 }

@@ -10,6 +10,8 @@ function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get('session_id');
+  const friendCode = searchParams.get('friend_code');
+  const submissionId = searchParams.get('submission_id');
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -25,47 +27,61 @@ function SuccessContent() {
         .catch(() => {
           setLoading(false);
         });
+    } else if (friendCode && submissionId) {
+      // For friend code, fetch submission details directly
+      fetch(`/api/admin/submissions/${submissionId}`)
+        .then(res => res.json())
+        .then(data => {
+          setPaymentDetails({
+            coachingType: data.coachingType,
+            submission: data,
+          });
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
     } else {
       setLoading(false);
     }
-  }, [sessionId]);
+  }, [sessionId, friendCode, submissionId]);
 
   const getNextSteps = () => {
     if (!paymentDetails?.coachingType) {
       return [
-        'You\'ll receive a confirmation email shortly',
         'Your booking has been confirmed',
-        'Check your email for next steps'
+        'Check Discord for a confirmation message from my bot',
+        'I\'ll reach out with next steps'
       ];
     }
 
     switch (paymentDetails.coachingType) {
       case 'review-async':
         return [
-          'You\'ll receive a confirmation email shortly',
           'Your replay submission has been confirmed',
+          'You\'ll receive a Discord DM confirmation shortly',
           'I\'ll review your replays and send detailed feedback within 2-3 business days',
-          'Check your email or Discord for the review'
+          'Watch for a Discord DM when your review is ready!'
         ];
       case 'vod-review':
         return [
-          'You\'ll receive a confirmation email shortly',
           'Your VOD review session has been booked',
-          'A Discord notification has been sent - I\'ll reach out closer to your session time',
-          'I\'ll see you at the scheduled time on Discord!'
+          'You\'ll receive a Discord DM confirmation shortly',
+          'I\'ll reach out on Discord closer to your session time',
+          'See you at the scheduled time on Discord!'
         ];
       case 'live-coaching':
         return [
-          'You\'ll receive a confirmation email shortly',
           'Your live coaching session has been booked',
-          'A Discord notification has been sent - I\'ll reach out closer to your session time',
+          'You\'ll receive a Discord DM confirmation shortly',
+          'I\'ll reach out on Discord closer to your session time',
           'Make sure you\'re ready to stream your gameplay on Discord!'
         ];
       default:
         return [
-          'You\'ll receive a confirmation email shortly',
           'Your booking has been confirmed',
-          'Check your email for next steps'
+          'Check Discord for a confirmation message from my bot',
+          'I\'ll reach out with next steps'
         ];
     }
   };
@@ -130,7 +146,9 @@ function SuccessContent() {
             </CardHeader>
             <CardContent className="text-center">
               <p className="text-gray-300 mb-6 text-lg">
-                Thank you for your purchase! Your payment has been processed successfully.
+                {friendCode
+                  ? 'Thank you! Your friend code has been applied successfully.'
+                  : 'Thank you for your purchase! Your payment has been processed successfully.'}
               </p>
 
               {/* Show scheduled time for VOD/Live coaching */}
@@ -178,15 +196,10 @@ function SuccessContent() {
                 </p>
               )}
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex justify-center">
                 <Link href="/">
                   <Button variant="primary" size="lg">
                     Back to Home
-                  </Button>
-                </Link>
-                <Link href="/contact">
-                  <Button variant="secondary" size="lg">
-                    Contact Me
                   </Button>
                 </Link>
               </div>

@@ -1,14 +1,13 @@
 /**
  * Discord Integration Module
  *
- * This module handles Discord notifications via two methods:
- * 1. Bot DMs - For admin notifications and fallback
- * 2. OAuth DMs - For user notifications (preferred method, no server requirement)
+ * This module handles Discord notifications via bot DMs.
+ * OAuth is used to get the user's Discord ID, then the bot sends DMs to that ID.
  *
  * Features:
  * - Admin receives bot DM when VOD is requested
- * - Users receive OAuth DM when review is ready (if connected via OAuth)
- * - Automatic token refresh for expired OAuth tokens
+ * - Users receive bot DM when review is ready (if they connected Discord via OAuth)
+ * - No shared server requirement - bot can DM users directly by ID
  */
 
 import { Client, GatewayIntentBits, Events } from 'discord.js';
@@ -38,9 +37,6 @@ interface ReviewReadyDetails {
   discordTag: string | null;
   discordId?: string | null;
   discordUsername?: string | null;
-  discordAccessToken?: string | null;
-  discordRefreshToken?: string | null;
-  discordTokenExpiry?: Date | null;
   replayCode: string;
   rank: string;
   role: string;
@@ -50,12 +46,20 @@ interface ReviewReadyDetails {
   reviewedAt: Date | null;
 }
 
-interface DiscordOAuthTokens {
-  access_token: string;
-  refresh_token: string;
-  expires_in: number;
-  token_type: string;
-  scope: string;
+interface BookingConfirmationDetails {
+  id: string;
+  email: string;
+  discordId?: string | null;
+  discordUsername?: string | null;
+  coachingType: string;
+  rank: string;
+  role: string;
+  hero: string | null;
+  scheduledAt?: Date | null;
+  replays: Array<{
+    code: string;
+    mapName: string;
+  }>;
 }
 
 interface DiscordResult {
@@ -192,100 +196,11 @@ ${replayList}
   }
 }
 
-/**
- * Refresh Discord OAuth access token using refresh token
- */
-async function refreshDiscordToken(refreshToken: string): Promise<DiscordOAuthTokens> {
-  const clientId = process.env.DISCORD_CLIENT_ID;
-  const clientSecret = process.env.DISCORD_CLIENT_SECRET;
-
-  if (!clientId || !clientSecret) {
-    throw new Error('Discord OAuth not configured');
-  }
-
-  const response = await fetch('https://discord.com/api/oauth2/token', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      grant_type: 'refresh_token',
-      refresh_token: refreshToken,
-    }),
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(`Token refresh failed: ${error.error_description || error.error}`);
-  }
-
-  return await response.json();
-}
-
-/**
- * Send Discord DM using OAuth access token (REST API)
- * This method doesn't require the bot or a shared server
- */
-async function sendDMViaOAuth(
-  userId: string,
-  message: string,
-  accessToken: string
-): Promise<DiscordResult> {
-  try {
-    // Create DM channel with user
-    const dmChannelResponse = await fetch('https://discord.com/api/users/@me/channels', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        recipient_id: userId,
-      }),
-    });
-
-    if (!dmChannelResponse.ok) {
-      const error = await dmChannelResponse.json();
-      throw new Error(`Failed to create DM channel: ${error.message || error.error}`);
-    }
-
-    const dmChannel = await dmChannelResponse.json();
-
-    // Send message to the DM channel
-    const messageResponse = await fetch(
-      `https://discord.com/api/channels/${dmChannel.id}/messages`,
-      {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: message,
-        }),
-      }
-    );
-
-    if (!messageResponse.ok) {
-      const error = await messageResponse.json();
-      throw new Error(`Failed to send message: ${error.message || error.error}`);
-    }
-
-    return { success: true };
-  } catch (error) {
-    logger.error('Error sending OAuth DM', error instanceof Error ? error : new Error(String(error)));
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    };
-  }
-}
 
 /**
  * Send Discord DM to user when their review is ready
- * Uses OAuth if available (no server requirement), falls back to bot method
+ * Uses bot to send DM to user by their Discord ID (obtained from OAuth)
+ * User must be in the Discord server for this to work (automatically added during OAuth)
  */
 export async function sendReviewReadyNotification(
   details: ReviewReadyDetails
@@ -308,93 +223,150 @@ ${details.reviewNotes ? `**📝 Coach's Notes:**\n${details.reviewNotes}\n` : ''
 
 Thank you for submitting your replay! If you have any questions, feel free to reach out.`;
 
-    // PRIORITY 1: Try OAuth method if user has connected Discord via OAuth
-    if (details.discordId && details.discordAccessToken && details.discordRefreshToken) {
-      logger.debug('Attempting OAuth DM', {
-        discordUsername: details.discordUsername || details.discordId,
-      });
-
-      let accessToken = details.discordAccessToken;
-
-      // Check if token is expired and refresh if needed
-      if (details.discordTokenExpiry && new Date() > details.discordTokenExpiry) {
-        logger.debug('Access token expired, refreshing...');
-        try {
-          const newTokens = await refreshDiscordToken(details.discordRefreshToken);
-          accessToken = newTokens.access_token;
-
-          // Update tokens in database
-          await prisma.replaySubmission.update({
-            where: { id: details.id },
-            data: {
-              discordAccessToken: newTokens.access_token,
-              discordRefreshToken: newTokens.refresh_token,
-              discordTokenExpiry: new Date(Date.now() + newTokens.expires_in * 1000),
-            },
-          });
-
-          logger.debug('Token refreshed successfully');
-        } catch (refreshError) {
-          logger.error('Failed to refresh token', refreshError instanceof Error ? refreshError : new Error(String(refreshError)));
-          // Token refresh failed, fall through to bot method
-        }
-      }
-
-      // Try sending via OAuth
-      const oauthResult = await sendDMViaOAuth(details.discordId, message, accessToken);
-
-      if (oauthResult.success) {
-        logger.info('OAuth DM sent successfully', {
-          discordUsername: details.discordUsername || details.discordId,
-        });
-        return { success: true };
-      } else {
-        logger.warn('OAuth DM failed, falling back to bot method', {
-          error: oauthResult.error,
-        });
-      }
+    // Check if user has connected Discord via OAuth
+    if (!details.discordId) {
+      logger.debug('No Discord connection available for user');
+      return {
+        success: false,
+        error: 'User has not connected Discord account',
+      };
     }
 
-    // PRIORITY 2: Fall back to bot method if OAuth not available or failed
-    if (details.discordTag) {
-      logger.debug('Attempting bot DM (fallback method)');
+    logger.debug('Sending bot DM to user', {
+      discordUsername: details.discordUsername || details.discordId,
+    });
 
-      // Parse Discord tag to get user ID
-      const discordUserId = details.discordTag.replace(/[<@!>]/g, ''); // Remove mention markers if present
+    const client = await getDiscordClient();
 
-      const client = await getDiscordClient();
-
-      let user;
-      try {
-        user = await client.users.fetch(discordUserId);
-      } catch (error) {
-        logger.error('Failed to fetch Discord user', {
-          discordUserId,
-          error: error instanceof Error ? error.message : String(error),
-        });
-        return {
-          success: false,
-          error: `Could not find Discord user. Please ensure the user has connected their Discord account or is in a server with the bot.`,
-        };
-      }
-
-      await user.send(message);
-
-      logger.info('Bot DM sent', {
-        discordTag: details.discordTag,
-        submissionId: details.id,
+    let user;
+    try {
+      user = await client.users.fetch(details.discordId);
+    } catch (error) {
+      logger.error('Failed to fetch Discord user', {
+        discordId: details.discordId,
+        error: error instanceof Error ? error.message : String(error),
       });
-      return { success: true };
+      return {
+        success: false,
+        error: `Could not find Discord user. User may have left the Discord server.`,
+      };
     }
 
-    // No Discord connection method available
-    logger.debug('No Discord connection available for user');
-    return {
-      success: false,
-      error: 'User has not connected Discord account',
-    };
+    await user.send(message);
+
+    logger.info('Bot DM sent successfully', {
+      discordUsername: details.discordUsername || details.discordId,
+      submissionId: details.id,
+    });
+    return { success: true };
   } catch (error) {
     logger.error('Error sending Discord notification to user', error instanceof Error ? error : new Error(String(error)));
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send Discord DM to user when their booking is confirmed (after payment)
+ * Uses bot to send DM to user by their Discord ID (obtained from OAuth)
+ */
+export async function sendBookingConfirmationNotification(
+  details: BookingConfirmationDetails
+): Promise<DiscordResult> {
+  try {
+    // Check if user has connected Discord via OAuth
+    if (!details.discordId) {
+      logger.debug('No Discord connection available for user');
+      return {
+        success: false,
+        error: 'User has not connected Discord account',
+      };
+    }
+
+    // Build message content based on coaching type
+    let message: string;
+
+    if (details.scheduledAt) {
+      // For scheduled sessions (VOD review / Live coaching)
+      const formattedDate = details.scheduledAt.toLocaleString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZoneName: 'short',
+      });
+
+      message = `🎮 **${getCoachingTypeName(details.coachingType)} Confirmed!**
+
+Your coaching session has been booked and confirmed!
+
+**📅 Scheduled Time:** ${formattedDate}
+**🎯 Rank:** ${details.rank}
+**🛡️ Role:** ${details.role}${details.hero ? `\n**🦸 Hero:** ${details.hero}` : ''}
+
+**Replays Submitted:**
+${details.replays.map((r, i) => `${i + 1}. \`${r.code}\` - ${r.mapName}`).join('\n')}
+
+**What's Next:**
+${details.coachingType === 'vod-review'
+  ? `• I'll review your replays before our session\n• I'll reach out on Discord closer to your session time\n• Make sure you're available on Discord at the scheduled time!`
+  : `• I'll review your replays to understand your playstyle\n• I'll reach out on Discord closer to your session time\n• Make sure you're ready to stream your gameplay on Discord!`}
+
+See you soon!`;
+    } else {
+      // For async reviews
+      message = `🎮 **Replay Review Confirmed!**
+
+Your replay submission has been confirmed!
+
+**🎯 Rank:** ${details.rank}
+**🛡️ Role:** ${details.role}${details.hero ? `\n**🦸 Hero:** ${details.hero}` : ''}
+
+**Replays Submitted:**
+${details.replays.map((r, i) => `${i + 1}. \`${r.code}\` - ${r.mapName}`).join('\n')}
+
+**What's Next:**
+• I'll review your replays within 2-3 business days
+• You'll receive a Discord DM when your review is ready
+• The review will include detailed feedback and analysis
+
+Thank you for your submission!`;
+    }
+
+    logger.debug('Sending booking confirmation DM', {
+      discordUsername: details.discordUsername || details.discordId,
+    });
+
+    const client = await getDiscordClient();
+
+    let user;
+    try {
+      user = await client.users.fetch(details.discordId);
+    } catch (error) {
+      logger.error('Failed to fetch Discord user for booking confirmation', {
+        discordId: details.discordId,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      return {
+        success: false,
+        error: `Could not find Discord user. User may have left the Discord server.`,
+      };
+    }
+
+    await user.send(message);
+
+    logger.info('Booking confirmation DM sent successfully', {
+      discordUsername: details.discordUsername || details.discordId,
+      bookingId: details.id,
+      coachingType: details.coachingType,
+    });
+    return { success: true };
+  } catch (error) {
+    logger.error('Error sending booking confirmation to user', error instanceof Error ? error : new Error(String(error)));
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
