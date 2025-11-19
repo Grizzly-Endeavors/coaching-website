@@ -22,14 +22,19 @@ interface RateLimitEntry {
 const rateLimitStore = new Map<string, RateLimitEntry>();
 
 // Cleanup old entries every 10 minutes
-setInterval(() => {
+const cleanupInterval = setInterval(() => {
   const now = Date.now();
   for (const [key, entry] of rateLimitStore.entries()) {
     if (now > entry.resetTime) {
       rateLimitStore.delete(key);
     }
   }
-}, 10 * 60 * 1000).unref();
+}, 10 * 60 * 1000);
+
+// Only call unref() in Node.js environments (not available in Edge Runtime)
+if (typeof cleanupInterval === 'object' && 'unref' in cleanupInterval) {
+  cleanupInterval.unref();
+}
 
 /**
  * Helper to get client IP from request
