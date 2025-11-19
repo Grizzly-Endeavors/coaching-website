@@ -126,6 +126,42 @@ export async function GET(request: NextRequest) {
     const discordUser = await userResponse.json();
     logger.info(`Discord user authenticated: ${discordUser.username} (${discordUser.id})`);
 
+    // Add user to Discord server (guild)
+    const guildId = process.env.DISCORD_GUILD_ID;
+    if (guildId) {
+      try {
+        const addMemberResponse = await fetch(
+          `https://discord.com/api/guilds/${guildId}/members/${discordUser.id}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              access_token: tokens.access_token,
+            }),
+          }
+        );
+
+        if (addMemberResponse.ok || addMemberResponse.status === 204) {
+          logger.info(`Added user ${discordUser.username} to Discord server`);
+        } else if (addMemberResponse.status === 201) {
+          logger.info(`User ${discordUser.username} was already in the server`);
+        } else {
+          const errorData = await addMemberResponse.json().catch(() => null);
+          logger.warn(`Failed to add user to Discord server: ${addMemberResponse.status}`, {
+            error: errorData,
+          });
+        }
+      } catch (error) {
+        logger.error('Error adding user to Discord server:', error instanceof Error ? error : new Error(String(error)));
+        // Don't fail the OAuth flow if adding to server fails
+      }
+    } else {
+      logger.warn('DISCORD_GUILD_ID not configured, skipping server join');
+    }
+
     // Calculate token expiry time
     const tokenExpiry = new Date(Date.now() + tokens.expires_in * 1000);
 

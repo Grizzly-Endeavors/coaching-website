@@ -129,11 +129,11 @@ export function DiscordConnection() {
           </div>
           <div className="flex-1">
             <h3 className="text-sm font-semibold text-gray-200 mb-1">
-              Get Notified on Discord
+              Connect Discord <span className="text-red-400">*</span>
             </h3>
             <p className="text-xs text-gray-400 leading-relaxed mb-3">
-              Connect your Discord account to receive instant notifications when your review is ready.
-              We'll send you a direct message with your review link and notes.
+              Discord is required for all coaching sessions. You'll be added to our coaching server where
+              we'll conduct sessions and send you notifications when your review is ready.
             </p>
             <Button
               variant="primary"
@@ -148,8 +148,10 @@ export function DiscordConnection() {
             </Button>
           </div>
         </div>
-        <div className="text-xs text-gray-500">
-          <p>This is optional but recommended for the fastest notifications.</p>
+        <div className="p-3 mt-3 bg-red-600/10 border border-red-600/30 rounded-lg">
+          <p className="text-xs text-red-300">
+            <strong>Required:</strong> You must connect Discord to proceed with booking.
+          </p>
         </div>
       </CardContent>
     </Card>

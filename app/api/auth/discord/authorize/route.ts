@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     discordAuthUrl.searchParams.set('client_id', clientId);
     discordAuthUrl.searchParams.set('redirect_uri', redirectUri);
     discordAuthUrl.searchParams.set('response_type', 'code');
-    discordAuthUrl.searchParams.set('scope', 'identify'); // Only need to identify the user
+    discordAuthUrl.searchParams.set('scope', 'identify guilds.join'); // Identify user and add them to server
     discordAuthUrl.searchParams.set('state', state);
 
     // Store state and returnTo in secure HTTP-only cookie for verification in callback

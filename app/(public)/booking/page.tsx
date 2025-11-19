@@ -63,6 +63,27 @@ function BookingContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [friendCodeDialogOpen, setFriendCodeDialogOpen] = useState(false);
+  const [discordConnected, setDiscordConnected] = useState(false);
+
+  // Check Discord connection status
+  useEffect(() => {
+    const checkDiscordStatus = async () => {
+      try {
+        const response = await fetch('/api/auth/discord/status');
+        const data = await response.json();
+        setDiscordConnected(data.connected);
+      } catch (error) {
+        logger.error('Failed to check Discord status', error instanceof Error ? error : new Error(String(error)));
+      }
+    };
+
+    checkDiscordStatus();
+
+    // Re-check if the URL indicates successful Discord connection
+    if (searchParams.get('discord_connected') === 'true') {
+      checkDiscordStatus();
+    }
+  }, [searchParams]);
 
   // Pre-select coaching type from URL parameter
   useEffect(() => {
@@ -134,6 +155,14 @@ function BookingContent() {
     e.preventDefault();
     setErrors({});
     setSubmitStatus('idle');
+
+    // Check Discord connection (required for all bookings)
+    if (!discordConnected) {
+      setSubmitStatus('error');
+      // Scroll to Discord connection section
+      document.querySelector('.discord-connection-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
 
     // For VOD Review and Live Coaching, require time slot selection
     if ((selectedType === 'vod-review' || selectedType === 'live-coaching') && !selectedTimeSlot) {
@@ -486,11 +515,18 @@ function BookingContent() {
                   </div>
 
                   {/* Discord Connection Section */}
-                  <div>
+                  <div className="discord-connection-section">
                     <h3 className="text-lg font-semibold text-gray-100 mb-3">
-                      Discord Notifications <span className="text-xs font-normal text-gray-400">(Optional)</span>
+                      Discord Connection <span className="text-red-500">*</span>
                     </h3>
                     <DiscordConnection />
+                    {!discordConnected && submitStatus === 'error' && (
+                      <div className="mt-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <p className="text-red-400 font-medium">
+                          You must connect Discord before proceeding. Please click the "Connect Discord" button above.
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   {submitStatus === 'error' && (
@@ -710,11 +746,18 @@ function BookingContent() {
               </div>
 
               {/* Discord Connection Section */}
-              <div>
+              <div className="discord-connection-section">
                 <h3 className="text-lg font-semibold text-gray-100 mb-3">
-                  Discord Notifications <span className="text-xs font-normal text-gray-400">(Optional)</span>
+                  Discord Connection <span className="text-red-500">*</span>
                 </h3>
                 <DiscordConnection />
+                {!discordConnected && submitStatus === 'error' && (
+                  <div className="mt-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                    <p className="text-red-400 font-medium">
+                      You must connect Discord before proceeding. Please click the "Connect Discord" button above.
+                    </p>
+                  </div>
+                )}
               </div>
 
               {submitStatus === 'error' && (
