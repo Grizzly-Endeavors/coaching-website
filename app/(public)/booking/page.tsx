@@ -18,6 +18,12 @@ import { logger } from '@/lib/logger';
 
 type CoachingType = typeof coachingTypes[number];
 
+interface ReplayFieldErrors {
+  code?: string;
+  mapName?: string;
+  notes?: string;
+}
+
 interface FormErrors {
   email?: string;
   discordTag?: string;
@@ -25,13 +31,8 @@ interface FormErrors {
   rank?: string;
   role?: string;
   hero?: string;
-  replays?: Array<{
-    code?: string;
-    mapName?: string;
-    notes?: string;
-  }> | string;
+  replays?: Array<ReplayFieldErrors> | string;
   timeSlot?: string;
-  [key: string]: string | Array<{code?: string; mapName?: string; notes?: string}> | string | undefined;
 }
 
 function BookingContent() {
@@ -116,10 +117,10 @@ function BookingContent() {
     setFormData((prev) => ({ ...prev, replays: newReplays }));
 
     // Clear error for this replay field
-    if (errors.replays?.[index]?.[field]) {
+    if (Array.isArray(errors.replays) && errors.replays[index]?.[field]) {
       const newErrors = { ...errors };
-      if (newErrors.replays?.[index]) {
-        delete newErrors.replays[index][field];
+      if (Array.isArray(newErrors.replays) && newErrors.replays[index]) {
+        delete newErrors.replays[index][field as keyof ReplayFieldErrors];
       }
       setErrors(newErrors);
     }
@@ -158,13 +159,22 @@ function BookingContent() {
       result.error.issues.forEach((error) => {
         const path = error.path;
         if (path.length === 1) {
-          fieldErrors[path[0]] = error.message;
+          const field = path[0] as keyof FormErrors;
+          if (field !== 'replays') {
+            (fieldErrors[field] as string | undefined) = error.message;
+          }
         } else if (path.length > 1) {
           // Handle nested errors for replays
           const [field, index, subfield] = path;
-          if (!fieldErrors[field]) fieldErrors[field] = [];
-          if (!fieldErrors[field][index as number]) fieldErrors[field][index as number] = {};
-          fieldErrors[field][index as number][subfield as string] = error.message;
+          if (field === 'replays') {
+            if (!Array.isArray(fieldErrors.replays)) {
+              fieldErrors.replays = [];
+            }
+            if (!fieldErrors.replays[index as number]) {
+              fieldErrors.replays[index as number] = {};
+            }
+            fieldErrors.replays[index as number][subfield as keyof ReplayFieldErrors] = error.message;
+          }
         }
       });
       setErrors(fieldErrors);
