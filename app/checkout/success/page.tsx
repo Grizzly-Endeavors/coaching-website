@@ -10,6 +10,8 @@ function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get('session_id');
+  const friendCode = searchParams.get('friend_code');
+  const submissionId = searchParams.get('submission_id');
   const [paymentDetails, setPaymentDetails] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -25,10 +27,24 @@ function SuccessContent() {
         .catch(() => {
           setLoading(false);
         });
+    } else if (friendCode && submissionId) {
+      // For friend code, fetch submission details directly
+      fetch(`/api/admin/submissions/${submissionId}`)
+        .then(res => res.json())
+        .then(data => {
+          setPaymentDetails({
+            coachingType: data.coachingType,
+            submission: data,
+          });
+          setLoading(false);
+        })
+        .catch(() => {
+          setLoading(false);
+        });
     } else {
       setLoading(false);
     }
-  }, [sessionId]);
+  }, [sessionId, friendCode, submissionId]);
 
   const getNextSteps = () => {
     if (!paymentDetails?.coachingType) {
@@ -130,7 +146,9 @@ function SuccessContent() {
             </CardHeader>
             <CardContent className="text-center">
               <p className="text-gray-300 mb-6 text-lg">
-                Thank you for your purchase! Your payment has been processed successfully.
+                {friendCode
+                  ? 'Thank you! Your friend code has been applied successfully.'
+                  : 'Thank you for your purchase! Your payment has been processed successfully.'}
               </p>
 
               {/* Show scheduled time for VOD/Live coaching */}
