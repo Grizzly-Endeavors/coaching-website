@@ -57,3 +57,17 @@ export type { Toast, ToastType } from './Toast';
 
 // Alert
 export { Alert, AlertTitle, AlertDescription } from './Alert';
+
+// Dialog
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogTrigger,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from './Dialog';
