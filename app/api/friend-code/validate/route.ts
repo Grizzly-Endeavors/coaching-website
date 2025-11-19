@@ -63,14 +63,51 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate friend code against environment variable
-    const validCodes = process.env.FRIEND_CODES?.split(',').map(code => code.trim()) || [];
+    // Validate friend code against database
+    const friendCodeRecord = await prisma.friendCode.findUnique({
+      where: {
+        code: friendCode.trim().toUpperCase(),
+      },
+    });
 
-    if (!validCodes.includes(friendCode.trim())) {
+    if (!friendCodeRecord) {
       return NextResponse.json(
         {
           success: false,
           error: 'Invalid friend code',
+        },
+        { status: 401 }
+      );
+    }
+
+    // Check if code is active
+    if (!friendCodeRecord.isActive) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'This friend code has been deactivated',
+        },
+        { status: 401 }
+      );
+    }
+
+    // Check if code has expired
+    if (friendCodeRecord.expiresAt && new Date(friendCodeRecord.expiresAt) < new Date()) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'This friend code has expired',
+        },
+        { status: 401 }
+      );
+    }
+
+    // Check if max uses has been reached
+    if (friendCodeRecord.maxUses && friendCodeRecord.usesCount >= friendCodeRecord.maxUses) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'This friend code has reached its maximum number of uses',
         },
         { status: 401 }
       );
@@ -112,7 +149,7 @@ export async function POST(request: NextRequest) {
     // Get package details for payment record
     const packageDetails = getCoachingPackage(validatedData.coachingType);
 
-    // Create replay submission with PAYMENT_RECEIVED status
+    // Create replay submission with PAYMENT_RECEIVED status and link to friend code
     const submission = await prisma.replaySubmission.create({
       data: {
         email: validatedData.email,
@@ -128,6 +165,7 @@ export async function POST(request: NextRequest) {
         role: validatedData.role,
         hero: validatedData.hero || null,
         status: 'PAYMENT_RECEIVED', // Skip payment step
+        friendCodeId: friendCodeRecord.id, // Link to friend code
         replays: {
           create: validatedData.replays.map((replay) => ({
             code: replay.code.toUpperCase(),
@@ -162,6 +200,16 @@ export async function POST(request: NextRequest) {
         replays: true,
         booking: true,
         payment: true,
+      },
+    });
+
+    // Increment the friend code usage count
+    await prisma.friendCode.update({
+      where: { id: friendCodeRecord.id },
+      data: {
+        usesCount: {
+          increment: 1,
+        },
       },
     });
 
