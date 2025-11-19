@@ -23,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui'
-import { FormLabel as Label } from '@/components/forms'
 import { logger } from '@/lib/logger'
 
 interface AvailabilitySlot {
