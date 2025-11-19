@@ -2,9 +2,9 @@ import NextAuth, { DefaultSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { compare } from 'bcryptjs';
 import { prisma } from './prisma';
-import { z } from 'zod';
-import { loginRateLimiter } from './rate-limit';
+import { loginRateLimiter } from './rate-limiter';
 import { logger } from './logger';
+import { loginSchema } from './validations';
 
 // Extend the built-in session types
 declare module 'next-auth' {
@@ -22,12 +22,6 @@ declare module 'next-auth' {
     name?: string | null;
   }
 }
-
-// Validation schema for login credentials
-const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
-});
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,

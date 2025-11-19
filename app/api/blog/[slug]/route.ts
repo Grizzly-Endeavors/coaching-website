@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
+import { logger } from '@/lib/logger';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -136,7 +137,7 @@ export async function GET(
       }
     );
   } catch (error) {
-    console.error('Error fetching blog post:', error);
+    logger.error('Error fetching blog post:', error instanceof Error ? error : new Error(String(error)));
 
     // Handle Prisma errors
     if (error instanceof Error) {

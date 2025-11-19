@@ -8,7 +8,7 @@ A professional Overwatch coaching platform built with Next.js 14, TypeScript, an
 - **Custom Appointment System**: Book coaching sessions with custom availability management
 - **Blog System**: Markdown-based blog with syntax highlighting
 - **Admin Panel**: Manage submissions, bookings, and blog posts
-- **Email Notifications**: Automated emails via Resend
+- **Discord Notifications**: Automated notifications via Discord bot integration
 - **Docker Deployment**: Full containerized setup with PostgreSQL
 
 ## Tech Stack
@@ -18,7 +18,7 @@ A professional Overwatch coaching platform built with Next.js 14, TypeScript, an
 - **Database**: PostgreSQL with Prisma ORM
 - **Styling**: Tailwind CSS
 - **Authentication**: NextAuth.js v5
-- **Email**: Resend + React Email
+- **Notifications**: Discord bot integration
 - **Deployment**: Docker + Cloudflare Tunnel
 
 ## Getting Started
@@ -85,7 +85,6 @@ Open [http://localhost:3000](http://localhost:3000) to see the application.
 │   └── types.ts          # TypeScript types
 ├── prisma/               # Database schema and migrations
 │   └── schema.prisma     # Prisma schema
-├── emails/               # Email templates
 ├── public/               # Static assets
 └── docker-compose.yml    # Docker configuration
 ```

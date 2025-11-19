@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui'
 import { FormLabel as Label } from '@/components/forms'
+import { logger } from '@/lib/logger'
 
 interface AvailabilitySlot {
   id: string
@@ -119,7 +120,7 @@ export default function AvailabilityPage() {
       const data = await response.json()
       setExceptions(data.exceptions)
     } catch (err) {
-      console.error('Failed to fetch exceptions:', err)
+      logger.error('Failed to fetch exceptions:', err instanceof Error ? err : new Error(String(err)))
     }
   }
 

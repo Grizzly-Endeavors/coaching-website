@@ -2,16 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
-
-// Validation schema for availability slot
-const availabilitySlotSchema = z.object({
-  dayOfWeek: z.number().min(0).max(6), // 0 = Sunday, 6 = Saturday
-  startTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/), // HH:MM format
-  endTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/),
-  sessionType: z.enum(['vod-review', 'live-coaching']),
-  slotDuration: z.number().optional().default(60),
-  isActive: z.boolean().optional().default(true),
-})
+import { logger } from '@/lib/logger'
+import { availabilitySlotSchema } from '@/lib/validations'
 
 // GET /api/admin/availability - List all availability slots
 export async function GET(req: NextRequest) {
@@ -51,7 +43,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ slots })
   } catch (error) {
-    console.error('Error fetching availability slots:', error)
+    logger.error('Error fetching availability slots:', error instanceof Error ? error : new Error(String(error)))
     return NextResponse.json(
       { error: 'Failed to fetch availability slots' },
       { status: 500 }
@@ -121,7 +113,7 @@ export async function POST(req: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 })
     }
-    console.error('Error creating availability slot:', error)
+    logger.error('Error creating availability slot:', error instanceof Error ? error : new Error(String(error)))
     return NextResponse.json(
       { error: 'Failed to create availability slot' },
       { status: 500 }

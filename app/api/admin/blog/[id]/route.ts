@@ -3,19 +3,7 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { logger } from '@/lib/logger';
-
-// Validation schema for PATCH request body
-const updateSchema = z.object({
-  title: z.string().min(1, 'Title is required').optional(),
-  slug: z.string().min(1, 'Slug is required').regex(
-    /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-    'Slug must be lowercase alphanumeric with hyphens'
-  ).optional(),
-  content: z.string().optional(),
-  excerpt: z.string().optional().or(z.literal('')),
-  tags: z.array(z.string()).optional(),
-  published: z.boolean().optional(),
-});
+import { adminBlogUpdateSchema } from '@/lib/validations';
 
 /**
  * GET /api/admin/blog/[id]
@@ -108,7 +96,7 @@ export async function PATCH(
 
     // Parse and validate request body
     const body = await request.json();
-    const validatedData = updateSchema.parse(body);
+    const validatedData = adminBlogUpdateSchema.parse(body);
 
     // Check if blog post exists
     const existingPost = await prisma.blogPost.findUnique({

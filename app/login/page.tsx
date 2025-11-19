@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { z } from 'zod';
+import { logger } from '@/lib/logger';
 
 /**
  * Zod schema for login form validation
@@ -80,7 +81,7 @@ function AdminLoginForm() {
         router.refresh();
       }
     } catch (error) {
-      console.error('Login error:', error);
+      logger.error('Login error:', error instanceof Error ? error : new Error(String(error)));
       setLoginError('An unexpected error occurred. Please try again.');
       setIsLoading(false);
     }

@@ -2,14 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
-
-const createExceptionSchema = z.object({
-  slotId: z.string().optional(), // Optional - can block without linking to specific slot
-  date: z.string().datetime(), // ISO 8601 datetime
-  endDate: z.string().datetime(), // ISO 8601 datetime
-  reason: z.enum(['blocked', 'holiday']), // 'booked' is created automatically by booking system
-  notes: z.string().optional(),
-})
+import { logger } from '@/lib/logger'
+import { createExceptionSchema } from '@/lib/validations'
 
 // GET /api/admin/availability/exceptions - List all exceptions
 export async function GET(req: NextRequest) {
@@ -57,7 +51,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ exceptions })
   } catch (error) {
-    console.error('Error fetching availability exceptions:', error)
+    logger.error('Error fetching availability exceptions:', error instanceof Error ? error : new Error(String(error)))
     return NextResponse.json(
       { error: 'Failed to fetch availability exceptions' },
       { status: 500 }
@@ -148,7 +142,7 @@ export async function POST(req: NextRequest) {
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 })
     }
-    console.error('Error creating availability exception:', error)
+    logger.error('Error creating availability exception:', error instanceof Error ? error : new Error(String(error)))
     return NextResponse.json(
       { error: 'Failed to create availability exception' },
       { status: 500 }

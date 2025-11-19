@@ -4,12 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { BookingStatus } from '@prisma/client';
 import { logger } from '@/lib/logger';
-
-// Validation schema for PATCH request body
-const updateSchema = z.object({
-  status: z.nativeEnum(BookingStatus),
-  notes: z.string().optional().or(z.literal('')),
-});
+import { adminBookingUpdateSchema } from '@/lib/validations';
 
 /**
  * PATCH /api/admin/bookings/[id]
@@ -34,7 +29,7 @@ export async function PATCH(
 
     // Parse and validate request body
     const body = await request.json();
-    const validatedData = updateSchema.parse(body);
+    const validatedData = adminBookingUpdateSchema.parse(body);
 
     // Check if booking exists
     const existingBooking = await prisma.booking.findUnique({

@@ -5,10 +5,12 @@ A custom website for Overwatch coaching services that handles:
 1. Marketing/landing pages to attract clients
 2. Blog for content marketing and SEO
 3. Replay code submission system
-4. Google Calendar appointment scheduling integration
+4. ~~Google Calendar appointment scheduling integration~~ (DEPRECATED - using custom booking system)
 5. Admin panel for managing submissions and blog posts
 
 **Target**: MVP focusing on core functionality, professional dark purple aesthetic
+
+**Note**: Email notifications via Resend and Google Calendar integration have been deprecated in favor of Discord bot notifications.
 
 ---
 
@@ -29,7 +31,7 @@ A custom website for Overwatch coaching services that handles:
 - **Database**: PostgreSQL 16
 - **ORM**: Prisma
 - **Authentication**: NextAuth.js (v5/Auth.js)
-- **Email**: Resend (with React Email for templates)
+- **Notifications**: Discord bot integration (email system deprecated)
 - **File Upload**: Built-in Next.js handling for .md files
 
 ### DevOps
@@ -124,11 +126,11 @@ enum SubmissionStatus {
   ARCHIVED
 }
 
-// Calendar bookings synced from Google Calendar
+// Calendar bookings managed by custom booking system
 model Booking {
   id            String   @id @default(cuid())
   email         String
-  googleEventId String   @unique @map("google_event_id")
+  googleEventId String   @unique @map("google_event_id") // Legacy field, kept for backward compatibility
   sessionType   String   @map("session_type") // e.g., "1-on-1 Coaching", "VOD Review"
   scheduledAt   DateTime @map("scheduled_at")
   status        BookingStatus @default(SCHEDULED)
@@ -173,31 +175,31 @@ model Admin {
   @@map("admins")
 }
 
-// Email notification log (optional but recommended)
-model EmailLog {
-  id        String   @id @default(cuid())
-  to        String
-  subject   String
-  type      EmailType
-  status    EmailStatus
-  sentAt    DateTime @default(now()) @map("sent_at")
-  error     String?
-
-  @@map("email_logs")
-}
-
-enum EmailType {
-  SUBMISSION_RECEIVED
-  REVIEW_READY
-  BOOKING_CONFIRMED
-  BOOKING_REMINDER
-}
-
-enum EmailStatus {
-  SENT
-  FAILED
-  PENDING
-}
+// DEPRECATED: Email notification log (email system no longer used - Discord notifications used instead)
+// model EmailLog {
+//   id        String   @id @default(cuid())
+//   to        String
+//   subject   String
+//   type      EmailType
+//   status    EmailStatus
+//   sentAt    DateTime @default(now()) @map("sent_at")
+//   error     String?
+//
+//   @@map("email_logs")
+// }
+//
+// enum EmailType {
+//   SUBMISSION_RECEIVED
+//   REVIEW_READY
+//   BOOKING_CONFIRMED
+//   BOOKING_REMINDER
+// }
+//
+// enum EmailStatus {
+//   SENT
+//   FAILED
+//   PENDING
+// }
 ```
 
 ---
@@ -271,7 +273,7 @@ enum EmailStatus {
 
 **Two Sections**:
 1. **Live Coaching Booking**
-   - Google Calendar appointment scheduler embed
+   - ~~Google Calendar appointment scheduler embed~~ (DEPRECATED - using custom booking system)
    - Session type selection
    - Clear pricing display
 
@@ -332,7 +334,7 @@ enum EmailStatus {
 - All submission info
 - Form to add review notes and video URL
 - Status update dropdown
-- Email notification checkbox (send when completed)
+- Discord notification checkbox (send when completed)
 
 #### 4. Blog Manager (`/admin/blog`)
 **Purpose**: Manage blog posts
@@ -365,7 +367,6 @@ enum EmailStatus {
 - Table of upcoming bookings
 - Columns: Date/Time, Email, Session Type, Status
 - Filter by status
-- Link to Google Calendar (external)
 - Mark as completed/no-show
 
 ---
@@ -400,8 +401,7 @@ enum EmailStatus {
 
 **Side Effects**:
 - Save to database
-- Send confirmation email to submitter
-- Send notification email to admin
+- Send Discord notification to admin
 
 #### `GET /api/blog/posts`
 **Purpose**: Get published blog posts (paginated)
@@ -462,18 +462,12 @@ enum EmailStatus {
 ```
 
 **Response**: 200 OK
-**Side Effects**: Send email to admin
+**Side Effects**: Send Discord notification to admin
 
-#### `POST /api/webhooks/google-calendar`
-**Purpose**: Receive Google Calendar notifications
+#### `POST /api/webhooks/google-calendar` (DEPRECATED)
+**Purpose**: ~~Receive Google Calendar notifications~~ (No longer used)
 
-**Authentication**: Verify webhook signature/token
-
-**Request Body**: (Google Calendar webhook format)
-
-**Side Effects**:
-- Create/update booking in database
-- Send confirmation email to client
+**Note**: This endpoint has been deprecated. The project now uses a custom booking system instead of Google Calendar integration.
 
 ### Admin API Routes (Protected)
 
@@ -498,11 +492,11 @@ All admin routes require authentication via NextAuth session.
   "status": "COMPLETED",
   "reviewNotes": "Great positioning improvement...",
   "reviewUrl": "https://youtube.com/...",
-  "sendEmail": true
+  "sendNotification": true
 }
 ```
 
-**Side Effects**: If `sendEmail: true`, send review ready email
+**Side Effects**: If `sendNotification: true`, send Discord notification to user
 
 #### `DELETE /api/admin/submissions/[id]`
 **Purpose**: Delete/archive submission
@@ -594,10 +588,8 @@ services:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
       - NEXTAUTH_URL=${NEXTAUTH_URL}
       - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
-      - GOOGLE_CALENDAR_CLIENT_ID=${GOOGLE_CALENDAR_CLIENT_ID}
-      - GOOGLE_CALENDAR_CLIENT_SECRET=${GOOGLE_CALENDAR_CLIENT_SECRET}
-      - GOOGLE_CALENDAR_WEBHOOK_SECRET=${GOOGLE_CALENDAR_WEBHOOK_SECRET}
-      - RESEND_API_KEY=${RESEND_API_KEY}
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+      - ADMIN_DISCORD_USER_ID=${ADMIN_DISCORD_USER_ID}
       - ADMIN_EMAIL=${ADMIN_EMAIL}
     ports:
       - "3000:3000"
@@ -721,14 +713,9 @@ DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@localhost:5432/${DB_NAME}
 NEXTAUTH_URL=https://your-domain.com
 NEXTAUTH_SECRET=your_nextauth_secret_here_generate_with_openssl
 
-# Google Calendar API
-GOOGLE_CALENDAR_CLIENT_ID=your_google_client_id
-GOOGLE_CALENDAR_CLIENT_SECRET=your_google_client_secret
-GOOGLE_CALENDAR_CALENDAR_ID=your_calendar_id@group.calendar.google.com
-GOOGLE_CALENDAR_WEBHOOK_SECRET=your_webhook_secret
-
-# Resend Email
-RESEND_API_KEY=re_your_resend_api_key
+# Discord Notifications (replaces email system)
+DISCORD_BOT_TOKEN=your_discord_bot_token_here
+ADMIN_DISCORD_USER_ID=your_discord_user_id_here
 
 # Admin
 ADMIN_EMAIL=your-email@example.com
@@ -744,20 +731,14 @@ CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token
 **IMPORTANT**: After implementing the project, generate detailed setup instructions that include:
 
 ### Required Integration Guides:
-1. **Google Calendar API Setup**
-   - How to create Google Cloud project
-   - OAuth 2.0 credentials configuration
-   - Appointment schedule setup
-   - Webhook configuration for calendar events
-   - Include actual code/scripts if needed for webhook setup
+1. **Discord Bot Setup** (replaces email notifications)
+   - Creating a Discord bot application
+   - Obtaining bot token
+   - Setting up bot permissions
+   - Getting your Discord user ID
+   - Testing Discord notifications
 
-2. **Resend Email Setup**
-   - Account creation and domain verification
-   - API key generation
-   - Email template configuration
-   - Testing email delivery
-
-3. **NextAuth Configuration**
+2. **NextAuth Configuration**
    - Secret generation
    - Admin user creation process
    - Any additional auth setup needed
@@ -806,8 +787,8 @@ CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token
 - [ ] All integrations tested and working
 - [ ] Admin login functional
 - [ ] Replay code submission working
-- [ ] Email notifications sending
-- [ ] Google Calendar appointments syncing
+- [ ] Discord notifications sending
+- [ ] Custom booking system working
 - [ ] Blog post creation working
 - [ ] Mobile responsive on all pages
 - [ ] SSL certificate active (Cloudflare)
@@ -817,7 +798,7 @@ CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token
 ### Week 1
 - [ ] Monitor error logs
 - [ ] Test booking flow end-to-end
-- [ ] Verify email deliverability
+- [ ] Verify Discord notification delivery
 - [ ] Write first 3 blog posts
 - [ ] Set up Google Search Console
 - [ ] Submit sitemap
@@ -830,9 +811,9 @@ CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token
 - [ ] Consider adding FAQ page
 
 ### Future Enhancements (Post-MVP)
-- [ ] Stripe payment integration
+- [x] Stripe payment integration (COMPLETED)
+- [x] Discord bot integration for notifications (COMPLETED - replaces email)
 - [ ] Client portal (dashboard to view submissions)
-- [ ] Discord bot integration for notifications
 - [ ] Replay code validation against Blizzard API
 - [ ] Automated booking reminders (24hr before)
 - [ ] Blog post categories/advanced filtering
@@ -878,7 +859,7 @@ CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token
 ├── lib/
 │   ├── prisma.ts           # Prisma client singleton
 │   ├── auth.ts             # NextAuth configuration
-│   ├── email.ts            # Email utilities
+│   ├── discord.ts          # Discord bot utilities
 │   └── utils.ts            # General utilities
 ├── prisma/
 │   ├── schema.prisma
@@ -888,7 +869,6 @@ CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token
 │   └── fonts/
 ├── styles/
 │   └── globals.css
-├── emails/                 # React Email templates
 ├── docker-compose.yml
 ├── Dockerfile
 ├── .env.example
@@ -904,8 +884,7 @@ CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token
     "@prisma/client": "^5.0.0",
     "next-auth": "^5.0.0",
     "bcrypt": "^5.1.1",
-    "resend": "^2.0.0",
-    "react-email": "^2.0.0",
+    "discord.js": "^14.0.0",
     "gray-matter": "^4.0.3",
     "react-markdown": "^9.0.0",
     "rehype-highlight": "^7.0.0",
@@ -979,7 +958,6 @@ npx prisma format
 - Validate all inputs with Zod schemas
 - Sanitize user-generated content (especially blog markdown)
 - Implement rate limiting on public endpoints (especially forms)
-- Verify webhook signatures (Google Calendar)
 - Use CORS appropriately
 
 ### Database
@@ -1008,13 +986,13 @@ npx prisma format
 - Use structured logging (consider Pino or Winston)
 - Log all API errors
 - Log webhook events
-- Monitor email delivery status
+- Monitor Discord notification delivery status
 
 ### Metrics to Track
 - Replay code submissions per day
 - Booking conversion rate
 - Average review turnaround time
-- Email delivery rate
+- Discord notification delivery rate
 - Page load times
 - Blog post views
 
@@ -1032,11 +1010,11 @@ npx prisma format
 - Next.js docs: https://nextjs.org/docs
 - Prisma docs: https://www.prisma.io/docs
 - NextAuth docs: https://next-auth.js.org
-- Resend docs: https://resend.com/docs
+- Discord.js docs: https://discord.js.org
 - Tailwind docs: https://tailwindcss.com/docs
 
 ### API References
-- Google Calendar API: https://developers.google.com/calendar
+- Discord Developer Portal: https://discord.com/developers/docs
 - Cloudflare Tunnel: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks
 
 ---
@@ -1072,8 +1050,8 @@ npx prisma format
 
 ### MVP is successful when:
 - [ ] Public can submit replay codes successfully
-- [ ] You receive email notifications for submissions
-- [ ] Google Calendar bookings sync to database
+- [ ] You receive Discord notifications for submissions
+- [ ] Custom booking system allows users to book sessions
 - [ ] You can log in to admin panel
 - [ ] You can manage submissions (view, update, complete)
 - [ ] You can create blog posts by uploading .md files
@@ -1086,7 +1064,7 @@ npx prisma format
 - 5+ coaching bookings per month
 - 1000+ blog page views per month
 - At least 2 new blog posts per month
-- Email open rate >40%
+- Discord notification delivery rate >95%
 
 ---
 
@@ -1117,8 +1095,8 @@ When implementing this project:
 4. Replay code submission flow
 5. Admin panel (submissions manager)
 6. Blog system
-7. Google Calendar integration
-8. Email notifications
+7. Custom booking system
+8. Discord notifications
 9. Polish & responsive design
 10. Testing & bug fixes
 
@@ -1128,11 +1106,11 @@ When implementing this project:
 - [ ] Test admin login
 - [ ] Test creating blog post from .md file
 - [ ] Test marking submission as complete
-- [ ] Verify emails are sent correctly
+- [ ] Verify Discord notifications are sent correctly
 - [ ] Test on mobile device
 - [ ] Test booking flow
 - [ ] Check all links work
-- [ ] Verify Google Calendar sync
+- [ ] Verify custom booking system works
 
 ---
 

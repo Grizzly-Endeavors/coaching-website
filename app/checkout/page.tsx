@@ -4,6 +4,7 @@ import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { logger } from '@/lib/logger';
 
 function CheckoutContent() {
   const searchParams = useSearchParams();
@@ -62,7 +63,7 @@ function CheckoutContent() {
         throw new Error('No checkout URL received');
       }
     } catch (err) {
-      console.error('Checkout error:', err);
+      logger.error('Checkout error:', err instanceof Error ? err : new Error(String(err)));
       setError(err instanceof Error ? err.message : 'An error occurred');
       setLoading(false);
     }

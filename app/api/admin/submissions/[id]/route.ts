@@ -5,14 +5,7 @@ import { requireAuth } from '@/lib/auth';
 import { sendReviewReadyNotification } from '@/lib/discord';
 import { SubmissionStatus } from '@prisma/client';
 import { logger } from '@/lib/logger';
-
-// Validation schema for PATCH request body
-const updateSchema = z.object({
-  status: z.nativeEnum(SubmissionStatus).optional(),
-  reviewNotes: z.string().optional(),
-  reviewUrl: z.string().url().optional().or(z.literal('')),
-  sendDiscordNotification: z.boolean().optional().default(false),
-});
+import { adminSubmissionUpdateSchema } from '@/lib/validations';
 
 /**
  * GET /api/admin/submissions/[id]
@@ -120,7 +113,7 @@ export async function PATCH(
 
     // Parse and validate request body
     const body = await request.json();
-    const validatedData = updateSchema.parse(body);
+    const validatedData = adminSubmissionUpdateSchema.parse(body);
 
     // Check if submission exists
     const existingSubmission = await prisma.replaySubmission.findUnique({

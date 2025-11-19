@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/Input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { contactFormSchema, type ContactFormInput } from '@/lib/validations';
 import { useFormState } from '@/hooks';
+import { logger } from '@/lib/logger';
 
 type ContactFormData = ContactFormInput;
 
@@ -55,7 +56,7 @@ export default function ContactPage() {
       setSubmitStatus('success');
       reset();
     } catch (error) {
-      console.error('Error submitting form:', error);
+      logger.error('Error submitting form:', error instanceof Error ? error : new Error(String(error)));
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);

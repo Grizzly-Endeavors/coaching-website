@@ -3,28 +3,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { AdminTable, AdminTableRow, AdminTableCell } from '@/components/admin';
-import { Badge, Loading } from '@/components/ui';
-
-type SubmissionStatus = 'ALL' | 'AWAITING_PAYMENT' | 'PAYMENT_RECEIVED' | 'PAYMENT_FAILED' | 'IN_PROGRESS' | 'COMPLETED' | 'ARCHIVED';
-
-interface ReplayCode {
-  id: string;
-  code: string;
-  mapName: string;
-  notes: string | null;
-}
-
-interface Submission {
-  id: string;
-  email: string;
-  coachingType: string;
-  rank: string;
-  role: string;
-  hero: string | null;
-  status: string;
-  submittedAt: string;
-  replays: ReplayCode[];
-}
+import { Badge, Loading, getStatusBadgeVariant } from '@/components/ui';
+import type { Submission, SubmissionStatus } from '@/lib/types';
+import { getCoachingTypeName } from '@/lib/coaching';
+import { logger } from '@/lib/logger';
 
 export default function SubmissionsPage() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
@@ -54,26 +36,13 @@ export default function SubmissionsPage() {
       const data = await response.json();
       setSubmissions(data.submissions);
     } catch (error) {
-      console.error('Error fetching submissions:', error);
+      logger.error('Error fetching submissions:', error instanceof Error ? error : new Error(String(error)));
     } finally {
       setLoading(false);
     }
   }
 
   const filteredAndSortedSubmissions = submissions;
-
-  const getCoachingTypeName = (type: string) => {
-    switch (type) {
-      case 'review-async':
-        return 'Review on My Time';
-      case 'vod-review':
-        return 'VOD Review';
-      case 'live-coaching':
-        return 'Live Coaching';
-      default:
-        return type;
-    }
-  };
 
   return (
     <div>
@@ -179,7 +148,7 @@ export default function SubmissionsPage() {
                   </div>
                 </AdminTableCell>
                 <AdminTableCell>
-                  <Badge variant={submission.status.toLowerCase() as any}>
+                  <Badge variant={getStatusBadgeVariant(submission.status)}>
                     {submission.status}
                   </Badge>
                 </AdminTableCell>

@@ -10,7 +10,7 @@ This is a full-stack web application for an Overwatch coaching service. It's bui
 - **Custom Appointment System:** A custom-built booking system allows users to book coaching sessions based on the coach's availability.
 - **Blog System:** A Markdown-based blog with syntax highlighting.
 - **Admin Panel:** A secure admin panel for managing submissions, bookings, and blog posts.
-- **Email Notifications:** Automated email notifications are sent using Resend.
+- **Discord Notifications:** Automated notifications via Discord bot integration (email system has been deprecated).
 - **Dockerized Deployment:** The entire application is containerized for easy deployment and scaling.
 
 **Architecture:**

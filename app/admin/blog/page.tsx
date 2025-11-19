@@ -8,17 +8,8 @@ import {
   AdminTableCell,
 } from '@/components/admin';
 import { Button, Badge, Loading } from '@/components/ui';
-
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  published: boolean;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string | null;
-  tags: string[];
-}
+import type { BlogPost } from '@/lib/types';
+import { logger } from '@/lib/logger';
 
 export default function BlogPostsPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -37,7 +28,7 @@ export default function BlogPostsPage() {
       const data = await response.json();
       setPosts(data.posts);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      logger.error('Error fetching posts:', error instanceof Error ? error : new Error(String(error)));
     } finally {
       setLoading(false);
     }
@@ -58,7 +49,7 @@ export default function BlogPostsPage() {
       alert('Post deleted successfully');
       fetchPosts();
     } catch (error) {
-      console.error('Error deleting post:', error);
+      logger.error('Error deleting post:', error instanceof Error ? error : new Error(String(error)));
       alert('Failed to delete post');
     }
   }
@@ -76,7 +67,7 @@ export default function BlogPostsPage() {
       alert(`Post ${!currentStatus ? 'published' : 'unpublished'} successfully`);
       fetchPosts();
     } catch (error) {
-      console.error('Error updating post:', error);
+      logger.error('Error updating post:', error instanceof Error ? error : new Error(String(error)));
       alert('Failed to update post');
     }
   }

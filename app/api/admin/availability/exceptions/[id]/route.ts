@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth-helpers'
+import { requireAuth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { logger } from '@/lib/logger'
 
 // DELETE /api/admin/availability/exceptions/[id] - Delete availability exception
 export async function DELETE(
@@ -45,7 +46,7 @@ export async function DELETE(
     if (error instanceof Error && error.message.includes('Unauthorized')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-    console.error('Error deleting availability exception:', error)
+    logger.error('Error deleting availability exception:', error instanceof Error ? error : new Error(String(error)))
     return NextResponse.json(
       { error: 'Failed to delete availability exception' },
       { status: 500 }

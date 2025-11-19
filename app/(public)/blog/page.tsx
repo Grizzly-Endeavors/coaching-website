@@ -8,6 +8,8 @@ import { Suspense } from 'react';
 import { BlogCard, BlogCardSkeleton } from '@/components/blog/BlogCard';
 import { TagFilter, TagFilterSkeleton } from '@/components/blog/TagFilter';
 import { Pagination, PaginationSkeleton } from '@/components/blog/Pagination';
+import type { BlogPostSummary } from '@/lib/types/blog.types';
+import { logger } from '@/lib/logger';
 
 interface BlogPageProps {
   searchParams: Promise<{
@@ -49,7 +51,7 @@ async function getBlogPosts(page: number = 1, tag?: string) {
 
     return await response.json();
   } catch (error) {
-    console.error('Error fetching blog posts:', error);
+    logger.error('Error fetching blog posts:', error instanceof Error ? error : new Error(String(error)));
     return {
       posts: [],
       pagination: {
@@ -79,7 +81,7 @@ async function getAllTags() {
     const data = await response.json();
     return data.tags || [];
   } catch (error) {
-    console.error('Error fetching tags:', error);
+    logger.error('Error fetching tags:', error instanceof Error ? error : new Error(String(error)));
     return [];
   }
 }
@@ -153,7 +155,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         ) : (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {posts.map((post: any) => (
+              {posts.map((post: BlogPostSummary) => (
                 <BlogCard key={post.id} post={post} />
               ))}
             </div>

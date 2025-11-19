@@ -1,20 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { Prisma, SubmissionStatus } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
-import { SubmissionStatus } from '@prisma/client';
 import { handleApiError } from '@/lib/api-error-handler';
+import { adminSubmissionsQuerySchema } from '@/lib/validations';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
-
-// Query parameters validation schema
-const querySchema = z.object({
-  status: z.nativeEnum(SubmissionStatus).optional(),
-  sort: z.enum(['submittedAt', 'reviewedAt', 'status']).optional().default('submittedAt'),
-  order: z.enum(['asc', 'desc']).optional().default('desc'),
-  search: z.string().optional(), // Search by submission ID or email
-});
 
 /**
  * GET /api/admin/submissions
@@ -43,10 +36,10 @@ export async function GET(request: NextRequest) {
       search: searchParams.get('search') || undefined,
     };
 
-    const validatedParams = querySchema.parse(queryParams);
+    const validatedParams = adminSubmissionsQuerySchema.parse(queryParams);
 
     // Build query filter
-    const where: any = {};
+    const where: Prisma.ReplaySubmissionWhereInput = {};
     if (validatedParams.status) {
       where.status = validatedParams.status;
     }

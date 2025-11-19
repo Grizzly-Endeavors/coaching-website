@@ -3,30 +3,10 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Button, Badge, Loading } from '@/components/ui';
-
-interface ReplayCode {
-  id: string;
-  code: string;
-  mapName: string;
-  notes: string | null;
-}
-
-interface Submission {
-  id: string;
-  email: string;
-  discordTag: string | null;
-  coachingType: string;
-  rank: string;
-  role: string;
-  hero: string | null;
-  status: string;
-  reviewNotes: string | null;
-  reviewUrl: string | null;
-  submittedAt: string;
-  reviewedAt: string | null;
-  replays: ReplayCode[];
-}
+import { Button, Badge, Loading, getStatusBadgeVariant } from '@/components/ui';
+import type { Submission } from '@/lib/types';
+import { getCoachingTypeName } from '@/lib/coaching';
+import { logger } from '@/lib/logger';
 
 export default function SubmissionDetailPage() {
   const router = useRouter();
@@ -61,7 +41,7 @@ export default function SubmissionDetailPage() {
       setReviewNotes(data.submission.reviewNotes || '');
       setReviewUrl(data.submission.reviewUrl || '');
     } catch (error) {
-      console.error('Error fetching submission:', error);
+      logger.error('Error fetching submission:', error instanceof Error ? error : new Error(String(error)));
       alert('Failed to load submission');
     } finally {
       setLoading(false);
@@ -92,7 +72,7 @@ export default function SubmissionDetailPage() {
       }
       fetchSubmission();
     } catch (error) {
-      console.error('Error updating submission:', error);
+      logger.error('Error updating submission:', error instanceof Error ? error : new Error(String(error)));
       alert('Failed to update submission');
     } finally {
       setSaving(false);
@@ -116,7 +96,7 @@ export default function SubmissionDetailPage() {
       alert('Submission deleted successfully');
       router.push('/admin/submissions');
     } catch (error) {
-      console.error('Error deleting submission:', error);
+      logger.error('Error deleting submission:', error instanceof Error ? error : new Error(String(error)));
       alert('Failed to delete submission');
       setDeleting(false);
     }
@@ -129,19 +109,6 @@ export default function SubmissionDetailPage() {
       setTimeout(() => setCopiedId(false), 2000);
     }
   }
-
-  const getCoachingTypeName = (type: string) => {
-    switch (type) {
-      case 'review-async':
-        return 'Review on My Time';
-      case 'vod-review':
-        return 'VOD Review';
-      case 'live-coaching':
-        return 'Live Coaching';
-      default:
-        return type;
-    }
-  };
 
   if (loading) {
     return <Loading size="lg" message="Loading submission details..." />;
@@ -187,7 +154,7 @@ export default function SubmissionDetailPage() {
               </button>
             </div>
           </div>
-          <Badge variant={(submission.status || 'pending').toLowerCase() as any}>
+          <Badge variant={getStatusBadgeVariant(submission.status || 'PENDING')}>
             {submission.status || 'Pending'}
           </Badge>
         </div>

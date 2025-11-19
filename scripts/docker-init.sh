@@ -57,7 +57,7 @@ if [ "$SEED_ADMIN" = "true" ]; then
     # Create a temporary Node.js script to create admin user
     docker exec overwatch-coaching-app node -e "
     const { PrismaClient } = require('@prisma/client');
-    const bcrypt = require('bcrypt');
+    const bcrypt = require('bcryptjs');
     
     const prisma = new PrismaClient();
     

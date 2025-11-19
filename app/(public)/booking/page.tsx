@@ -14,8 +14,25 @@ import {
   coachingTypes
 } from '@/lib/validations';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
+import { logger } from '@/lib/logger';
 
 type CoachingType = typeof coachingTypes[number];
+
+interface FormErrors {
+  email?: string;
+  discordTag?: string;
+  coachingType?: string;
+  rank?: string;
+  role?: string;
+  hero?: string;
+  replays?: Array<{
+    code?: string;
+    mapName?: string;
+    notes?: string;
+  }> | string;
+  timeSlot?: string;
+  [key: string]: string | Array<{code?: string; mapName?: string; notes?: string}> | string | undefined;
+}
 
 function BookingContent() {
   const searchParams = useSearchParams();
@@ -39,7 +56,7 @@ function BookingContent() {
     ],
   });
   const [generalNotes, setGeneralNotes] = useState<string>('');
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
@@ -89,7 +106,7 @@ function BookingContent() {
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors((prev: any) => ({ ...prev, [name]: undefined }));
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
   };
 
@@ -137,7 +154,7 @@ function BookingContent() {
     // Validate form data
     const result = replaySubmissionSchema.safeParse(dataToValidate);
     if (!result.success) {
-      const fieldErrors: any = {};
+      const fieldErrors: FormErrors = {};
       result.error.issues.forEach((error) => {
         const path = error.path;
         if (path.length === 1) {
@@ -177,7 +194,7 @@ function BookingContent() {
       // Redirect directly to payment with submission ID
       router.push(`/checkout?submissionId=${data.submissionId}`);
     } catch (error) {
-      console.error('Error submitting form:', error);
+      logger.error('Error submitting form:', error instanceof Error ? error : new Error(String(error)));
       setSubmitStatus('error');
       setIsSubmitting(false);
     }

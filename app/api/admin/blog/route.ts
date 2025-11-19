@@ -3,18 +3,10 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { logger } from '@/lib/logger';
+import { adminBlogQuerySchema } from '@/lib/validations';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
-
-// Query parameters validation schema
-const querySchema = z.object({
-  page: z.coerce.number().int().positive().optional().default(1),
-  limit: z.coerce.number().int().positive().max(100).optional().default(20),
-  published: z.enum(['true', 'false', 'all']).optional().default('all'),
-  sort: z.enum(['createdAt', 'updatedAt', 'publishedAt', 'title']).optional().default('createdAt'),
-  order: z.enum(['asc', 'desc']).optional().default('desc'),
-});
 
 /**
  * GET /api/admin/blog
@@ -45,7 +37,7 @@ export async function GET(request: NextRequest) {
       order: searchParams.get('order') || undefined,
     };
 
-    const validatedParams = querySchema.parse(queryParams);
+    const validatedParams = adminBlogQuerySchema.parse(queryParams);
 
     // Build query filter
     const where: { published?: boolean } = {};

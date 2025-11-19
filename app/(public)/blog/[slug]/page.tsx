@@ -9,6 +9,8 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 import { BlogContent, BlogContentSkeleton } from '@/components/blog/BlogContent';
 import { estimateReadingTime } from '@/lib/markdown';
+import { logger } from '@/lib/logger';
+import type { BlogPostSummary } from '@/lib/types/blog.types';
 
 // Force dynamic rendering since this page needs database access
 export const dynamic = 'force-dynamic';
@@ -38,7 +40,7 @@ async function getBlogPost(slug: string) {
 
     return await response.json();
   } catch (error) {
-    console.error('Error fetching blog post:', error);
+    logger.error('Error fetching blog post:', error instanceof Error ? error : new Error(String(error)));
     return null;
   }
 }
@@ -92,11 +94,11 @@ export async function generateStaticParams() {
     }
 
     const data = await response.json();
-    return data.posts.map((post: any) => ({
+    return data.posts.map((post: BlogPostSummary) => ({
       slug: post.slug,
     }));
   } catch (error) {
-    console.error('Error generating static params:', error);
+    logger.error('Error generating static params:', error instanceof Error ? error : new Error(String(error)));
     return [];
   }
 }

@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { AdminTable, AdminTableRow, AdminTableCell } from '@/components/admin';
-import { Button, Badge, Loading } from '@/components/ui';
+import { Button, Badge, Loading, getStatusBadgeVariant } from '@/components/ui';
 
 // Force dynamic rendering since this page needs database access
 export const dynamic = 'force-dynamic';
@@ -141,7 +141,7 @@ async function DashboardContent() {
                 <AdminTableCell>{booking.email}</AdminTableCell>
                 <AdminTableCell>{booking.sessionType}</AdminTableCell>
                 <AdminTableCell>
-                  <Badge variant={booking.status.toLowerCase() as any}>
+                  <Badge variant={getStatusBadgeVariant(booking.status)}>
                     {booking.status}
                   </Badge>
                 </AdminTableCell>
@@ -176,7 +176,7 @@ async function DashboardContent() {
                 <AdminTableCell>{submission.role}</AdminTableCell>
                 <AdminTableCell>{submission.hero || '-'}</AdminTableCell>
                 <AdminTableCell>
-                  <Badge variant={submission.status.toLowerCase() as any}>
+                  <Badge variant={getStatusBadgeVariant(submission.status)}>
                     {submission.status}
                   </Badge>
                 </AdminTableCell>

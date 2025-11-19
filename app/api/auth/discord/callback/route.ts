@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 /**
  * GET /api/auth/discord/callback
@@ -19,7 +20,7 @@ export async function GET(request: NextRequest) {
 
     // Handle user denying authorization
     if (error) {
-      console.log(`Discord OAuth denied: ${error}`);
+      logger.info(`Discord OAuth denied: ${error}`);
       const returnTo = request.cookies.get('discord_oauth_return')?.value || '/submit-replay';
       const response = NextResponse.redirect(new URL(`${returnTo}?discord_error=denied`, request.url));
 
@@ -33,7 +34,7 @@ export async function GET(request: NextRequest) {
     // Verify state to prevent CSRF attacks
     const savedState = request.cookies.get('discord_oauth_state')?.value;
     if (!state || !savedState || state !== savedState) {
-      console.error('Discord OAuth state mismatch - possible CSRF attack');
+      logger.error('Discord OAuth state mismatch - possible CSRF attack');
       return NextResponse.json(
         {
           success: false,
@@ -60,7 +61,7 @@ export async function GET(request: NextRequest) {
     const redirectUri = process.env.DISCORD_REDIRECT_URI;
 
     if (!clientId || !clientSecret || !redirectUri) {
-      console.error('Discord OAuth not configured properly');
+      logger.error('Discord OAuth not configured properly');
       return NextResponse.json(
         {
           success: false,
@@ -72,7 +73,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Exchange authorization code for access token
-    console.log('Exchanging Discord authorization code for access token');
+    logger.info('Exchanging Discord authorization code for access token');
     const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
       method: 'POST',
       headers: {
@@ -89,7 +90,7 @@ export async function GET(request: NextRequest) {
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
-      console.error('Discord token exchange failed:', errorData);
+      logger.error('Discord token exchange failed:', { error: errorData });
       return NextResponse.json(
         {
           success: false,
@@ -101,7 +102,7 @@ export async function GET(request: NextRequest) {
     }
 
     const tokens = await tokenResponse.json();
-    console.log('Successfully received Discord OAuth tokens');
+    logger.info('Successfully received Discord OAuth tokens');
 
     // Fetch user information from Discord
     const userResponse = await fetch('https://discord.com/api/users/@me', {
@@ -111,7 +112,7 @@ export async function GET(request: NextRequest) {
     });
 
     if (!userResponse.ok) {
-      console.error('Failed to fetch Discord user info');
+      logger.error('Failed to fetch Discord user info');
       return NextResponse.json(
         {
           success: false,
@@ -123,7 +124,7 @@ export async function GET(request: NextRequest) {
     }
 
     const discordUser = await userResponse.json();
-    console.log(`Discord user authenticated: ${discordUser.username} (${discordUser.id})`);
+    logger.info(`Discord user authenticated: ${discordUser.username} (${discordUser.id})`);
 
     // Calculate token expiry time
     const tokenExpiry = new Date(Date.now() + tokens.expires_in * 1000);
@@ -161,10 +162,10 @@ export async function GET(request: NextRequest) {
     response.cookies.delete('discord_oauth_state');
     response.cookies.delete('discord_oauth_return');
 
-    console.log(`Discord OAuth completed successfully for user ${discordUsername}`);
+    logger.info(`Discord OAuth completed successfully for user ${discordUsername}`);
     return response;
   } catch (error) {
-    console.error('Error in Discord OAuth callback:', error);
+    logger.error('Error in Discord OAuth callback:', error instanceof Error ? error : new Error(String(error)));
 
     const returnTo = request.cookies.get('discord_oauth_return')?.value || '/submit-replay';
     const response = NextResponse.redirect(

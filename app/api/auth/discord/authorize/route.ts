@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { logger } from '@/lib/logger';
 
 /**
  * GET /api/auth/discord/authorize
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
     const redirectUri = process.env.DISCORD_REDIRECT_URI;
 
     if (!clientId || !redirectUri) {
-      console.error('Discord OAuth not configured: Missing DISCORD_CLIENT_ID or DISCORD_REDIRECT_URI');
+      logger.error('Discord OAuth not configured: Missing DISCORD_CLIENT_ID or DISCORD_REDIRECT_URI');
       return NextResponse.json(
         {
           success: false,
@@ -59,10 +60,10 @@ export async function GET(request: NextRequest) {
       path: '/',
     });
 
-    console.log('Initiating Discord OAuth flow');
+    logger.info('Initiating Discord OAuth flow');
     return response;
   } catch (error) {
-    console.error('Error initiating Discord OAuth:', error);
+    logger.error('Error initiating Discord OAuth:', error instanceof Error ? error : new Error(String(error)));
     return NextResponse.json(
       {
         success: false,

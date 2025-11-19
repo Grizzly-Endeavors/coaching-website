@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 /**
  * POST /api/auth/discord/disconnect
@@ -15,10 +16,10 @@ export async function POST(request: NextRequest) {
     // Clear Discord data cookie
     response.cookies.delete('discord_user_data');
 
-    console.log('Discord account disconnected');
+    logger.info('Discord account disconnected');
     return response;
   } catch (error) {
-    console.error('Error disconnecting Discord:', error);
+    logger.error('Error disconnecting Discord:', error instanceof Error ? error : new Error(String(error)));
     return NextResponse.json(
       {
         success: false,

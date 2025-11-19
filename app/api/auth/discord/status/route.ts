@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 /**
  * GET /api/auth/discord/status
@@ -27,7 +28,7 @@ export async function GET(request: NextRequest) {
       expired: isExpired,
     });
   } catch (error) {
-    console.error('Error checking Discord status:', error);
+    logger.error('Error checking Discord status:', error instanceof Error ? error : new Error(String(error)));
     return NextResponse.json({
       connected: false,
       error: 'Failed to check Discord connection status',

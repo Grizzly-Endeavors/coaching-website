@@ -10,21 +10,6 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer }) => {
-    // Fix for bcrypt issues
-    if (isServer) {
-      config.externals.push('bcrypt');
-      config.externals.push('zlib-sync');
-    }
-
-    // Ignore problematic files from bcrypt dependencies
-    config.module.rules.push({
-      test: /\.html$/,
-      loader: 'ignore-loader',
-    });
-
-    return config;
-  },
   serverExternalPackages: ['@prisma/client', 'prisma'],
 }
 

@@ -1,16 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { requireAuth } from '@/lib/auth-helpers'
+import { requireAuth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
-
-const updateSlotSchema = z.object({
-  dayOfWeek: z.number().min(0).max(6).optional(),
-  startTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/).optional(),
-  endTime: z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/).optional(),
-  sessionType: z.enum(['vod-review', 'live-coaching']).optional(),
-  slotDuration: z.number().optional(),
-  isActive: z.boolean().optional(),
-})
+import { logger } from '@/lib/logger'
+import { updateSlotSchema } from '@/lib/validations'
 
 // PATCH /api/admin/availability/[id] - Update availability slot
 export async function PATCH(
@@ -67,7 +60,7 @@ export async function PATCH(
     if (error instanceof z.ZodError) {
       return NextResponse.json({ error: error.issues }, { status: 400 })
     }
-    console.error('Error updating availability slot:', error)
+    logger.error('Error updating availability slot:', error instanceof Error ? error : new Error(String(error)))
     return NextResponse.json(
       { error: 'Failed to update availability slot' },
       { status: 500 }
@@ -125,7 +118,7 @@ export async function DELETE(
     if (error instanceof Error && error.message.includes('Unauthorized')) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
-    console.error('Error deleting availability slot:', error)
+    logger.error('Error deleting availability slot:', error instanceof Error ? error : new Error(String(error)))
     return NextResponse.json(
       { error: 'Failed to delete availability slot' },
       { status: 500 }

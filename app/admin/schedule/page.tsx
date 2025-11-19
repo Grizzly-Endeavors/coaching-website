@@ -6,18 +6,9 @@ import {
   AdminTableRow,
   AdminTableCell,
 } from '@/components/admin';
-import { Badge, Button, Loading } from '@/components/ui';
-
-type BookingStatus = 'ALL' | 'SCHEDULED' | 'COMPLETED' | 'CANCELLED' | 'NO_SHOW';
-
-interface Booking {
-  id: string;
-  email: string;
-  sessionType: string;
-  scheduledAt: string;
-  status: string;
-  notes: string | null;
-}
+import { Badge, Button, Loading, getStatusBadgeVariant } from '@/components/ui';
+import type { Booking, BookingStatus } from '@/lib/types';
+import { logger } from '@/lib/logger';
 
 export default function SchedulePage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -37,7 +28,7 @@ export default function SchedulePage() {
       const data = await response.json();
       setBookings(data.bookings);
     } catch (error) {
-      console.error('Error fetching bookings:', error);
+      logger.error('Error fetching bookings:', error instanceof Error ? error : new Error(String(error)));
     } finally {
       setLoading(false);
     }
@@ -61,7 +52,7 @@ export default function SchedulePage() {
       alert(`Booking marked as ${newStatus}`);
       fetchBookings();
     } catch (error) {
-      console.error('Error updating booking:', error);
+      logger.error('Error updating booking:', error instanceof Error ? error : new Error(String(error)));
       alert('Failed to update booking');
     } finally {
       setUpdating(null);
@@ -164,7 +155,7 @@ export default function SchedulePage() {
                     </AdminTableCell>
                     <AdminTableCell>{booking.sessionType}</AdminTableCell>
                     <AdminTableCell>
-                      <Badge variant={booking.status.toLowerCase() as any}>
+                      <Badge variant={getStatusBadgeVariant(booking.status)}>
                         {booking.status}
                       </Badge>
                     </AdminTableCell>
@@ -235,7 +226,7 @@ export default function SchedulePage() {
                     </AdminTableCell>
                     <AdminTableCell>{booking.sessionType}</AdminTableCell>
                     <AdminTableCell>
-                      <Badge variant={booking.status.toLowerCase() as any}>
+                      <Badge variant={getStatusBadgeVariant(booking.status)}>
                         {booking.status}
                       </Badge>
                     </AdminTableCell>

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import { blogPostQuerySchema } from '@/lib/validations';
 import { handleApiError } from '@/lib/api-error-handler';
@@ -63,7 +64,7 @@ export async function GET(request: NextRequest) {
     const { page, limit, tag } = blogPostQuerySchema.parse(queryParams);
 
     // Build query conditions
-    const whereConditions: any = {
+    const whereConditions: Prisma.BlogPostWhereInput = {
       published: true,
     };
 

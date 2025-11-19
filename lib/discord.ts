@@ -14,6 +14,7 @@
 import { Client, GatewayIntentBits, Events } from 'discord.js';
 import { prisma } from './prisma';
 import { logger } from './logger';
+import { getCoachingTypeName } from './coaching';
 
 interface SubmissionDetails {
   id: string;
@@ -125,22 +126,6 @@ async function getDiscordClient(): Promise<Client> {
 
   await clientInitPromise;
   return discordClient!;
-}
-
-/**
- * Get coaching type display name
- */
-function getCoachingTypeName(type: string): string {
-  switch (type) {
-    case 'review-async':
-      return 'Review on My Time';
-    case 'vod-review':
-      return 'VOD Review';
-    case 'live-coaching':
-      return 'Live Coaching';
-    default:
-      return type;
-  }
 }
 
 /**

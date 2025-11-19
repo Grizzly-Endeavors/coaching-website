@@ -16,3 +16,12 @@ export * from './booking';
 
 // Export blog schemas
 export * from './blog';
+
+// Export admin schemas
+export * from './admin';
+
+// Export availability schemas
+export * from './availability';
+
+// Export authentication schemas
+export * from './auth';

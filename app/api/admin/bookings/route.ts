@@ -4,17 +4,10 @@ import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { BookingStatus } from '@prisma/client';
 import { logger } from '@/lib/logger';
+import { adminBookingsQuerySchema } from '@/lib/validations';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
-
-// Query parameters validation schema
-const querySchema = z.object({
-  status: z.nativeEnum(BookingStatus).optional(),
-  sort: z.enum(['scheduledAt', 'createdAt', 'updatedAt']).optional().default('scheduledAt'),
-  order: z.enum(['asc', 'desc']).optional().default('asc'),
-  upcoming: z.enum(['true', 'false']).optional(),
-});
 
 /**
  * GET /api/admin/bookings
@@ -43,7 +36,7 @@ export async function GET(request: NextRequest) {
       upcoming: searchParams.get('upcoming') || undefined,
     };
 
-    const validatedParams = querySchema.parse(queryParams);
+    const validatedParams = adminBookingsQuerySchema.parse(queryParams);
 
     // Build query filter
     const where: {

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { addMinutes, format, parse, startOfDay, endOfDay, isBefore, isAfter } from 'date-fns'
 import { toZonedTime, fromZonedTime } from 'date-fns-tz'
+import { logger } from '@/lib/logger'
 
 const TIMEZONE = 'America/New_York' // EST
 
@@ -128,7 +129,7 @@ export async function GET(req: NextRequest) {
       }
     })
   } catch (error) {
-    console.error('Error fetching available slots:', error)
+    logger.error('Error fetching available slots:', error instanceof Error ? error : new Error(String(error)))
     return NextResponse.json(
       { error: 'Failed to fetch available slots', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
