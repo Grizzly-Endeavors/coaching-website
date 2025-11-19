@@ -1,14 +1,13 @@
 /**
  * Discord Integration Module
  *
- * This module handles Discord notifications via two methods:
- * 1. Bot DMs - For admin notifications and fallback
- * 2. OAuth DMs - For user notifications (preferred method, no server requirement)
+ * This module handles Discord notifications via bot DMs.
+ * OAuth is used to get the user's Discord ID, then the bot sends DMs to that ID.
  *
  * Features:
  * - Admin receives bot DM when VOD is requested
- * - Users receive OAuth DM when review is ready (if connected via OAuth)
- * - Automatic token refresh for expired OAuth tokens
+ * - Users receive bot DM when review is ready (if they connected Discord via OAuth)
+ * - No shared server requirement - bot can DM users directly by ID
  */
 
 import { Client, GatewayIntentBits, Events } from 'discord.js';
@@ -38,9 +37,6 @@ interface ReviewReadyDetails {
   discordTag: string | null;
   discordId?: string | null;
   discordUsername?: string | null;
-  discordAccessToken?: string | null;
-  discordRefreshToken?: string | null;
-  discordTokenExpiry?: Date | null;
   replayCode: string;
   rank: string;
   role: string;
@@ -48,14 +44,6 @@ interface ReviewReadyDetails {
   reviewNotes: string | null;
   reviewUrl: string | null;
   reviewedAt: Date | null;
-}
-
-interface DiscordOAuthTokens {
-  access_token: string;
-  refresh_token: string;
-  expires_in: number;
-  token_type: string;
-  scope: string;
 }
 
 interface DiscordResult {
