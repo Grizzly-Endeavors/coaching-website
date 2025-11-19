@@ -106,8 +106,9 @@ function BookingContent() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    const errorKey = name as keyof FormErrors;
+    if (errors[errorKey]) {
+      setErrors((prev) => ({ ...prev, [errorKey]: undefined }));
     }
   };
 
@@ -443,7 +444,7 @@ function BookingContent() {
                             type="text"
                             value={formData.replays?.[index]?.code || ''}
                             onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
-                            error={errors.replays?.[index]?.code}
+                            error={Array.isArray(errors.replays) ? errors.replays?.[index]?.code : undefined}
                             required={index === 0}
                             placeholder="ABC123"
                             disabled={isSubmitting}
@@ -456,7 +457,7 @@ function BookingContent() {
                             type="text"
                             value={formData.replays?.[index]?.mapName || ''}
                             onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
-                            error={errors.replays?.[index]?.mapName}
+                            error={Array.isArray(errors.replays) ? errors.replays?.[index]?.mapName : undefined}
                             required={index === 0}
                             placeholder="e.g., King's Row, Ilios"
                             disabled={isSubmitting}
@@ -649,7 +650,7 @@ function BookingContent() {
                         type="text"
                         value={formData.replays?.[index]?.code || ''}
                         onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
-                        error={errors.replays?.[index]?.code}
+                        error={Array.isArray(errors.replays) ? errors.replays?.[index]?.code : undefined}
                         required={index === 0}
                         placeholder="ABC123"
                         disabled={isSubmitting}
@@ -662,7 +663,7 @@ function BookingContent() {
                         type="text"
                         value={formData.replays?.[index]?.mapName || ''}
                         onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
-                        error={errors.replays?.[index]?.mapName}
+                        error={Array.isArray(errors.replays) ? errors.replays?.[index]?.mapName : undefined}
                         required={index === 0}
                         placeholder="e.g., King's Row, Ilios"
                         disabled={isSubmitting}

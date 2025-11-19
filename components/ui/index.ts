@@ -22,6 +22,7 @@ export {
 
 
 // Textarea
+export { Label } from './Label';
 export { default as Textarea } from './Textarea';
 export type { TextAreaProps } from './Textarea';
 

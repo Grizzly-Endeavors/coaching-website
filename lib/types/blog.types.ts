@@ -27,4 +27,5 @@ export interface BlogPostSummary {
   excerpt: string | null;
   tags: string[];
   publishedAt: string;
+  readingTime?: number;
 }
