@@ -26,13 +26,13 @@ const updateSchema = z.object({
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication
     await requireAuth();
 
-    const { id } = params;
+    const { id } = await params;
 
     // Fetch blog post from database
     const post = await prisma.blogPost.findUnique({
@@ -98,13 +98,13 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication
     await requireAuth();
 
-    const { id } = params;
+    const { id } = await params;
 
     // Parse and validate request body
     const body = await request.json();
@@ -223,7 +223,7 @@ export async function PATCH(
         {
           success: false,
           error: 'Invalid request data',
-          details: error.errors,
+          details: error.issues,
         },
         { status: 400 }
       );
@@ -246,13 +246,13 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication
     await requireAuth();
 
-    const { id } = params;
+    const { id } = await params;
 
     // Check if blog post exists
     const existingPost = await prisma.blogPost.findUnique({

@@ -15,17 +15,17 @@ const updateSlotSchema = z.object({
 // PATCH /api/admin/availability/[id] - Update availability slot
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAuth()
-
+    const { id } = await params;
     const body = await req.json()
     const validatedData = updateSlotSchema.parse(body)
 
     // Check if slot exists
     const existingSlot = await prisma.availabilitySlot.findUnique({
-      where: { id: params.id },
+      where: { id },
     })
 
     if (!existingSlot) {
@@ -52,7 +52,7 @@ export async function PATCH(
     }
 
     const slot = await prisma.availabilitySlot.update({
-      where: { id: params.id },
+      where: { id },
       data: validatedData,
       include: {
         exceptions: true,
@@ -65,7 +65,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.errors }, { status: 400 })
+      return NextResponse.json({ error: error.issues }, { status: 400 })
     }
     console.error('Error updating availability slot:', error)
     return NextResponse.json(
@@ -78,14 +78,14 @@ export async function PATCH(
 // DELETE /api/admin/availability/[id] - Delete availability slot
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAuth()
-
+    const { id } = await params;
     // Check if slot exists
     const existingSlot = await prisma.availabilitySlot.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         exceptions: {
           where: {
@@ -117,7 +117,7 @@ export async function DELETE(
     }
 
     await prisma.availabilitySlot.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ success: true })

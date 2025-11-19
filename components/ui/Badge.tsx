@@ -5,7 +5,7 @@ import React from 'react';
  */
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   /** Badge color variant */
-  variant?: 'purple' | 'success' | 'warning' | 'error' | 'pending' | 'in_progress' | 'completed';
+  variant?: 'purple' | 'success' | 'warning' | 'error' | 'pending' | 'in_progress' | 'completed' | 'outline';
   /** Badge size */
   size?: 'sm' | 'md' | 'lg';
   /** Badge content */
@@ -36,6 +36,7 @@ export const Badge: React.FC<BadgeProps> = ({
     pending: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
     in_progress: 'bg-purple-600/10 text-purple-400 border-purple-600/30',
     completed: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
+    outline: 'bg-transparent text-gray-400 border-gray-600',
   };
 
   const sizeClasses = {

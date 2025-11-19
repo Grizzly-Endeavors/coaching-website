@@ -14,9 +14,9 @@ import { estimateReadingTime } from '@/lib/markdown';
 export const dynamic = 'force-dynamic';
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 /**
@@ -49,7 +49,8 @@ async function getBlogPost(slug: string) {
 export async function generateMetadata({
   params,
 }: BlogPostPageProps): Promise<Metadata> {
-  const post = await getBlogPost(params.slug);
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
 
   if (!post) {
     return {
@@ -101,16 +102,14 @@ export async function generateStaticParams() {
 }
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getBlogPost(params.slug);
-
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
   // Show 404 if post not found
   if (!post) {
     notFound();
   }
-
   // Calculate reading time
   const readingTime = estimateReadingTime(post.content);
-
   // Format the published date
   const publishedDate = new Date(post.publishedAt).toLocaleDateString('en-US', {
     year: 'numeric',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -17,7 +17,7 @@ import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 
 type CoachingType = typeof coachingTypes[number];
 
-export default function GetCoachingPage() {
+function BookingContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const typeParam = searchParams.get('type') as CoachingType | null;
@@ -138,7 +138,7 @@ export default function GetCoachingPage() {
     const result = replaySubmissionSchema.safeParse(dataToValidate);
     if (!result.success) {
       const fieldErrors: any = {};
-      result.error.errors.forEach((error) => {
+      result.error.issues.forEach((error) => {
         const path = error.path;
         if (path.length === 1) {
           fieldErrors[path[0]] = error.message;
@@ -350,9 +350,7 @@ export default function GetCoachingPage() {
                         onChange={handleChange}
                         required
                         disabled={isSubmitting}
-                        className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${
-                          errors.rank ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'
-                        }`}
+                        className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'}`}
                       >
                         <option value="" disabled>Select your rank</option>
                         {rankOptions.map((rank) => (
@@ -374,9 +372,7 @@ export default function GetCoachingPage() {
                         onChange={handleChange}
                         required
                         disabled={isSubmitting}
-                        className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${
-                          errors.role ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'
-                        }`}
+                        className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'}`}
                       >
                         <option value="" disabled>Select your role</option>
                         {roleOptions.map((role) => (
@@ -560,9 +556,7 @@ export default function GetCoachingPage() {
                     onChange={handleChange}
                     required
                     disabled={isSubmitting}
-                    className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${
-                      errors.rank ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'
-                    }`}
+                    className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'}`}
                   >
                     <option value="" disabled>Select your rank</option>
                     {rankOptions.map((rank) => (
@@ -584,9 +578,7 @@ export default function GetCoachingPage() {
                     onChange={handleChange}
                     required
                     disabled={isSubmitting}
-                    className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${
-                      errors.role ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'
-                    }`}
+                    className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'}`}
                   >
                     <option value="" disabled>Select your role</option>
                     {roleOptions.map((role) => (
@@ -700,5 +692,13 @@ export default function GetCoachingPage() {
         </div>
       </section>
     </div>
+  );
+}
+
+export default function GetCoachingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0f0f23] flex items-center justify-center"><div className="animate-spin h-8 w-8 border-2 border-purple-500 border-t-transparent rounded-full"></div></div>}>
+      <BookingContent />
+    </Suspense>
   );
 }

@@ -5,14 +5,14 @@ import { prisma } from '@/lib/prisma'
 // DELETE /api/admin/availability/exceptions/[id] - Delete availability exception
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await requireAuth()
-
+    const { id } = await params;
     // Check if exception exists
     const existingException = await prisma.availabilityException.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
         booking: true,
       },
@@ -37,7 +37,7 @@ export async function DELETE(
     }
 
     await prisma.availabilityException.delete({
-      where: { id: params.id },
+      where: { id },
     })
 
     return NextResponse.json({ success: true })

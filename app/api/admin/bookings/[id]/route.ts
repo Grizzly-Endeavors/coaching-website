@@ -24,13 +24,13 @@ const updateSchema = z.object({
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication
     await requireAuth();
 
-    const { id } = params;
+    const { id } = await params;
 
     // Parse and validate request body
     const body = await request.json();
@@ -97,7 +97,7 @@ export async function PATCH(
         {
           success: false,
           error: 'Invalid request data',
-          details: error.errors,
+          details: error.issues,
         },
         { status: 400 }
       );
@@ -120,13 +120,13 @@ export async function PATCH(
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify authentication
     await requireAuth();
 
-    const { id } = params;
+    const { id } = await params;
 
     // Fetch booking from database
     const booking = await prisma.booking.findUnique({

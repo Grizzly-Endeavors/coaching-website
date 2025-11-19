@@ -10,10 +10,10 @@ import { TagFilter, TagFilterSkeleton } from '@/components/blog/TagFilter';
 import { Pagination, PaginationSkeleton } from '@/components/blog/Pagination';
 
 interface BlogPageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string;
     tag?: string;
-  };
+  }>;
 }
 
 // Metadata for SEO
@@ -85,9 +85,9 @@ async function getAllTags() {
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
-  const currentPage = parseInt(searchParams.page || '1', 10);
-  const currentTag = searchParams.tag;
-
+  const { page, tag } = await searchParams;
+  const currentPage = parseInt(page || '1', 10);
+  const currentTag = tag;
   // Fetch blog posts and tags in parallel
   const [{ posts, pagination }, allTags] = await Promise.all([
     getBlogPosts(currentPage, currentTag),

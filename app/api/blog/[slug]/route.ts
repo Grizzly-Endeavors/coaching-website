@@ -34,7 +34,7 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
     // Rate limiting: 100 requests per minute per IP
@@ -50,7 +50,7 @@ export async function GET(
       return rateLimitResult.response!;
     }
 
-    const { slug } = params;
+    const { slug } = await params;
 
     // Validate slug parameter
     if (!slug || typeof slug !== 'string') {

@@ -38,13 +38,13 @@ export const replaySubmissionSchema = z.object({
   email: emailSchema,
   discordTag: z.string().optional(),
   coachingType: z.enum(coachingTypes, {
-    errorMap: () => ({ message: 'Please select a coaching type' }),
+    message: 'Please select a coaching type',
   }),
   rank: z.enum(rankOptions, {
-    errorMap: () => ({ message: 'Please select your rank' }),
+    message: 'Please select your rank',
   }),
   role: z.enum(roleOptions, {
-    errorMap: () => ({ message: 'Please select your role' }),
+    message: 'Please select your role',
   }),
   hero: z.string()
     .min(2, 'Please specify which hero you played')

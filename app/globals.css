@@ -1,6 +1,84 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-background-primary: #0f0f23;
+  --color-background-surface: #1a1a2e;
+  --color-background-elevated: #2a2a40;
+
+  --color-purple-primary: #8b5cf6;
+  --color-purple-hover: #a78bfa;
+  --color-purple-glow: rgba(139, 92, 246, 0.3);
+  
+  --color-purple-50: #faf5ff;
+  --color-purple-100: #f3e8ff;
+  --color-purple-200: #e9d5ff;
+  --color-purple-300: #d8b4fe;
+  --color-purple-400: #c084fc;
+  --color-purple-500: #a855f7;
+  --color-purple-600: #8b5cf6;
+  --color-purple-700: #7c3aed;
+  --color-purple-800: #6d28d9;
+  --color-purple-900: #5b21b6;
+  --color-purple-950: #4c1d95;
+
+  --color-text-primary: #e5e7eb;
+  --color-text-secondary: #9ca3af;
+  --color-text-muted: #6b7280;
+
+  --color-status-success: #10b981;
+  --color-status-warning: #f59e0b;
+  --color-status-error: #ef4444;
+
+  --color-border: #2a2a40;
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-mono: JetBrains Mono, monospace;
+  
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  --shadow-purple-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+  --shadow-purple-glow-lg: 0 0 30px rgba(139, 92, 246, 0.4);
+  --shadow-purple-glow-xl: 0 0 40px rgba(139, 92, 246, 0.5);
+  
+  --animate-fade-in: fadeIn 0.5s ease-out;
+  --animate-fade-in-up: fadeInUp 0.5s ease-out;
+  --animate-fade-in-down: fadeInDown 0.5s ease-out;
+  --animate-pulse-glow: pulseGlow 2s ease-in-out infinite;
+  --animate-slide-in-right: slideInRight 0.3s ease-out;
+  --animate-slide-in-left: slideInLeft 0.3s ease-out;
+  --animate-bounce-subtle: bounceSubtle 1s ease-in-out infinite;
+
+  @keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeInDown {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+    50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+  }
+  @keyframes slideInRight {
+    0% { transform: translateX(-100%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes slideInLeft {
+    0% { transform: translateX(100%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes bounceSubtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+}
 
 /* CSS Custom Properties for Design System */
 :root {
@@ -39,7 +117,7 @@
   }
 
   * {
-    @apply border-border;
+    border-color: var(--color-border);
   }
 
   body {
@@ -187,7 +265,8 @@
 
   /* Card with elevated effect */
   .card-elevated {
-    @apply card bg-background-elevated shadow-lg;
+    @apply bg-background-elevated shadow-lg;
+    @apply bg-background-surface border border-border rounded-lg p-6 transition-all duration-200 hover:border-purple-primary/50 hover:shadow-purple-glow/20;
   }
 
   /* Form input field */
@@ -234,23 +313,23 @@
   }
 
   .status-pending {
-    @apply status-badge bg-status-warning/10 text-status-warning border border-status-warning/20;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-status-warning/10 text-status-warning border border-status-warning/20;
   }
 
   .status-in-progress {
-    @apply status-badge bg-purple-primary/10 text-purple-primary border border-purple-primary/20;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-primary/10 text-purple-primary border border-purple-primary/20;
   }
 
   .status-completed {
-    @apply status-badge bg-status-success/10 text-status-success border border-status-success/20;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-status-success/10 text-status-success border border-status-success/20;
   }
 
   .status-error {
-    @apply status-badge bg-status-error/10 text-status-error border border-status-error/20;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-status-error/10 text-status-error border border-status-error/20;
   }
 
   .status-archived {
-    @apply status-badge bg-text-muted/10 text-text-muted border border-text-muted/20;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-text-muted/10 text-text-muted border border-text-muted/20;
   }
 
   /* Section container */
@@ -355,7 +434,28 @@
 
 /* Syntax highlighting for code blocks (highlight.js) */
 .hljs {
-  @apply bg-background-elevated rounded-lg p-4 overflow-x-auto scrollbar-custom;
+  @apply bg-background-elevated rounded-lg p-4 overflow-x-auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--purple-primary) var(--bg-elevated);
+}
+
+.hljs::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.hljs::-webkit-scrollbar-track {
+  background: var(--bg-elevated);
+  border-radius: 4px;
+}
+
+.hljs::-webkit-scrollbar-thumb {
+  background: var(--purple-primary);
+  border-radius: 4px;
+}
+
+.hljs::-webkit-scrollbar-thumb:hover {
+  background: var(--purple-hover);
 }
 
 .hljs-comment,
@@ -446,7 +546,15 @@
 
 /* Skeleton loader */
 .skeleton {
-  @apply animate-shimmer bg-background-elevated rounded;
+  @apply bg-background-elevated rounded;
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(139, 92, 246, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
 }
 
 /* Page transitions */
@@ -461,7 +569,7 @@
 
 /* Interactive card effect */
 .interactive-card {
-  @apply card hover:scale-[1.02] transition-transform duration-200;
+  @apply bg-background-surface border border-border rounded-lg p-6 transition-all duration-200 hover:border-purple-primary/50 hover:shadow-purple-glow/20 hover:scale-[1.02] transition-transform duration-200;
 }
 
 /* Focus ring for accessibility */

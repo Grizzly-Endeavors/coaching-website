@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Loading } from '@/components/ui';
 
+import { useParams } from 'next/navigation';
+
 interface BlogPost {
   id: string;
   title: string;
@@ -15,8 +17,10 @@ interface BlogPost {
   published: boolean;
 }
 
-export default function EditBlogPostPage({ params }: { params: { id: string } }) {
+export default function EditBlogPostPage() {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
@@ -30,13 +34,15 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
   const [published, setPublished] = useState(false);
 
   useEffect(() => {
-    fetchPost();
-  }, [params.id]);
+    if (id) {
+      fetchPost();
+    }
+  }, [id]);
 
   async function fetchPost() {
     try {
       setLoading(true);
-      const response = await fetch(`/api/admin/blog/${params.id}`);
+      const response = await fetch(`/api/admin/blog/${id}`);
       if (!response.ok) throw new Error('Failed to fetch post');
 
       const post: BlogPost = await response.json();
@@ -70,7 +76,7 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
 
     try {
       setSaving(true);
-      const response = await fetch(`/api/admin/blog/${params.id}`, {
+      const response = await fetch(`/api/admin/blog/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -107,7 +113,7 @@ export default function EditBlogPostPage({ params }: { params: { id: string } })
     }
 
     try {
-      const response = await fetch(`/api/admin/blog/${params.id}`, {
+      const response = await fetch(`/api/admin/blog/${id}`, {
         method: 'DELETE',
       });
 

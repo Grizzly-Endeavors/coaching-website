@@ -25,10 +25,7 @@ const nextConfig = {
 
     return config;
   },
-  // Disable static optimization for pages that need database access
-  experimental: {
-    serverComponentsExternalPackages: ['@prisma/client', 'prisma'],
-  },
+  serverExternalPackages: ['@prisma/client', 'prisma'],
 }
 
 module.exports = nextConfig

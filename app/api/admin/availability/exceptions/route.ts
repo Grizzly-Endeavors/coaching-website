@@ -146,7 +146,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ exception }, { status: 201 })
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: error.errors }, { status: 400 })
+      return NextResponse.json({ error: error.issues }, { status: 400 })
     }
     console.error('Error creating availability exception:', error)
     return NextResponse.json(

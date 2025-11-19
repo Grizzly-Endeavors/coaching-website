@@ -5,7 +5,7 @@ import React from 'react';
  */
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   /** Button variant style */
-  variant?: 'primary' | 'secondary' | 'outline';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   /** Button size */
   size?: 'sm' | 'md' | 'lg';
   /** Loading state */
@@ -40,6 +40,7 @@ export const Button: React.FC<ButtonProps> = ({
     primary: 'bg-purple-600 text-white hover:bg-purple-500 shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] active:scale-95',
     secondary: 'bg-[#2a2a40] text-purple-400 hover:bg-[#363650] border border-purple-600/30 hover:border-purple-500/50 hover:shadow-[0_0_15px_rgba(139,92,246,0.2)]',
     outline: 'bg-transparent border-2 border-purple-600 text-purple-400 hover:bg-purple-600 hover:text-white',
+    ghost: 'bg-transparent text-purple-400 hover:bg-purple-600/10 hover:text-purple-300',
   };
 
   const sizeClasses = {

@@ -8,7 +8,7 @@ import { logger } from '@/lib/logger';
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  const signature = headers().get('stripe-signature');
+  const signature = (await headers()).get('stripe-signature');
 
   if (!signature) {
     return NextResponse.json(

@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 
-export default function SuccessPage() {
+function SuccessContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const sessionId = searchParams.get('session_id');
@@ -33,7 +33,7 @@ export default function SuccessPage() {
   const getNextSteps = () => {
     if (!paymentDetails?.coachingType) {
       return [
-        'You'll receive a confirmation email shortly',
+        'You\'ll receive a confirmation email shortly',
         'Your booking has been confirmed',
         'Check your email for next steps'
       ];
@@ -42,28 +42,28 @@ export default function SuccessPage() {
     switch (paymentDetails.coachingType) {
       case 'review-async':
         return [
-          'You'll receive a confirmation email shortly',
+          'You\'ll receive a confirmation email shortly',
           'Your replay submission has been confirmed',
-          'I'll review your replays and send detailed feedback within 2-3 business days',
+          'I\'ll review your replays and send detailed feedback within 2-3 business days',
           'Check your email or Discord for the review'
         ];
       case 'vod-review':
         return [
-          'You'll receive a confirmation email shortly',
+          'You\'ll receive a confirmation email shortly',
           'Your VOD review session has been booked',
-          'A Discord notification has been sent - I'll reach out closer to your session time',
-          'I'll see you at the scheduled time on Discord!'
+          'A Discord notification has been sent - I\'ll reach out closer to your session time',
+          'I\'ll see you at the scheduled time on Discord!'
         ];
       case 'live-coaching':
         return [
-          'You'll receive a confirmation email shortly',
+          'You\'ll receive a confirmation email shortly',
           'Your live coaching session has been booked',
-          'A Discord notification has been sent - I'll reach out closer to your session time',
-          'Make sure you're ready to stream your gameplay on Discord!'
+          'A Discord notification has been sent - I\'ll reach out closer to your session time',
+          'Make sure you\'re ready to stream your gameplay on Discord!'
         ];
       default:
         return [
-          'You'll receive a confirmation email shortly',
+          'You\'ll receive a confirmation email shortly',
           'Your booking has been confirmed',
           'Check your email for next steps'
         ];
@@ -195,5 +195,13 @@ export default function SuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0f0f23] flex items-center justify-center"><div className="animate-spin h-8 w-8 border-2 border-purple-500 border-t-transparent rounded-full"></div></div>}>
+      <SuccessContent />
+    </Suspense>
   );
 }

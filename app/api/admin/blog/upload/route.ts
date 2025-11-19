@@ -171,7 +171,7 @@ export async function POST(request: NextRequest) {
         {
           success: false,
           error: 'Invalid frontmatter or file structure',
-          details: error.errors,
+          details: error.issues,
         },
         { status: 400 }
       );

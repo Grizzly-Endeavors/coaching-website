@@ -61,7 +61,7 @@ export function useFormState<T extends Record<string, any>>({
 
     if (!result.success) {
       const fieldErrors: Partial<Record<keyof T, string>> = {};
-      result.error.errors.forEach((error) => {
+      result.error.issues.forEach((error) => {
         const field = error.path[0] as keyof T;
         if (!fieldErrors[field]) {
           fieldErrors[field] = error.message;

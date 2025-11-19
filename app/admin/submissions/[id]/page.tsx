@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Badge, Loading } from '@/components/ui';
 
@@ -28,8 +28,10 @@ interface Submission {
   replays: ReplayCode[];
 }
 
-export default function SubmissionDetailPage({ params }: { params: { id: string } }) {
+export default function SubmissionDetailPage() {
   const router = useRouter();
+  const params = useParams();
+  const id = params.id as string;
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -43,13 +45,15 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
   const [copiedId, setCopiedId] = useState(false);
 
   useEffect(() => {
-    fetchSubmission();
-  }, [params.id]);
+    if (id) {
+      fetchSubmission();
+    }
+  }, [id]);
 
   async function fetchSubmission() {
     try {
       setLoading(true);
-      const response = await fetch(`/api/admin/submissions/${params.id}`);
+      const response = await fetch(`/api/admin/submissions/${id}`);
       if (!response.ok) throw new Error('Failed to fetch submission');
       const data = await response.json();
       setSubmission(data.submission);
@@ -69,7 +73,7 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
 
     try {
       setSaving(true);
-      const response = await fetch(`/api/admin/submissions/${params.id}`, {
+      const response = await fetch(`/api/admin/submissions/${id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -103,7 +107,7 @@ export default function SubmissionDetailPage({ params }: { params: { id: string 
 
     try {
       setDeleting(true);
-      const response = await fetch(`/api/admin/submissions/${params.id}`, {
+      const response = await fetch(`/api/admin/submissions/${id}`, {
         method: 'DELETE',
       });
 
