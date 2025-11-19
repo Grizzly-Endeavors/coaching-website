@@ -15,6 +15,7 @@ import {
 } from '@/lib/validations';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
 import { DiscordConnection } from '@/components/booking/DiscordConnection';
+import { FriendCodeDialog } from '@/components/booking/FriendCodeDialog';
 import { logger } from '@/lib/logger';
 
 type CoachingType = typeof coachingTypes[number];
@@ -61,6 +62,7 @@ function BookingContent() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
+  const [friendCodeDialogOpen, setFriendCodeDialogOpen] = useState(false);
 
   // Pre-select coaching type from URL parameter
   useEffect(() => {
@@ -543,6 +545,16 @@ function BookingContent() {
               {isSubmitting ? 'Processing...' : 'Continue to Payment'}
             </Button>
 
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={() => setFriendCodeDialogOpen(true)}
+                className="text-xs text-gray-500 hover:text-gray-400 underline transition-colors"
+              >
+                or use a code
+              </button>
+            </div>
+
             <p className="text-sm text-gray-400 text-center">
               By submitting, you agree to our terms of service and privacy policy
             </p>
@@ -726,6 +738,16 @@ function BookingContent() {
                 </Button>
               </div>
 
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => setFriendCodeDialogOpen(true)}
+                  className="text-xs text-gray-500 hover:text-gray-400 underline transition-colors"
+                >
+                  or use a code
+                </button>
+              </div>
+
               <p className="text-sm text-gray-400 text-center">
                 By submitting, you agree to our terms of service and privacy policy
               </p>
@@ -736,6 +758,27 @@ function BookingContent() {
           )}
         </div>
       </section>
+
+      {/* Friend Code Dialog */}
+      {selectedType && (
+        <FriendCodeDialog
+          open={friendCodeDialogOpen}
+          onOpenChange={setFriendCodeDialogOpen}
+          submissionData={{
+            email: formData.email,
+            discordTag: formData.discordTag,
+            coachingType: formData.coachingType,
+            rank: formData.rank,
+            role: formData.role,
+            hero: formData.hero,
+            replays: (formData.replays || []).filter(replay => replay.code.trim() !== '').map(replay => ({
+              ...replay,
+              notes: replay === formData.replays?.[0] && generalNotes.trim() ? generalNotes.trim() : replay.notes
+            })),
+          }}
+          selectedTimeSlot={selectedTimeSlot}
+        />
+      )}
     </div>
   );
 }
