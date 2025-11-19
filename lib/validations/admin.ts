@@ -38,6 +38,18 @@ export const adminBlogUpdateSchema = z.object({
   published: z.boolean().optional(),
 });
 
+/**
+ * Schema for creating new blog posts in admin panel
+ * Used in POST /api/admin/blog
+ */
+export const createBlogPostSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  content: z.string().min(1, 'Content is required'),
+  excerpt: z.string().optional().or(z.literal('')),
+  tags: z.array(z.string()).optional(),
+  published: z.boolean().optional().default(false),
+});
+
 // ===========================
 // Booking Admin Schemas
 // ===========================

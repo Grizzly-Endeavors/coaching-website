@@ -3,7 +3,9 @@ import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { logger } from '@/lib/logger';
-import { adminBlogQuerySchema } from '@/lib/validations';
+import { adminBlogQuerySchema } from '@/lib/validations/admin';
+import { createBlogPostSchema } from '@/lib/validations/admin'; // Will be created/exported in admin.ts
+import { generateSlug } from '@/lib/utils';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -122,3 +124,75 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+/**
+ * POST /api/admin/blog
+ *
+ * Create a new blog post.
+ *
+ * Requires authentication.
+ */
+export async function POST(request: NextRequest) {
+  try {
+    // Verify authentication
+    await requireAuth();
+
+    // Parse and validate request body
+    const body = await request.json();
+    const validatedData = createBlogPostSchema.parse(body);
+
+    // Generate slug from title
+    const slug = generateSlug(validatedData.title);
+
+    // Create new blog post in database
+    const newPost = await prisma.blogPost.create({
+      data: {
+        title: validatedData.title,
+        slug: slug,
+        content: validatedData.content,
+        excerpt: validatedData.excerpt,
+        tags: validatedData.tags,
+        published: validatedData.published,
+        publishedAt: validatedData.published ? new Date() : null,
+      },
+      select: {
+        id: true,
+        slug: true,
+      },
+    });
+
+    return NextResponse.json(
+      { success: true, message: 'Blog post created successfully.', postId: newPost.id, slug: newPost.slug },
+      { status: 201 }
+    );
+  } catch (error) {
+    logger.error('Error creating blog post', error instanceof Error ? error : new Error(String(error)));
+
+    // Handle authentication errors
+    if (error instanceof Error && error.message === 'Unauthorized') {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Handle validation errors
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Invalid request body',
+          details: error.issues,
+        },
+        { status: 400 }
+      );
+    }
+
+    // Handle other errors
+    return NextResponse.json(
+      { success: false, error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
+

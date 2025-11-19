@@ -23,7 +23,7 @@ export default function BlogPostsPage() {
   async function fetchPosts() {
     try {
       setLoading(true);
-      const response = await fetch('/api/admin/blog/posts');
+      const response = await fetch('/api/admin/blog');
       if (!response.ok) throw new Error('Failed to fetch posts');
       const data = await response.json();
       setPosts(data.posts);

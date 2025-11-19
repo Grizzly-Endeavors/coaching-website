@@ -21,7 +21,7 @@ export default function NewBlogPostPage() {
   ) {
     try {
       setIsSubmitting(true);
-      const response = await fetch('/api/admin/blog/posts', {
+      const response = await fetch('/api/admin/blog', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
