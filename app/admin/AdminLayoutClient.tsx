@@ -97,6 +97,14 @@ export function AdminLayoutClient({ children, userEmail }: AdminLayoutClientProp
             Availability
           </NavLink>
           <NavLink
+            href="/admin/friend-codes"
+            icon="🎟️"
+            active={isActive('/admin/friend-codes')}
+            onClick={() => setSidebarOpen(false)}
+          >
+            Friend Codes
+          </NavLink>
+          <NavLink
             href="/admin/blog"
             icon="📝"
             active={isActive('/admin/blog')}

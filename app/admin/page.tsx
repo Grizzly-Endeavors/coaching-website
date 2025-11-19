@@ -102,6 +102,11 @@ async function DashboardContent() {
               Review Pending Submissions
             </Button>
           </Link>
+          <Link href="/admin/friend-codes">
+            <Button variant="secondary">
+              Manage Friend Codes
+            </Button>
+          </Link>
           <Link href="/admin/blog/new">
             <Button variant="secondary">
               Create New Blog Post

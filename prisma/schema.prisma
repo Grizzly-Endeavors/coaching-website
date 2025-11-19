@@ -37,6 +37,10 @@ model ReplaySubmission {
   payment Payment? // One-to-one relationship with payment
   booking Booking? // One-to-one relationship with booking (for scheduled sessions)
 
+  // Friend code tracking
+  friendCodeId String?     @map("friend_code_id")
+  friendCode   FriendCode? @relation(fields: [friendCodeId], references: [id])
+
   @@map("replay_submissions")
 }
 
@@ -178,4 +182,22 @@ model Admin {
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("admins")
+}
+
+// Friend codes for skipping payment
+model FriendCode {
+  id          String    @id @default(cuid())
+  code        String    @unique // The actual code (e.g., "FRIEND2024")
+  description String?   @db.Text // Optional description/note about the code
+  maxUses     Int?      @map("max_uses") // Null = unlimited uses
+  usesCount   Int       @default(0) @map("uses_count") // How many times it's been used
+  expiresAt   DateTime? @map("expires_at") // Null = never expires
+  isActive    Boolean   @default(true) @map("is_active") // Can be manually disabled
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  // Track which submissions used this code
+  submissions ReplaySubmission[]
+
+  @@map("friend_codes")
 }
