@@ -10,7 +10,7 @@ const nextConfig = {
       },
     ],
   },
-  serverExternalPackages: ['@prisma/client', 'prisma'],
+  serverExternalPackages: ['@prisma/client', 'prisma', 'zlib-sync'],
 }
 
 module.exports = nextConfig
