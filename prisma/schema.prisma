@@ -106,6 +106,12 @@ model Booking {
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
 
+  // Reminder tracking
+  reminderSent24h  Boolean   @default(false) @map("reminder_sent_24h") // 24-hour reminder sent
+  reminderSent30m  Boolean   @default(false) @map("reminder_sent_30m") // 30-minute reminder sent
+  reminder24hSentAt DateTime? @map("reminder_24h_sent_at") // When 24h reminder was sent
+  reminder30mSentAt DateTime? @map("reminder_30m_sent_at") // When 30m reminder was sent
+
   submissionId String?           @unique @map("submission_id")
   submission   ReplaySubmission? @relation(fields: [submissionId], references: [id])
 
