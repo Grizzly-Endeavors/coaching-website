@@ -4,12 +4,10 @@
  */
 
 import Link from 'next/link';
-import { BlogPostMetadata } from '@/lib/markdown';
+import type { BlogPostSummary } from '@/lib/types';
 
 interface BlogCardProps {
-  post: BlogPostMetadata & {
-    id: string;
-  };
+  post: BlogPostSummary;
 }
 
 export function BlogCard({ post }: BlogCardProps) {
