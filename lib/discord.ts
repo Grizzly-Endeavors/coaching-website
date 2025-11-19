@@ -46,6 +46,22 @@ interface ReviewReadyDetails {
   reviewedAt: Date | null;
 }
 
+interface BookingConfirmationDetails {
+  id: string;
+  email: string;
+  discordId?: string | null;
+  discordUsername?: string | null;
+  coachingType: string;
+  rank: string;
+  role: string;
+  hero: string | null;
+  scheduledAt?: Date | null;
+  replays: Array<{
+    code: string;
+    mapName: string;
+  }>;
+}
+
 interface DiscordResult {
   success: boolean;
   error?: string;
@@ -245,6 +261,112 @@ Thank you for submitting your replay! If you have any questions, feel free to re
     return { success: true };
   } catch (error) {
     logger.error('Error sending Discord notification to user', error instanceof Error ? error : new Error(String(error)));
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send Discord DM to user when their booking is confirmed (after payment)
+ * Uses bot to send DM to user by their Discord ID (obtained from OAuth)
+ */
+export async function sendBookingConfirmationNotification(
+  details: BookingConfirmationDetails
+): Promise<DiscordResult> {
+  try {
+    // Check if user has connected Discord via OAuth
+    if (!details.discordId) {
+      logger.debug('No Discord connection available for user');
+      return {
+        success: false,
+        error: 'User has not connected Discord account',
+      };
+    }
+
+    // Build message content based on coaching type
+    let message: string;
+
+    if (details.scheduledAt) {
+      // For scheduled sessions (VOD review / Live coaching)
+      const formattedDate = details.scheduledAt.toLocaleString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZoneName: 'short',
+      });
+
+      message = `🎮 **${getCoachingTypeName(details.coachingType)} Confirmed!**
+
+Your coaching session has been booked and confirmed!
+
+**📅 Scheduled Time:** ${formattedDate}
+**🎯 Rank:** ${details.rank}
+**🛡️ Role:** ${details.role}${details.hero ? `\n**🦸 Hero:** ${details.hero}` : ''}
+
+**Replays Submitted:**
+${details.replays.map((r, i) => `${i + 1}. \`${r.code}\` - ${r.mapName}`).join('\n')}
+
+**What's Next:**
+${details.coachingType === 'vod-review'
+  ? `• I'll review your replays before our session\n• I'll reach out on Discord closer to your session time\n• Make sure you're available on Discord at the scheduled time!`
+  : `• I'll review your replays to understand your playstyle\n• I'll reach out on Discord closer to your session time\n• Make sure you're ready to stream your gameplay on Discord!`}
+
+See you soon!`;
+    } else {
+      // For async reviews
+      message = `🎮 **Replay Review Confirmed!**
+
+Your replay submission has been confirmed!
+
+**🎯 Rank:** ${details.rank}
+**🛡️ Role:** ${details.role}${details.hero ? `\n**🦸 Hero:** ${details.hero}` : ''}
+
+**Replays Submitted:**
+${details.replays.map((r, i) => `${i + 1}. \`${r.code}\` - ${r.mapName}`).join('\n')}
+
+**What's Next:**
+• I'll review your replays within 2-3 business days
+• You'll receive a Discord DM when your review is ready
+• The review will include detailed feedback and analysis
+
+Thank you for your submission!`;
+    }
+
+    logger.debug('Sending booking confirmation DM', {
+      discordUsername: details.discordUsername || details.discordId,
+    });
+
+    const client = await getDiscordClient();
+
+    let user;
+    try {
+      user = await client.users.fetch(details.discordId);
+    } catch (error) {
+      logger.error('Failed to fetch Discord user for booking confirmation', {
+        discordId: details.discordId,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      return {
+        success: false,
+        error: `Could not find Discord user. User may have left the Discord server.`,
+      };
+    }
+
+    await user.send(message);
+
+    logger.info('Booking confirmation DM sent successfully', {
+      discordUsername: details.discordUsername || details.discordId,
+      bookingId: details.id,
+      coachingType: details.coachingType,
+    });
+    return { success: true };
+  } catch (error) {
+    logger.error('Error sending booking confirmation to user', error instanceof Error ? error : new Error(String(error)));
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',

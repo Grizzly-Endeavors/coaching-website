@@ -49,39 +49,39 @@ function SuccessContent() {
   const getNextSteps = () => {
     if (!paymentDetails?.coachingType) {
       return [
-        'You\'ll receive a confirmation email shortly',
         'Your booking has been confirmed',
-        'Check your email for next steps'
+        'Check Discord for a confirmation message from my bot',
+        'I\'ll reach out with next steps'
       ];
     }
 
     switch (paymentDetails.coachingType) {
       case 'review-async':
         return [
-          'You\'ll receive a confirmation email shortly',
           'Your replay submission has been confirmed',
+          'You\'ll receive a Discord DM confirmation shortly',
           'I\'ll review your replays and send detailed feedback within 2-3 business days',
-          'Check your email or Discord for the review'
+          'Watch for a Discord DM when your review is ready!'
         ];
       case 'vod-review':
         return [
-          'You\'ll receive a confirmation email shortly',
           'Your VOD review session has been booked',
-          'A Discord notification has been sent - I\'ll reach out closer to your session time',
-          'I\'ll see you at the scheduled time on Discord!'
+          'You\'ll receive a Discord DM confirmation shortly',
+          'I\'ll reach out on Discord closer to your session time',
+          'See you at the scheduled time on Discord!'
         ];
       case 'live-coaching':
         return [
-          'You\'ll receive a confirmation email shortly',
           'Your live coaching session has been booked',
-          'A Discord notification has been sent - I\'ll reach out closer to your session time',
+          'You\'ll receive a Discord DM confirmation shortly',
+          'I\'ll reach out on Discord closer to your session time',
           'Make sure you\'re ready to stream your gameplay on Discord!'
         ];
       default:
         return [
-          'You\'ll receive a confirmation email shortly',
           'Your booking has been confirmed',
-          'Check your email for next steps'
+          'Check Discord for a confirmation message from my bot',
+          'I\'ll reach out with next steps'
         ];
     }
   };
@@ -196,15 +196,10 @@ function SuccessContent() {
                 </p>
               )}
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex justify-center">
                 <Link href="/">
                   <Button variant="primary" size="lg">
                     Back to Home
-                  </Button>
-                </Link>
-                <Link href="/contact">
-                  <Button variant="secondary" size="lg">
-                    Contact Me
                   </Button>
                 </Link>
               </div>

@@ -5,6 +5,7 @@ import Stripe from 'stripe';
 import { stripe } from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
+import { sendBookingConfirmationNotification } from '@/lib/discord';
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -112,6 +113,12 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
       submission: {
         include: {
           booking: true,
+          replays: {
+            select: {
+              code: true,
+              mapName: true,
+            },
+          },
         },
       },
     },
@@ -142,6 +149,41 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
 
       logger.info('Booking status updated to CONFIRMED', {
         bookingId: payment.submission.booking.id,
+      });
+    }
+
+    // Send Discord confirmation notification to user
+    if (payment.submission.discordId) {
+      const notificationResult = await sendBookingConfirmationNotification({
+        id: payment.submission.id,
+        email: payment.submission.email,
+        discordId: payment.submission.discordId,
+        discordUsername: payment.submission.discordUsername,
+        coachingType: payment.submission.coachingType,
+        rank: payment.submission.rank,
+        role: payment.submission.role,
+        hero: payment.submission.hero,
+        scheduledAt: payment.submission.booking?.scheduledAt || null,
+        replays: payment.submission.replays.map(r => ({
+          code: r.code,
+          mapName: r.mapName,
+        })),
+      });
+
+      if (notificationResult.success) {
+        logger.info('Booking confirmation sent to user via Discord', {
+          submissionId: payment.submission.id,
+          discordUsername: payment.submission.discordUsername,
+        });
+      } else {
+        logger.error('Failed to send booking confirmation via Discord', {
+          submissionId: payment.submission.id,
+          error: notificationResult.error,
+        });
+      }
+    } else {
+      logger.warn('User has no Discord ID, skipping booking confirmation notification', {
+        submissionId: payment.submission.id,
       });
     }
   }
