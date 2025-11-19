@@ -5,7 +5,7 @@ import Stripe from 'stripe';
 import { stripe } from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
-import { sendBookingConfirmationNotification } from '@/lib/discord';
+import { sendBookingConfirmationNotification, sendVodRequestNotification } from '@/lib/discord';
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
@@ -117,6 +117,7 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
             select: {
               code: true,
               mapName: true,
+              notes: true,
             },
           },
         },
@@ -184,6 +185,30 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
     } else {
       logger.warn('User has no Discord ID, skipping booking confirmation notification', {
         submissionId: payment.submission.id,
+      });
+    }
+
+    // Send admin notification now that payment is confirmed
+    const adminNotificationResult = await sendVodRequestNotification({
+      id: payment.submission.id,
+      email: payment.submission.email,
+      discordTag: payment.submission.discordTag,
+      coachingType: payment.submission.coachingType,
+      rank: payment.submission.rank,
+      role: payment.submission.role,
+      hero: payment.submission.hero,
+      replays: payment.submission.replays,
+      submittedAt: payment.submission.submittedAt,
+    });
+
+    if (adminNotificationResult.success) {
+      logger.info('Admin notification sent for confirmed booking', {
+        submissionId: payment.submission.id,
+      });
+    } else {
+      logger.error('Failed to send admin notification for confirmed booking', {
+        submissionId: payment.submission.id,
+        error: adminNotificationResult.error,
       });
     }
   }
