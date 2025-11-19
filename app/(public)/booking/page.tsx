@@ -14,6 +14,7 @@ import {
   coachingTypes
 } from '@/lib/validations';
 import { TimeSlotPicker } from '@/components/booking/TimeSlotPicker';
+import { DiscordConnection } from '@/components/booking/DiscordConnection';
 import { logger } from '@/lib/logger';
 
 type CoachingType = typeof coachingTypes[number];
@@ -482,6 +483,14 @@ function BookingContent() {
                     />
                   </div>
 
+                  {/* Discord Connection Section */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-100 mb-3">
+                      Discord Notifications <span className="text-xs font-normal text-gray-400">(Optional)</span>
+                    </h3>
+                    <DiscordConnection />
+                  </div>
+
                   {submitStatus === 'error' && (
                     <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
                       <p className="text-red-400 font-medium">
@@ -686,6 +695,14 @@ function BookingContent() {
                   disabled={isSubmitting}
                   helperText="Optional - help me understand what you'd like to work on"
                 />
+              </div>
+
+              {/* Discord Connection Section */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-100 mb-3">
+                  Discord Notifications <span className="text-xs font-normal text-gray-400">(Optional)</span>
+                </h3>
+                <DiscordConnection />
               </div>
 
               {submitStatus === 'error' && (
