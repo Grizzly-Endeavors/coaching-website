@@ -157,10 +157,11 @@ function BookingContent() {
     setSubmitStatus('idle');
 
     // Check Discord connection (required for all bookings)
+    // This should never happen since the form is only shown when Discord is connected
+    // but keeping it as a safety check
     if (!discordConnected) {
       setSubmitStatus('error');
-      // Scroll to Discord connection section
-      document.querySelector('.discord-connection-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      alert('Please connect your Discord account first.');
       return;
     }
 
@@ -292,7 +293,11 @@ function BookingContent() {
               Get Coaching
             </h1>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              {selectedType ? 'Submit your replay codes' : 'Choose your coaching style to get started'}
+              {!discordConnected
+                ? 'First, connect your Discord account to get started'
+                : selectedType
+                  ? 'Submit your replay codes'
+                  : 'Choose your coaching style to get started'}
             </p>
           </div>
         </div>
@@ -301,11 +306,24 @@ function BookingContent() {
       {/* Content Section */}
       <section className="py-20 bg-[#0f0f23] flex-grow">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Discord Connection - Always show first if not connected */}
+          {!discordConnected && (
+            <div className="max-w-2xl mx-auto mb-12">
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold text-gray-100 mb-4">Step 1: Connect Discord</h2>
+                <p className="text-gray-400 leading-relaxed">
+                  All coaching sessions are conducted over Discord. You'll join our coaching server where we'll schedule sessions, conduct reviews, and I'll send you notifications when your review is ready.
+                </p>
+              </div>
+              <DiscordConnection />
+            </div>
+          )}
+
           {/* Coaching Type Selection */}
-          {!selectedType && (
+          {discordConnected && !selectedType && (
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-100 mb-4">Select Your Coaching Style</h2>
+                <h2 className="text-3xl font-bold text-gray-100 mb-4">Step 2: Select Your Coaching Style</h2>
                 <p className="text-gray-400 leading-relaxed">
                   Not sure which one to choose? <a href="/pricing" className="text-purple-400 hover:text-purple-300 underline">View detailed pricing and comparisons</a>
                 </p>
@@ -512,21 +530,6 @@ function BookingContent() {
                       disabled={isSubmitting}
                       helperText="Optional - help me understand what you'd like to work on"
                     />
-                  </div>
-
-                  {/* Discord Connection Section */}
-                  <div className="discord-connection-section">
-                    <h3 className="text-lg font-semibold text-gray-100 mb-3">
-                      Discord Connection <span className="text-red-500">*</span>
-                    </h3>
-                    <DiscordConnection />
-                    {!discordConnected && submitStatus === 'error' && (
-                      <div className="mt-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-                        <p className="text-red-400 font-medium">
-                          You must connect Discord before proceeding. Please click the "Connect Discord" button above.
-                        </p>
-                      </div>
-                    )}
                   </div>
 
                   {submitStatus === 'error' && (
@@ -743,21 +746,6 @@ function BookingContent() {
                   disabled={isSubmitting}
                   helperText="Optional - help me understand what you'd like to work on"
                 />
-              </div>
-
-              {/* Discord Connection Section */}
-              <div className="discord-connection-section">
-                <h3 className="text-lg font-semibold text-gray-100 mb-3">
-                  Discord Connection <span className="text-red-500">*</span>
-                </h3>
-                <DiscordConnection />
-                {!discordConnected && submitStatus === 'error' && (
-                  <div className="mt-3 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-                    <p className="text-red-400 font-medium">
-                      You must connect Discord before proceeding. Please click the "Connect Discord" button above.
-                    </p>
-                  </div>
-                )}
               </div>
 
               {submitStatus === 'error' && (

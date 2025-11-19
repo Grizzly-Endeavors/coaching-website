@@ -110,7 +110,7 @@ export function DiscordConnection() {
           )}
           <div className="mt-3 p-3 bg-purple-600/10 border border-purple-600/30 rounded-lg">
             <p className="text-xs text-purple-300">
-              ✅ You'll receive a Discord DM when your review is ready!
+              ✅ You're in the coaching server! My bot will DM you with session details and when your review is ready.
             </p>
           </div>
         </CardContent>
@@ -129,11 +129,11 @@ export function DiscordConnection() {
           </div>
           <div className="flex-1">
             <h3 className="text-sm font-semibold text-gray-200 mb-1">
-              Connect Discord <span className="text-red-400">*</span>
+              Connect Your Discord Account <span className="text-red-400">*</span>
             </h3>
             <p className="text-xs text-gray-400 leading-relaxed mb-3">
-              Discord is required for all coaching sessions. You'll be added to our coaching server where
-              we'll conduct sessions and send you notifications when your review is ready.
+              By connecting, you'll automatically join our coaching server. This is where all sessions take place
+              and where my bot will DM you with updates about your reviews.
             </p>
             <Button
               variant="primary"
@@ -148,9 +148,9 @@ export function DiscordConnection() {
             </Button>
           </div>
         </div>
-        <div className="p-3 mt-3 bg-red-600/10 border border-red-600/30 rounded-lg">
-          <p className="text-xs text-red-300">
-            <strong>Required:</strong> You must connect Discord to proceed with booking.
+        <div className="p-3 mt-3 bg-purple-600/10 border border-purple-600/30 rounded-lg">
+          <p className="text-xs text-purple-300">
+            <strong>What happens next:</strong> You'll authorize our app, automatically join the coaching server, and then continue with your booking.
           </p>
         </div>
       </CardContent>
