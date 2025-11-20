@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { replaySubmissionSchema } from '@/lib/validations';
-import { sendVodRequestNotification } from '@/lib/discord';
 import { handleApiError } from '@/lib/api-error-handler';
 import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
 import { logger } from '@/lib/logger';
@@ -150,33 +149,7 @@ export async function POST(request: NextRequest) {
       hasBooking: !!submission.booking,
     });
 
-    // Send Discord notification to admin (non-blocking)
-    sendVodRequestNotification({
-      id: submission.id,
-      email: submission.email,
-      discordTag: submission.discordTag,
-      coachingType: submission.coachingType,
-      rank: submission.rank,
-      role: submission.role,
-      hero: submission.hero,
-      replays: submission.replays,
-      submittedAt: submission.submittedAt,
-    })
-      .then((result) => {
-        if (result.success) {
-          logger.info('Discord notification sent to admin', {
-            submissionId: submission.id,
-          });
-        } else {
-          logger.error('Failed to send Discord notification', {
-            submissionId: submission.id,
-            error: result.error,
-          });
-        }
-      })
-      .catch((error) => {
-        logger.error('Error sending Discord notification', error instanceof Error ? error : new Error(String(error)));
-      });
+    // Note: Admin notification is sent after payment confirmation (see webhooks/stripe)
 
     // Get rate limit headers
     const rateLimitHeaders = getRateLimitHeaders(request, rateLimitOptions);

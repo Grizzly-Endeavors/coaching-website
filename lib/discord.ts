@@ -62,6 +62,18 @@ interface BookingConfirmationDetails {
   }>;
 }
 
+interface BookingReminderDetails {
+  id: string;
+  email: string;
+  discordId?: string | null;
+  discordUsername?: string | null;
+  sessionType: string;
+  scheduledAt: Date;
+  rank?: string;
+  role?: string;
+  hero?: string | null;
+}
+
 interface DiscordResult {
   success: boolean;
   error?: string;
@@ -367,6 +379,206 @@ Thank you for your submission!`;
     return { success: true };
   } catch (error) {
     logger.error('Error sending booking confirmation to user', error instanceof Error ? error : new Error(String(error)));
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send Discord DM to user as a 24-hour reminder before their session
+ */
+export async function send24HourReminder(
+  details: BookingReminderDetails
+): Promise<DiscordResult> {
+  try {
+    // Check if user has connected Discord via OAuth
+    if (!details.discordId) {
+      logger.debug('No Discord connection available for user');
+      return {
+        success: false,
+        error: 'User has not connected Discord account',
+      };
+    }
+
+    const formattedDate = details.scheduledAt.toLocaleString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+
+    const message = `⏰ **Session Reminder - 24 Hours**
+
+Your ${getCoachingTypeName(details.sessionType)} session is coming up tomorrow!
+
+**📅 Scheduled Time:** ${formattedDate}
+${details.rank && details.role ? `**🎯 Details:** ${details.rank} ${details.role}${details.hero ? ` ${details.hero}` : ''}` : ''}
+
+**Reminders:**
+${details.sessionType === 'live-coaching'
+  ? '• Make sure you can stream your gameplay on Discord\n• Test your mic and streaming setup ahead of time\n• Be ready to join voice chat 5 minutes early'
+  : '• I\'ll have reviewed your replays by then\n• Make sure you\'re available on Discord\n• Be ready to join voice chat 5 minutes early'}
+
+See you tomorrow!`;
+
+    logger.debug('Sending 24-hour reminder DM', {
+      discordUsername: details.discordUsername || details.discordId,
+      bookingId: details.id,
+    });
+
+    const client = await getDiscordClient();
+
+    let user;
+    try {
+      user = await client.users.fetch(details.discordId);
+    } catch (error) {
+      logger.error('Failed to fetch Discord user for 24h reminder', {
+        discordId: details.discordId,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      return {
+        success: false,
+        error: `Could not find Discord user. User may have left the Discord server.`,
+      };
+    }
+
+    await user.send(message);
+
+    logger.info('24-hour reminder DM sent successfully', {
+      discordUsername: details.discordUsername || details.discordId,
+      bookingId: details.id,
+    });
+    return { success: true };
+  } catch (error) {
+    logger.error('Error sending 24-hour reminder to user', error instanceof Error ? error : new Error(String(error)));
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send Discord DM to user as a 30-minute reminder before their session
+ */
+export async function send30MinuteReminder(
+  details: BookingReminderDetails
+): Promise<DiscordResult> {
+  try {
+    // Check if user has connected Discord via OAuth
+    if (!details.discordId) {
+      logger.debug('No Discord connection available for user');
+      return {
+        success: false,
+        error: 'User has not connected Discord account',
+      };
+    }
+
+    const formattedDate = details.scheduledAt.toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+
+    const message = `🚨 **Session Starting Soon - 30 Minutes**
+
+Your ${getCoachingTypeName(details.sessionType)} session starts in 30 minutes!
+
+**📅 Time:** ${formattedDate}
+${details.rank && details.role ? `**🎯 Details:** ${details.rank} ${details.role}${details.hero ? ` ${details.hero}` : ''}` : ''}
+
+**Get Ready:**
+${details.sessionType === 'live-coaching'
+  ? '• Start your game and get warmed up\n• Make sure you can stream on Discord\n• I\'ll message you here shortly to start!'
+  : '• Make sure you\'re available on Discord\n• I\'ll reach out here to start the session\n• Have any questions ready!'}
+
+See you in 30 minutes!`;
+
+    logger.debug('Sending 30-minute reminder DM', {
+      discordUsername: details.discordUsername || details.discordId,
+      bookingId: details.id,
+    });
+
+    const client = await getDiscordClient();
+
+    let user;
+    try {
+      user = await client.users.fetch(details.discordId);
+    } catch (error) {
+      logger.error('Failed to fetch Discord user for 30m reminder', {
+        discordId: details.discordId,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      return {
+        success: false,
+        error: `Could not find Discord user. User may have left the Discord server.`,
+      };
+    }
+
+    await user.send(message);
+
+    logger.info('30-minute reminder DM sent successfully', {
+      discordUsername: details.discordUsername || details.discordId,
+      bookingId: details.id,
+    });
+    return { success: true };
+  } catch (error) {
+    logger.error('Error sending 30-minute reminder to user', error instanceof Error ? error : new Error(String(error)));
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send Discord DM to admin as a 30-minute reminder before a session
+ */
+export async function send30MinuteAdminReminder(
+  details: BookingReminderDetails
+): Promise<DiscordResult> {
+  try {
+    const adminDiscordId = process.env.ADMIN_DISCORD_USER_ID;
+
+    if (!adminDiscordId) {
+      logger.warn('ADMIN_DISCORD_USER_ID not configured, skipping admin reminder');
+      return { success: false, error: 'ADMIN_DISCORD_USER_ID not configured' };
+    }
+
+    const formattedDate = details.scheduledAt.toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short',
+    });
+
+    const message = `⏰ **Coaching Session Starting in 30 Minutes**
+
+**Session Type:** ${getCoachingTypeName(details.sessionType)}
+**📅 Time:** ${formattedDate}
+**📧 Client Email:** ${details.email}
+${details.discordUsername ? `**💬 Discord:** ${details.discordUsername}` : ''}
+${details.rank && details.role ? `**🎯 Details:** ${details.rank} ${details.role}${details.hero ? ` ${details.hero}` : ''}` : ''}
+
+**Booking ID:** ${details.id}
+
+Time to get ready!`;
+
+    const client = await getDiscordClient();
+    const user = await client.users.fetch(adminDiscordId);
+
+    await user.send(message);
+
+    logger.info('30-minute admin reminder sent', {
+      bookingId: details.id,
+    });
+    return { success: true };
+  } catch (error) {
+    logger.error('Error sending 30-minute admin reminder', error instanceof Error ? error : new Error(String(error)));
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',
