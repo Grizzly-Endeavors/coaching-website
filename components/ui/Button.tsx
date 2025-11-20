@@ -34,13 +34,13 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantClasses = {
-    primary: 'bg-orange-500 text-white hover:bg-orange-400 shadow-[0_0_20px_rgba(255,140,66,0.3)] hover:shadow-[0_0_30px_rgba(255,140,66,0.5)] active:scale-95',
-    secondary: 'bg-[#242424] text-orange-400 hover:bg-[#2e2e2e] border border-orange-600/30 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(255,140,66,0.2)]',
-    outline: 'bg-transparent border-2 border-orange-600 text-orange-400 hover:bg-orange-600 hover:text-white',
-    ghost: 'bg-transparent text-orange-400 hover:bg-orange-600/10 hover:text-orange-300',
+    primary: 'bg-cyan-500 text-white hover:bg-cyan-400 shadow-[0_0_20px_rgba(0,217,255,0.3)] hover:shadow-[0_0_30px_rgba(0,217,255,0.5)] active:scale-95',
+    secondary: 'bg-[#242424] text-cyan-400 hover:bg-[#2e2e2e] border border-cyan-600/30 hover:border-cyan-500/50 hover:shadow-[0_0_15px_rgba(0,217,255,0.2)]',
+    outline: 'bg-transparent border-2 border-cyan-600 text-cyan-400 hover:bg-cyan-600 hover:text-white',
+    ghost: 'bg-transparent text-cyan-400 hover:bg-cyan-600/10 hover:text-cyan-300',
   };
 
   const sizeClasses = {

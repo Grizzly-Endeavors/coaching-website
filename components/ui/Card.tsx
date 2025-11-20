@@ -47,11 +47,11 @@ export const Card: React.FC<CardProps> = ({
   };
 
   const borderClasses = purpleBorder
-    ? 'border-2 border-orange-600'
+    ? 'border-2 border-cyan-600'
     : 'border border-[#2e2e2e]';
 
   const hoverClasses = hover
-    ? 'hover:shadow-[0_0_20px_rgba(255,140,66,0.15)] hover:border-orange-600/50 transition-all duration-300 cursor-pointer hover:-translate-y-1'
+    ? 'hover:shadow-[0_0_20px_rgba(0,217,255,0.15)] hover:border-cyan-600/50 transition-all duration-300 cursor-pointer hover:-translate-y-1'
     : '';
 
   return (
