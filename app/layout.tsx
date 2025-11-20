@@ -9,22 +9,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Overwatch Coaching | Professional Rank Improvement',
-  description: 'Professional Overwatch coaching services. Get personalized VOD reviews, one-on-one coaching sessions, and rank up faster with expert guidance.',
-  keywords: ['overwatch coaching', 'overwatch 2', 'vod review', 'rank improvement', 'esports coaching'],
+  title: 'Overwatch Coaching | Sustainable Improvement',
+  description: 'GM1 across all roles. Teaching you how to think, not just what to do. Overwatch coaching focused on sustainable improvement with a playful, results-driven approach.',
+  keywords: ['overwatch coaching', 'overwatch 2', 'vod review', 'rank improvement', 'esports coaching', 'sustainable improvement'],
   authors: [{ name: 'Overwatch Coaching' }],
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://yoursite.com',
-    title: 'Overwatch Coaching | Professional Rank Improvement',
-    description: 'Professional Overwatch coaching services. Get personalized VOD reviews and rank up faster.',
+    title: 'Overwatch Coaching | Sustainable Improvement',
+    description: 'GM1 across all roles. Teaching you how to think, not just what to do. Sustainable improvement with a playful approach.',
     siteName: 'Overwatch Coaching',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Overwatch Coaching | Professional Rank Improvement',
-    description: 'Professional Overwatch coaching services. Get personalized VOD reviews and rank up faster.',
+    title: 'Overwatch Coaching | Sustainable Improvement',
+    description: 'GM1 across all roles. Teaching you how to think, not just what to do. Sustainable improvement with a playful approach.',
   },
   robots: {
     index: true,
