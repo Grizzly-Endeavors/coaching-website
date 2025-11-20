@@ -42,15 +42,15 @@ export default function CancelPage() {
             </CardHeader>
             <CardContent className="text-center">
               <p className="text-gray-300 mb-6 text-lg">
-                {checkoutLocale.cancel.description as string}
+                {checkoutLocale.cancel.message as string}
               </p>
 
               <div className="bg-[#1a1a2e] rounded-lg p-6 mb-8">
                 <h3 className="text-xl font-bold text-gray-100 mb-4">
-                  {checkoutLocale.cancel.next_steps.title as string}
+                  {checkoutLocale.cancel.what_next.title as string}
                 </h3>
                 <ul className="text-left space-y-3 text-gray-300">
-                  {(checkoutLocale.cancel.next_steps.options as string[]).map((option, index) => (
+                  {(checkoutLocale.cancel.what_next.options as string[]).map((option, index) => (
                     <li key={index} className="flex items-start">
                       <svg
                         className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0"

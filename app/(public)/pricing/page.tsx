@@ -7,6 +7,7 @@ import type { Metadata } from 'next';
 
 const pricingLocale = loadLocale('pricing');
 const metadataLocale = loadLocale('metadata');
+const commonLocale = loadLocale('common');
 
 export const metadata: Metadata = {
   title: metadataLocale.pricing.title as string,
@@ -38,9 +39,10 @@ type PricingOption = {
   description: string;
   features: string[];
   highlight: boolean;
+  badge: string;
 };
 
-const pricingOptions: Array<PricingOption & { icon: React.ReactElement }> = (pricingLocale.options as PricingOption[]).map((option, index) => ({
+const pricingOptions: Array<PricingOption & { icon: React.ReactElement }> = Object.values(pricingLocale.packages as Record<string, PricingOption>).map((option, index) => ({
   ...option,
   icon: Object.values(iconComponents)[index],
 }));
@@ -57,7 +59,7 @@ const comparisonOptions = pricingLocale.comparison.options as Array<{
   description: string;
 }>;
 
-const faqItems = pricingLocale.faq.items as Array<{
+const faqItems = pricingLocale.faq.questions as Array<{
   question: string;
   answer: string;
 }>;
@@ -101,7 +103,7 @@ export default function PricingPage() {
                   {option.highlight && (
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                       <span className="bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                        {pricingLocale.options_section.badge as string}
+                        {option.badge as string}
                       </span>
                     </div>
                   )}
@@ -145,7 +147,7 @@ export default function PricingPage() {
                         size="lg"
                         className="w-full"
                       >
-                        {pricingLocale.options_section.button as string}
+                        {commonLocale.buttons.primary.select_package as string}
                       </Button>
                     </Link>
                   </CardContent>
@@ -256,7 +258,7 @@ export default function PricingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/contact">
                 <Button variant="secondary" size="lg" className="w-full sm:w-auto">
-                  {pricingLocale.cta.button as string}
+                  {pricingLocale.cta.buttons.have_questions as string}
                 </Button>
               </Link>
             </div>

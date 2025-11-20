@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { LocaleProvider } from '@/lib/locales/client';
+import { loadAllLocales } from '@/lib/locales/loader';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -37,10 +39,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locales = loadAllLocales();
   return (
     <html lang="en" className={inter.variable}>
       <body className="antialiased">
-        {children}
+        <LocaleProvider locales={locales}>
+          {children}
+        </LocaleProvider>
       </body>
     </html>
   );
