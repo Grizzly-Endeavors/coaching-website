@@ -1,0 +1,79 @@
+# =============================================================================
+# BLOG LOCALE
+# =============================================================================
+# Location: /app/(public)/blog/page.tsx and /app/(public)/blog/[slug]/page.tsx
+# Blog listing, post pages, and blog-related UI elements
+
+# -----------------------------------------------------------------------------
+# Blog Listing Page
+# -----------------------------------------------------------------------------
+# Location: /app/(public)/blog/page.tsx
+listing:
+  # Page header
+  title: "Blog"
+  description: "Expert Overwatch coaching insights, strategies, and tips to help you climb the ranks. Learn from detailed guides on heroes, positioning, game sense, and more."
+
+  # Empty states
+  empty:
+    no_posts:
+      title: "No blog posts yet"
+      description: "Check back soon for expert Overwatch coaching content."
+
+    no_filtered_posts:
+      title: "No posts found with this tag"
+      description: "Try selecting a different tag or clearing the filter."
+      button: "Clear filter"
+
+  # Call-to-action section
+  cta:
+    title: "Ready to Improve Your Game?"
+    description: "Get personalized coaching and detailed VOD reviews to take your Overwatch skills to the next level."
+    buttons:
+      book_session: "Book a Session"
+      submit_replay: "Submit Replay Code"
+
+# -----------------------------------------------------------------------------
+# Blog Post Page
+# -----------------------------------------------------------------------------
+# Location: /app/(public)/blog/[slug]/page.tsx
+post:
+  # Navigation
+  back_to_blog: "Back to Blog"
+  back_to_all_posts: "Back to all posts"
+
+  # Metadata display
+  author: "Overwatch Coach"
+  reading_time: "{minutes} min read"  # {minutes} = calculated reading time
+
+  # Footer CTA
+  cta:
+    title: "Want to Level Up Your Game?"
+    description: "Get personalized Overwatch coaching tailored to your rank and role. Book a session or submit a replay code for detailed feedback."
+    buttons:
+      book_session: "Book a Coaching Session"
+      submit_replay: "Submit Replay Code"
+
+# -----------------------------------------------------------------------------
+# Blog Components
+# -----------------------------------------------------------------------------
+# Tag filter component
+tags:
+  all_posts: "All Posts"
+  filter_by_tag: "Filter by tag"
+
+# Pagination
+pagination:
+  previous: "Previous"
+  next: "Next"
+  page: "Page {current} of {total}"  # {current} and {total} = page numbers
+
+# Loading states
+loading:
+  posts: "Loading posts..."
+  post_content: "Loading post..."
+
+# Not found (404)
+not_found:
+  title: "Post Not Found"
+  description: "The blog post you're looking for doesn't exist or has been removed."
+  button: "Back to Blog"

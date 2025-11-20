@@ -1,5 +1,15 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { loadLocale, interpolate } from '@/lib/locales';
+import type { Metadata } from 'next';
+
+const termsLocale = loadLocale('terms');
+const metadataLocale = loadLocale('metadata');
+
+export const metadata: Metadata = {
+  title: metadataLocale.terms.title as string,
+  description: metadataLocale.terms.description as string,
+};
 
 /**
  * Terms of Service page
@@ -9,6 +19,8 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
  * of using their coaching services.
  */
 export default function TermsPage() {
+  const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
   return (
     <div className="flex flex-col min-h-screen">
       {/* Hero Section */}
@@ -16,10 +28,10 @@ export default function TermsPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6">
-              Terms of Service
+              {termsLocale.hero.title as string}
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              Last updated: {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              {interpolate(termsLocale.hero.last_updated as string, { date: currentDate })}
             </p>
           </div>
         </div>
@@ -38,12 +50,10 @@ export default function TermsPage() {
                 </div>
                 <div>
                   <h2 className="text-xl font-bold text-yellow-400 mb-2">
-                    Placeholder Notice
+                    {termsLocale.notice.title as string}
                   </h2>
                   <p className="text-gray-300 leading-relaxed">
-                    This is a placeholder Terms of Service page. The site owner must replace this
-                    content with proper terms and conditions that accurately reflect their business
-                    practices, service offerings, and legal requirements.
+                    {termsLocale.notice.message as string}
                   </p>
                 </div>
               </div>
@@ -52,177 +62,160 @@ export default function TermsPage() {
             <div className="space-y-8">
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">1. Acceptance of Terms</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.acceptance.number}. {termsLocale.sections.acceptance.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed">
-                    [Placeholder] By accessing and using this coaching service, you accept and agree
-                    to be bound by the terms and provisions of this agreement. If you do not agree
-                    to these terms, please do not use this service.
+                    {termsLocale.sections.acceptance.content as string}
                   </p>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">2. Service Description</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.service_description.number}. {termsLocale.sections.service_description.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed mb-4">
-                    [Placeholder] Describe the coaching services provided:
+                    {termsLocale.sections.service_description.intro as string}
                   </p>
                   <ul className="list-disc list-inside text-gray-400 space-y-2 ml-4">
-                    <li>Review on My Time (asynchronous replay review)</li>
-                    <li>VOD Review (live replay review sessions)</li>
-                    <li>Live Coaching (real-time gameplay coaching)</li>
+                    {(termsLocale.sections.service_description.services as string[]).map((service, index) => (
+                      <li key={index}>{service}</li>
+                    ))}
                   </ul>
                   <p className="text-gray-300 leading-relaxed mt-4">
-                    All services are provided for Overwatch gameplay improvement and are subject
-                    to availability and scheduling.
+                    {termsLocale.sections.service_description.outro as string}
                   </p>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">3. Booking and Scheduling</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.booking.number}. {termsLocale.sections.booking.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed mb-4">
-                    [Placeholder] Define the booking process and policies:
+                    {termsLocale.sections.booking.intro as string}
                   </p>
                   <ul className="list-disc list-inside text-gray-400 space-y-2 ml-4">
-                    <li>How to book sessions and submit replay codes</li>
-                    <li>Session duration and scheduling procedures</li>
-                    <li>Cancellation and rescheduling policies</li>
-                    <li>No-show policy and refund conditions</li>
-                    <li>Required notice periods for changes</li>
+                    {(termsLocale.sections.booking.items as string[]).map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">4. Payment Terms</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.payment.number}. {termsLocale.sections.payment.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed mb-4">
-                    [Placeholder] Detail payment terms and conditions:
+                    {termsLocale.sections.payment.intro as string}
                   </p>
                   <ul className="list-disc list-inside text-gray-400 space-y-2 ml-4">
-                    <li>Payment is processed through Stripe</li>
-                    <li>Pricing structure for different coaching packages</li>
-                    <li>Payment must be completed before service delivery</li>
-                    <li>Refund policy and conditions</li>
-                    <li>Dispute resolution procedures</li>
+                    {(termsLocale.sections.payment.items as string[]).map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">5. User Responsibilities</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.user_responsibilities.number}. {termsLocale.sections.user_responsibilities.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed mb-4">
-                    [Placeholder] Specify user obligations and expected behavior:
+                    {termsLocale.sections.user_responsibilities.intro as string}
                   </p>
                   <ul className="list-disc list-inside text-gray-400 space-y-2 ml-4">
-                    <li>Provide accurate information when booking</li>
-                    <li>Be available for scheduled sessions</li>
-                    <li>Maintain respectful communication</li>
-                    <li>Provide valid replay codes or gameplay access</li>
-                    <li>Follow coaching instructions and guidelines</li>
+                    {(termsLocale.sections.user_responsibilities.items as string[]).map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">6. Intellectual Property</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.intellectual_property.number}. {termsLocale.sections.intellectual_property.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed">
-                    [Placeholder] Address ownership of coaching materials, session recordings,
-                    written analyses, and any other intellectual property created during or
-                    for the coaching sessions.
+                    {termsLocale.sections.intellectual_property.content as string}
                   </p>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">7. Service Limitations and Disclaimers</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.limitations.number}. {termsLocale.sections.limitations.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed mb-4">
-                    [Placeholder] Include important disclaimers:
+                    {termsLocale.sections.limitations.intro as string}
                   </p>
                   <ul className="list-disc list-inside text-gray-400 space-y-2 ml-4">
-                    <li>No guarantee of specific rank improvements</li>
-                    <li>Results depend on individual effort and practice</li>
-                    <li>Service availability and technical requirements</li>
-                    <li>Limitation of liability for service interruptions</li>
+                    {(termsLocale.sections.limitations.items as string[]).map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">8. Privacy and Data Usage</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.privacy.number}. {termsLocale.sections.privacy.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed">
-                    [Placeholder] Reference your Privacy Policy and explain how user data,
-                    session recordings, and gameplay information will be used, stored, and protected.
+                    {termsLocale.sections.privacy.content as string}
                   </p>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">9. Termination</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.termination.number}. {termsLocale.sections.termination.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed">
-                    [Placeholder] Describe conditions under which services may be terminated,
-                    including violation of terms, inappropriate behavior, or other valid reasons.
+                    {termsLocale.sections.termination.content as string}
                   </p>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">10. Changes to Terms</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.changes.number}. {termsLocale.sections.changes.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed">
-                    [Placeholder] Reserve the right to modify these terms and explain how users
-                    will be notified of changes.
+                    {termsLocale.sections.changes.content as string}
                   </p>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">11. Contact Information</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.contact.number}. {termsLocale.sections.contact.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed">
-                    [Placeholder] Provide contact information for questions about these terms
-                    and conditions.
+                    {termsLocale.sections.contact.content as string}
                   </p>
                 </CardContent>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">12. Governing Law</CardTitle>
+                  <CardTitle className="text-2xl">{termsLocale.sections.governing_law.number}. {termsLocale.sections.governing_law.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-300 leading-relaxed">
-                    [Placeholder] Specify the jurisdiction and governing law for these terms
-                    and any disputes that may arise.
+                    {termsLocale.sections.governing_law.content as string}
                   </p>
                 </CardContent>
               </Card>
@@ -230,11 +223,7 @@ export default function TermsPage() {
 
             <Card variant="surface" padding="lg" className="mt-8 bg-purple-600/10 border-purple-600/30">
               <p className="text-gray-300 leading-relaxed">
-                <strong className="text-purple-400">Note to Site Owner:</strong> You should consult
-                with a legal professional to ensure your terms of service properly protect your
-                business and comply with all applicable laws. Consider including specific details
-                about your refund policy, liability limitations, dispute resolution procedures,
-                and any other terms relevant to your coaching services.
+                <strong className="text-purple-400">{termsLocale.legal_notice.title as string}</strong> {termsLocale.legal_notice.message as string}
               </p>
             </Card>
           </div>

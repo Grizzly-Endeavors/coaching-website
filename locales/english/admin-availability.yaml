@@ -1,0 +1,172 @@
+# =============================================================================
+# ADMIN AVAILABILITY LOCALE
+# =============================================================================
+# Location: /app/admin/availability/page.tsx
+# Availability and schedule management
+
+# -----------------------------------------------------------------------------
+# Page Header
+# -----------------------------------------------------------------------------
+header:
+  title: "Availability Manager"
+  subtitle: "Manage your weekly schedule and block specific dates"
+
+# -----------------------------------------------------------------------------
+# Action Buttons
+# -----------------------------------------------------------------------------
+actions:
+  add_slot: "Add Availability Slot"
+  block_time: "Block Time"
+
+# -----------------------------------------------------------------------------
+# Add Slot Dialog
+# -----------------------------------------------------------------------------
+add_slot_dialog:
+  title: "Add Availability Slot"
+  description: "Add recurring weekly availability for coaching sessions"
+
+  fields:
+    day_of_week:
+      label: "Day of Week"
+      days:
+        - "Sunday"
+        - "Monday"
+        - "Tuesday"
+        - "Wednesday"
+        - "Thursday"
+        - "Friday"
+        - "Saturday"
+
+    start_time:
+      label: "Start Time (EST)"
+
+    end_time:
+      label: "End Time (EST)"
+
+    session_type:
+      label: "Session Type"
+      options:
+        - value: "vod-review"
+          label: "VOD Review ($40)"
+        - value: "live-coaching"
+          label: "Live Coaching ($50)"
+
+  button: "Create Slot"
+
+# -----------------------------------------------------------------------------
+# Block Time Dialog
+# -----------------------------------------------------------------------------
+block_time_dialog:
+  title: "Block Time"
+  description: "Block a specific date and time (e.g., holiday, personal time)"
+
+  fields:
+    date:
+      label: "Date"
+
+    time:
+      label: "Start Time (EST)"
+
+    duration:
+      label: "Duration (minutes)"
+
+    reason:
+      label: "Reason"
+      options:
+        blocked: "Blocked"
+        holiday: "Holiday"
+
+    notes:
+      label: "Notes (optional)"
+      placeholder: "e.g., Thanksgiving"
+
+  button: "Block Time"
+
+# -----------------------------------------------------------------------------
+# Filter
+# -----------------------------------------------------------------------------
+filter:
+  label: "Filter by Session Type:"
+  options:
+    all: "All Types"
+
+# -----------------------------------------------------------------------------
+# Weekly Schedule Section
+# -----------------------------------------------------------------------------
+schedule:
+  title: "Weekly Schedule"
+
+  # Slot display
+  slot:
+    duration: "{minutes} min slots"  # {minutes} = slot duration
+    badges:
+      vod_review: "VOD Review"
+      live_coaching: "Live Coaching"
+      disabled: "Disabled"
+
+  # Slot actions
+  actions:
+    enable: "Enable"
+    disable: "Disable"
+    delete: "Delete"
+
+  # Empty state
+  empty: "No availability on this day"
+
+# -----------------------------------------------------------------------------
+# Blocked Times Section
+# -----------------------------------------------------------------------------
+blocked_times:
+  title: "Blocked Times"
+
+  # Display format
+  at: "at"
+
+  # Reason badges
+  reasons:
+    holiday: "holiday"
+    blocked: "blocked"
+
+  # Actions
+  remove: "Remove"
+
+# -----------------------------------------------------------------------------
+# Info Card
+# -----------------------------------------------------------------------------
+info:
+  title: "How it works"
+  items:
+    - "Add weekly availability slots for VOD Review and Live Coaching sessions"
+    - "All times are in EST timezone"
+    - "Slots are automatically divided into {duration}-minute appointments"  # {duration} = 60
+    - "Block specific dates/times for holidays or personal time"
+    - "Disable slots temporarily without deleting them"
+    - "Once a user books a time, it will automatically be blocked"
+
+# -----------------------------------------------------------------------------
+# Confirmation Dialogs
+# -----------------------------------------------------------------------------
+confirmations:
+  delete_slot: "Are you sure you want to delete this slot?"
+  unblock_time: "Are you sure you want to unblock this time?"
+
+# -----------------------------------------------------------------------------
+# Success Messages
+# -----------------------------------------------------------------------------
+messages:
+  slot_created: "Availability slot created successfully"
+  slot_updated: "Slot {action}"  # {action} = enabled/disabled
+  slot_deleted: "Slot deleted successfully"
+  time_blocked: "Time blocked successfully"
+  time_unblocked: "Time unblocked successfully"
+  error_create: "Failed to create slot"
+  error_update: "Failed to update slot"
+  error_delete: "Failed to delete slot"
+  error_block: "Failed to block time"
+  error_unblock: "Failed to delete exception"
+
+# -----------------------------------------------------------------------------
+# Loading States
+# -----------------------------------------------------------------------------
+loading:
+  default: "Loading..."

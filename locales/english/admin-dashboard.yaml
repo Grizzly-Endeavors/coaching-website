@@ -1,0 +1,90 @@
+# =============================================================================
+# ADMIN DASHBOARD LOCALE
+# =============================================================================
+# Location: /app/admin/page.tsx
+# Main admin dashboard with stats and quick actions
+
+# -----------------------------------------------------------------------------
+# Page Header
+# -----------------------------------------------------------------------------
+# Location: Lines 201-202
+header:
+  title: "Dashboard"
+  subtitle: "Welcome back! Here's an overview of your coaching business."
+
+# -----------------------------------------------------------------------------
+# Stats Cards
+# -----------------------------------------------------------------------------
+# Location: Lines 51-93
+stats:
+  pending_submissions:
+    title: "Pending Submissions"
+    value: "{count}"  # {count} = number of pending submissions
+    subtitle: "Awaiting review"
+
+  total_submissions:
+    title: "Total Submissions"
+    value: "{count}"  # {count} = total number of submissions
+    subtitle: "All time"
+
+  completed_reviews:
+    title: "Completed Reviews"
+    value: "{count}"  # {count} = number of completed submissions
+    subtitle: "{percentage}% completion rate"  # {percentage} = calculated percentage
+
+# -----------------------------------------------------------------------------
+# Quick Actions Section
+# -----------------------------------------------------------------------------
+# Location: Lines 96-121
+quick_actions:
+  title: "Quick Actions"
+
+  buttons:
+    review_pending: "Review Pending Submissions"
+    manage_codes: "Manage Friend Codes"
+    create_post: "Create New Blog Post"
+    view_schedule: "View Schedule"
+
+# -----------------------------------------------------------------------------
+# Upcoming Bookings Section
+# -----------------------------------------------------------------------------
+# Location: Lines 123-157
+upcoming_bookings:
+  title: "Upcoming Bookings"
+  view_all: "View All"
+
+  # Table headers
+  table_headers:
+    - "Date & Time"
+    - "Email"
+    - "Session Type"
+    - "Status"
+
+  # Empty state
+  empty: "No upcoming bookings"
+
+# -----------------------------------------------------------------------------
+# Recent Submissions Section
+# -----------------------------------------------------------------------------
+# Location: Lines 159-192
+recent_submissions:
+  title: "Recent Submissions"
+  view_all: "View All"
+
+  # Table headers
+  table_headers:
+    - "Date"
+    - "Email"
+    - "Rank"
+    - "Role"
+    - "Hero"
+    - "Status"
+
+  # Hero display
+  no_hero: "-"
+
+# -----------------------------------------------------------------------------
+# Loading States
+# -----------------------------------------------------------------------------
+loading:
+  dashboard: "Loading dashboard..."

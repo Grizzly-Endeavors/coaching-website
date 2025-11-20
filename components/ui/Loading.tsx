@@ -69,7 +69,7 @@ export default function Loading({
         className="fixed inset-0 bg-background-primary/80 backdrop-blur-sm flex items-center justify-center z-50"
         role="dialog"
         aria-modal="true"
-        aria-label="Loading overlay"
+        aria-label="Loading..."
       >
         {spinner}
       </div>

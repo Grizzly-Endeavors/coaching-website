@@ -1,0 +1,146 @@
+# =============================================================================
+# HOME PAGE LOCALE
+# =============================================================================
+# Location: /app/(public)/page.tsx
+# All user-facing text from the home/landing page
+
+# -----------------------------------------------------------------------------
+# Hero Section
+# -----------------------------------------------------------------------------
+# Location: Lines 92-114
+hero:
+  title: "Level Up Your Game"
+  subtitle: "Sustainable improvement through teaching you how to think, not just what to do"
+  buttons:
+    view_pricing: "View Pricing"
+    get_coaching: "Get Coaching"
+
+# -----------------------------------------------------------------------------
+# Background & Credentials Section
+# -----------------------------------------------------------------------------
+# Location: Lines 118-167
+background:
+  section_title: "How I Got Here"
+
+  # Profile image placeholder text
+  image_placeholder:
+    line1: "Coach Photo or"
+    line2: "Overwatch Profile Screenshot"
+
+  # Biography paragraphs
+  bio:
+    paragraph_1: "My dad bought us both Overwatch when it first launched. Before then, I hadn't played any shooters - hero or otherwise. But Overwatch was different. I was immediately drawn to the characters and the strategy within the game."
+    paragraph_2: "I've always had a knack for breaking things down and explaining them. As I started connecting with others and making friends in the days after launch, I found myself naturally helping others understand matchups, how team comps work together, and how to get value with their hero's abilities."
+    paragraph_3: "I've been coaching in parallel with playing organized Overwatch almost the whole time, and I'm only just now stepping away from the player side. Getting to GM on every role shaped my coaching the most - it taught me the steps for identifying issues and addressing them in a sustainable way."
+
+  # Achievement cards
+  achievements:
+    - title: "DPS Peak"
+      value: "4.4k"
+      description: "High Grandmaster"
+    - title: "All Roles"
+      value: "GM1"
+      description: "Tank, DPS, Support"
+    - title: "Coaching Since"
+      value: "2016"
+      description: "Since game launch"
+    - title: "Approach"
+      value: "Holistic"
+      description: "Mindset & mechanics"
+
+# -----------------------------------------------------------------------------
+# Coaching Philosophy Section
+# -----------------------------------------------------------------------------
+# Location: Lines 170-200
+philosophy:
+  section_title: "Coaching Philosophy"
+  section_subtitle: "My approach to helping you improve"
+
+  points:
+    - title: "Mindset Matters Most"
+      description: "Your mental approach to the game is more important than any mechanical skill. We focus on building sustainable habits and a healthy relationship with improvement."
+
+    - title: "Quality Over Quantity"
+      description: "Consistent short bursts of focused practice are way more effective than endless hours of aimless grinding. Make the most of your time."
+
+    - title: "Teaching How to Think"
+      description: "Overwatch is too complex for cookie-cutter advice. I teach you the frameworks to figure out what to do on the fly, not memorize specific plays."
+
+    - title: "No Quick Fixes"
+      description: "Real improvement requires commitment. You have to show up and do the work day after day - but I'll make sure that work actually matters."
+
+# -----------------------------------------------------------------------------
+# Hero Expertise Section
+# -----------------------------------------------------------------------------
+# Location: Lines 202-238
+expertise:
+  section_title: "Hero Expertise"
+  section_subtitle: "Heroes I can coach at a high level"
+
+  roles:
+    tank:
+      name: "Tank"
+      heroes:
+        - "Reinhardt"
+        - "Winston"
+        - "Zarya"
+        - "D.Va"
+        - "Sigma"
+        - "Orisa"
+        - "Roadhog"
+        - "Wrecking Ball"
+
+    dps:
+      name: "DPS"
+      heroes:
+        - "Tracer"
+        - "Genji"
+        - "Soldier: 76"
+        - "Widowmaker"
+        - "Cassidy"
+        - "Ashe"
+        - "Echo"
+        - "Sojourn"
+
+    support:
+      name: "Support"
+      heroes:
+        - "Ana"
+        - "Mercy"
+        - "Lucio"
+        - "Zenyatta"
+        - "Moira"
+        - "Baptiste"
+        - "Brigitte"
+        - "Kiriko"
+
+# -----------------------------------------------------------------------------
+# What Sets Me Apart Section
+# -----------------------------------------------------------------------------
+# Location: Lines 240-303
+differentiators:
+  section_title: "What Sets Me Apart"
+
+  points:
+    - title: "Playful Roasting Style"
+      description: "Sessions feel less like being lectured and more like improving with a friend who keeps it real. Expect some \"So... what did you think was gonna happen?\" moments. It's just more fun this way."
+
+    - title: "Pattern Recognition Focus"
+      description: "I review replays beforehand to filter out one-off mistakes from the ongoing patterns that are really holding you back. This is what separates external coaching from self-review."
+
+    - title: "All Roles at GM Level"
+      description: "Reaching GM1 on Tank, DPS, and Support means I understand what actually matters at every level. That high-level play is so fast it forces you to focus on what's important."
+
+    - title: "Still Fun While Pushing Hard"
+      description: "At the end of the day, it's still a game. Even when you're trying to push yourself as hard as you can, it's not worth suffering for. Sustainable improvement means keeping the fun in it."
+
+# -----------------------------------------------------------------------------
+# Call-to-Action Section
+# -----------------------------------------------------------------------------
+# Location: Lines 305-329
+cta:
+  title: "Ready to Be the Best You Can Be?"
+  description: "If you're engaged and willing to put in the work, I'll go above and beyond to help you get where you're trying to go. Let's get started."
+  buttons:
+    get_coaching: "Get Coaching"
+    contact_me: "Contact Me"

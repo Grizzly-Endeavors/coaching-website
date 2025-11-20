@@ -1,0 +1,83 @@
+# =============================================================================
+# PRIVACY POLICY LOCALE
+# =============================================================================
+# Location: /app/(public)/privacy/page.tsx
+# Privacy policy page content (placeholder template)
+
+# -----------------------------------------------------------------------------
+# Page Header
+# -----------------------------------------------------------------------------
+hero:
+  title: "Privacy Policy"
+  last_updated: "Last updated: {date}"  # {date} = current date
+
+# -----------------------------------------------------------------------------
+# Placeholder Notice
+# -----------------------------------------------------------------------------
+notice:
+  title: "Placeholder Notice"
+  message: "This is a placeholder Privacy Policy page. The site owner must replace this content with a proper privacy policy that complies with applicable laws and regulations, including GDPR, CCPA, and other relevant privacy legislation."
+
+# -----------------------------------------------------------------------------
+# Section Titles and Placeholders
+# -----------------------------------------------------------------------------
+sections:
+  information_collected:
+    number: 1
+    title: "Information We Collect"
+    intro: "[Placeholder] Describe what personal information you collect from users, including but not limited to:"
+    items:
+      - "Contact information (name, email, Discord username)"
+      - "Payment information processed through Stripe"
+      - "Game replay codes and related gameplay data"
+      - "Session recordings and coaching notes"
+      - "Website usage data and analytics"
+
+  how_we_use:
+    number: 2
+    title: "How We Use Your Information"
+    intro: "[Placeholder] Explain how you use the collected information:"
+    items:
+      - "To provide coaching services and schedule sessions"
+      - "To process payments and maintain transaction records"
+      - "To communicate about bookings, updates, and support"
+      - "To improve our services and user experience"
+      - "To comply with legal obligations"
+
+  information_sharing:
+    number: 3
+    title: "Information Sharing and Disclosure"
+    content: "[Placeholder] Describe when and how you share user information with third parties, including payment processors (Stripe), calendar services (Google Calendar), and any other service providers."
+
+  data_security:
+    number: 4
+    title: "Data Security"
+    content: "[Placeholder] Explain the security measures you take to protect user data, including encryption, secure storage, and access controls."
+
+  user_rights:
+    number: 5
+    title: "Your Rights"
+    intro: "[Placeholder] Detail user rights regarding their personal data:"
+    items:
+      - "Right to access your personal information"
+      - "Right to correct or update your data"
+      - "Right to delete your personal information"
+      - "Right to opt-out of certain data processing"
+      - "Right to data portability"
+
+  cookies:
+    number: 6
+    title: "Cookies and Tracking"
+    content: "[Placeholder] Explain your use of cookies, analytics tools, and other tracking technologies."
+
+  contact:
+    number: 7
+    title: "Contact Information"
+    content: "[Placeholder] Provide contact details for privacy-related inquiries and data protection officer information if applicable."
+
+# -----------------------------------------------------------------------------
+# Legal Notice to Site Owner
+# -----------------------------------------------------------------------------
+legal_notice:
+  title: "Note to Site Owner:"
+  message: "You should consult with a legal professional to ensure your privacy policy complies with all applicable laws and accurately reflects your data practices. Consider including specific details about your jurisdiction, retention periods, third-party services, and user rights under GDPR, CCPA, and other relevant regulations."

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { handleApiError } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
-import { getServerSession } from 'next-auth';
 
 /**
  * GET /api/admin/friend-codes

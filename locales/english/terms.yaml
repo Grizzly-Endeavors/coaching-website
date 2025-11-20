@@ -1,0 +1,118 @@
+# =============================================================================
+# TERMS OF SERVICE LOCALE
+# =============================================================================
+# Location: /app/(public)/terms/page.tsx
+# Terms of service page content (placeholder template)
+
+# -----------------------------------------------------------------------------
+# Page Header
+# -----------------------------------------------------------------------------
+hero:
+  title: "Terms of Service"
+  last_updated: "Last updated: {date}"  # {date} = current date
+
+# -----------------------------------------------------------------------------
+# Placeholder Notice
+# -----------------------------------------------------------------------------
+notice:
+  title: "Placeholder Notice"
+  message: "This is a placeholder Terms of Service page. The site owner must replace this content with proper terms and conditions that accurately reflect their business practices, service offerings, and legal requirements."
+
+# -----------------------------------------------------------------------------
+# Section Titles and Placeholders
+# -----------------------------------------------------------------------------
+sections:
+  acceptance:
+    number: 1
+    title: "Acceptance of Terms"
+    content: "[Placeholder] By accessing and using this coaching service, you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to these terms, please do not use this service."
+
+  service_description:
+    number: 2
+    title: "Service Description"
+    intro: "[Placeholder] Describe the coaching services provided:"
+    services:
+      - "Review on My Time (asynchronous replay review)"
+      - "VOD Review (live replay review sessions)"
+      - "Live Coaching (real-time gameplay coaching)"
+    outro: "All services are provided for Overwatch gameplay improvement and are subject to availability and scheduling."
+
+  booking:
+    number: 3
+    title: "Booking and Scheduling"
+    intro: "[Placeholder] Define the booking process and policies:"
+    items:
+      - "How to book sessions and submit replay codes"
+      - "Session duration and scheduling procedures"
+      - "Cancellation and rescheduling policies"
+      - "No-show policy and refund conditions"
+      - "Required notice periods for changes"
+
+  payment:
+    number: 4
+    title: "Payment Terms"
+    intro: "[Placeholder] Detail payment terms and conditions:"
+    items:
+      - "Payment is processed through Stripe"
+      - "Pricing structure for different coaching packages"
+      - "Payment must be completed before service delivery"
+      - "Refund policy and conditions"
+      - "Dispute resolution procedures"
+
+  user_responsibilities:
+    number: 5
+    title: "User Responsibilities"
+    intro: "[Placeholder] Specify user obligations and expected behavior:"
+    items:
+      - "Provide accurate information when booking"
+      - "Be available for scheduled sessions"
+      - "Maintain respectful communication"
+      - "Provide valid replay codes or gameplay access"
+      - "Follow coaching instructions and guidelines"
+
+  intellectual_property:
+    number: 6
+    title: "Intellectual Property"
+    content: "[Placeholder] Address ownership of coaching materials, session recordings, written analyses, and any other intellectual property created during or for the coaching sessions."
+
+  limitations:
+    number: 7
+    title: "Service Limitations and Disclaimers"
+    intro: "[Placeholder] Include important disclaimers:"
+    items:
+      - "No guarantee of specific rank improvements"
+      - "Results depend on individual effort and practice"
+      - "Service availability and technical requirements"
+      - "Limitation of liability for service interruptions"
+
+  privacy:
+    number: 8
+    title: "Privacy and Data Usage"
+    content: "[Placeholder] Reference your Privacy Policy and explain how user data, session recordings, and gameplay information will be used, stored, and protected."
+
+  termination:
+    number: 9
+    title: "Termination"
+    content: "[Placeholder] Describe conditions under which services may be terminated, including violation of terms, inappropriate behavior, or other valid reasons."
+
+  changes:
+    number: 10
+    title: "Changes to Terms"
+    content: "[Placeholder] Reserve the right to modify these terms and explain how users will be notified of changes."
+
+  contact:
+    number: 11
+    title: "Contact Information"
+    content: "[Placeholder] Provide contact information for questions about these terms and conditions."
+
+  governing_law:
+    number: 12
+    title: "Governing Law"
+    content: "[Placeholder] Specify the jurisdiction and governing law for these terms and any disputes that may arise."
+
+# -----------------------------------------------------------------------------
+# Legal Notice to Site Owner
+# -----------------------------------------------------------------------------
+legal_notice:
+  title: "Note to Site Owner:"
+  message: "You should consult with a legal professional to ensure your terms of service properly protect your business and comply with all applicable laws. Consider including specific details about your refund policy, liability limitations, dispute resolution procedures, and any other terms relevant to your coaching services."

@@ -1,0 +1,163 @@
+# =============================================================================
+# BOOKING PAGE LOCALE
+# =============================================================================
+# Location: /app/(public)/booking/page.tsx
+# Booking flow, replay submission, and scheduling
+
+# -----------------------------------------------------------------------------
+# Hero Section
+# -----------------------------------------------------------------------------
+# Location: Lines 289-303
+hero:
+  states:
+    not_connected: "First, connect your Discord account to get started"
+    type_selection: "Choose your coaching style to get started"
+    submission: "Submit your replay codes"
+
+  title: "Get Coaching"
+
+# -----------------------------------------------------------------------------
+# Discord Connection Step
+# -----------------------------------------------------------------------------
+# Location: Lines 310-320
+discord_step:
+  step_number: "Step 1: Connect Discord"
+  title: "Connect Discord"
+  description: "All coaching sessions are conducted over Discord. You'll join our coaching server where we'll schedule sessions, conduct reviews, and I'll send you notifications when your review is ready."
+
+# -----------------------------------------------------------------------------
+# Coaching Type Selection Step
+# -----------------------------------------------------------------------------
+# Location: Lines 323-356
+type_selection:
+  step_number: "Step 2: Select Your Coaching Style"
+  title: "Select Your Coaching Style"
+  subtitle: "Not sure which one to choose?"
+  subtitle_link_text: "View detailed pricing and comparisons"
+
+  # Coaching types with descriptions
+  # Also used in booking form
+  types:
+    review_async:
+      id: "review-async"
+      name: "Asynchronous VOD Review"
+      description: "Send replay codes and I'll send back structured notes with focused improvements"
+
+    vod_review:
+      id: "vod-review"
+      name: "Live VOD Review"
+      description: "We go through your replay together - I pause and guide your thinking"
+
+    live_coaching:
+      id: "live-coaching"
+      name: "Live Coaching"
+      description: "I sit over your shoulder and help break stubborn habits in real-time"
+
+# -----------------------------------------------------------------------------
+# Replay Submission Form
+# -----------------------------------------------------------------------------
+# Location: Lines 360-789
+form:
+  # Form titles based on coaching type
+  titles:
+    review_async: "Submit Your Replay Codes"
+    vod_and_live: "Submit Codes & Schedule Session"
+
+  # Back button
+  back_button: "← Back to Selection"
+
+  # Coaching type descriptions
+  descriptions:
+    review_async: "I review your replays when I have the chance and send you structured notes focusing on 1-2 key patterns to work on. Most accessible option."
+    vod_review: "I review the code beforehand, then we go through it together. I'll pause at key points and ask what you were thinking - teaching you how to think, not just what to do."
+    live_coaching: "Submit replays so I can understand your playstyle first. Then in our live session, I'll sit over your shoulder while you play and help break stubborn habits in real-time."
+
+  # Turnaround messages
+  turnaround:
+    review_async: "I'll review when I have time and send you notes - no rush, no pressure"
+    vod_review: "Select an appointment time that works for you"
+    live_coaching: "Select an appointment time that works for you"
+
+  # Form fields
+  fields:
+    email:
+      label: "Email Address"
+      placeholder: "your.email@example.com"
+      helper: "Where should I send the review?"
+
+    discord_tag:
+      label: "Discord Tag"
+      placeholder: "YourName#1234"
+      helper: "Optional - for follow-up questions"
+
+    rank:
+      label: "Current Rank"
+      placeholder: "Select your rank"
+
+    role:
+      label: "Role"
+      placeholder: "Select your role"
+
+    hero:
+      label: "Hero Played"
+      placeholder: "e.g., Ana, Reinhardt, Tracer"
+      helper: "Optional - helps me provide more specific feedback"
+
+  # Replay codes section
+  replay_codes:
+    title: "Replay Codes"
+    required_indicator: "*"
+
+    # Individual replay fields
+    code:
+      label: "Replay Code"
+      label_optional: "Replay Code {number} (optional)"  # {number} = 2, 3
+      placeholder: "ABC123"
+
+    map:
+      label: "Map Name"
+      label_optional: "Map Name {number} (optional)"  # {number} = 2, 3
+      placeholder: "e.g., King's Row, Ilios"
+
+  # General notes
+  general_notes:
+    label: "Notes for Coach"
+    placeholder: "Any specific moments or questions about your replays? What would you like to focus on?"
+    helper: "Optional - help me understand what you'd like to work on"
+
+  # Submit section
+  submit:
+    button_default: "Continue to Payment"
+    button_loading: "Processing..."
+    error_message: "Failed to submit. Please try again or contact me directly."
+    time_slot_error: "Please select an appointment time"
+    friend_code_link: "or use a code"
+    privacy_notice: "By submitting, you agree to our terms of service and privacy policy"
+
+# -----------------------------------------------------------------------------
+# Data Arrays (for dropdowns)
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/booking.ts
+data:
+  ranks:
+    - "Bronze"
+    - "Silver"
+    - "Gold"
+    - "Platinum"
+    - "Diamond"
+    - "Master"
+    - "Grandmaster"
+    - "Top 500"
+
+  roles:
+    - "Tank"
+    - "DPS"
+    - "Support"
+
+  coaching_types:
+    - value: "review-async"
+      label: "Asynchronous VOD Review"
+    - value: "vod-review"
+      label: "Live VOD Review"
+    - value: "live-coaching"
+      label: "Live Coaching"

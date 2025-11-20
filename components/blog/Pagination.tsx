@@ -87,8 +87,8 @@ export function Pagination({
           transition-all duration-200
           ${
             currentPage === 1
-              ? 'bg-[#1a1a2e] text-[#6b7280] cursor-not-allowed'
-              : 'bg-[#1a1a2e] text-[#9ca3af] border border-[#2a2a40] hover:border-[#8b5cf6] hover:text-[#a78bfa] hover:shadow-lg hover:shadow-purple-500/20'
+              ? 'bg-background-surface text-text-muted cursor-not-allowed'
+              : 'bg-background-surface text-text-secondary border border-border hover:border-purple-primary hover:text-purple-hover hover:shadow-lg hover:shadow-purple-500/20'
           }
         `}
         aria-label="Previous page"
@@ -103,7 +103,7 @@ export function Pagination({
             return (
               <span
                 key={`ellipsis-${index}`}
-                className="inline-flex items-center justify-center w-10 h-10 text-[#6b7280]"
+                className="inline-flex items-center justify-center w-10 h-10 text-text-muted"
               >
                 ...
               </span>
@@ -122,8 +122,8 @@ export function Pagination({
                 text-sm font-medium transition-all duration-200
                 ${
                   isActive
-                    ? 'bg-[#8b5cf6] text-white shadow-lg shadow-purple-500/30 scale-105'
-                    : 'bg-[#1a1a2e] text-[#9ca3af] border border-[#2a2a40] hover:border-[#8b5cf6] hover:text-[#a78bfa] hover:shadow-lg hover:shadow-purple-500/20'
+                    ? 'bg-purple-primary text-white shadow-lg shadow-purple-500/30 scale-105'
+                    : 'bg-background-surface text-text-secondary border border-border hover:border-purple-primary hover:text-purple-hover hover:shadow-lg hover:shadow-purple-500/20'
                 }
               `}
               aria-label={`Page ${pageNum}`}
@@ -144,8 +144,8 @@ export function Pagination({
           transition-all duration-200
           ${
             currentPage === totalPages
-              ? 'bg-[#1a1a2e] text-[#6b7280] cursor-not-allowed'
-              : 'bg-[#1a1a2e] text-[#9ca3af] border border-[#2a2a40] hover:border-[#8b5cf6] hover:text-[#a78bfa] hover:shadow-lg hover:shadow-purple-500/20'
+              ? 'bg-background-surface text-text-muted cursor-not-allowed'
+              : 'bg-background-surface text-text-secondary border border-border hover:border-purple-primary hover:text-purple-hover hover:shadow-lg hover:shadow-purple-500/20'
           }
         `}
         aria-label="Next page"
@@ -154,7 +154,7 @@ export function Pagination({
       </button>
 
       {/* Page Info Text */}
-      <span className="ml-4 text-sm text-[#6b7280]">
+      <span className="ml-4 text-sm text-text-muted">
         Page {currentPage} of {totalPages}
       </span>
     </nav>
@@ -168,12 +168,12 @@ export function Pagination({
 export function PaginationSkeleton() {
   return (
     <div className="flex items-center justify-center gap-2 animate-pulse">
-      <div className="w-10 h-10 bg-[#1a1a2e] rounded-lg" />
-      <div className="w-10 h-10 bg-[#1a1a2e] rounded-lg" />
-      <div className="w-10 h-10 bg-[#1a1a2e] rounded-lg" />
-      <div className="w-10 h-10 bg-[#1a1a2e] rounded-lg" />
-      <div className="w-10 h-10 bg-[#1a1a2e] rounded-lg" />
-      <div className="w-20 h-5 bg-[#1a1a2e] rounded ml-4" />
+      <div className="w-10 h-10 bg-background-surface rounded-lg" />
+      <div className="w-10 h-10 bg-background-surface rounded-lg" />
+      <div className="w-10 h-10 bg-background-surface rounded-lg" />
+      <div className="w-10 h-10 bg-background-surface rounded-lg" />
+      <div className="w-10 h-10 bg-background-surface rounded-lg" />
+      <div className="w-20 h-5 bg-background-surface rounded ml-4" />
     </div>
   );
 }

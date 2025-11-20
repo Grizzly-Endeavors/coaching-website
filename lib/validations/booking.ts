@@ -3,6 +3,9 @@ import { emailSchema, replayCodeSchema as replayCodeStringSchema, shortTextSchem
 
 /**
  * Validation schemas for booking and replay submission
+ *
+ * Note: Error messages are hardcoded to work in Edge Runtime
+ * For localized UI validation errors, handle them in the UI layer
  */
 
 // Rank options for Overwatch (consolidated tiers)
@@ -27,9 +30,9 @@ export const replayCodeObjectSchema = z.object({
   code: replayCodeStringSchema,
   mapName: z.string()
     .min(2, 'Map name is required')
-    .max(100, 'Map name is too long'),
+    .max(100, 'Map name must not exceed 100 characters'),
   notes: z.string()
-    .max(500, 'Notes are too long (max 500 characters)')
+    .max(500, 'Notes must not exceed 500 characters')
     .optional(),
 });
 
@@ -47,8 +50,8 @@ export const replaySubmissionSchema = z.object({
     message: 'Please select your role',
   }),
   hero: z.string()
-    .min(2, 'Please specify which hero you played')
-    .max(50, 'Hero name is too long')
+    .min(2, 'Hero name must be at least 2 characters')
+    .max(50, 'Hero name must not exceed 50 characters')
     .optional(),
   replays: z.array(replayCodeObjectSchema)
     .min(1, 'At least one replay code is required')

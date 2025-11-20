@@ -177,18 +177,18 @@ export default function FriendCodesPage() {
 
   const getStatusBadge = (code: FriendCode) => {
     if (!code.isActive) {
-      return <Badge variant="secondary">Inactive</Badge>;
+      return <Badge variant="outline">Inactive</Badge>;
     }
 
     const now = new Date();
     const expiresAt = code.expiresAt ? new Date(code.expiresAt) : null;
 
     if (expiresAt && expiresAt < now) {
-      return <Badge variant="destructive">Expired</Badge>;
+      return <Badge variant="error">Expired</Badge>;
     }
 
     if (code.maxUses && code.usesCount >= code.maxUses) {
-      return <Badge variant="destructive">Max Uses Reached</Badge>;
+      return <Badge variant="error">Max Uses Reached</Badge>;
     }
 
     return <Badge variant="success">Active</Badge>;
@@ -260,7 +260,7 @@ export default function FriendCodesPage() {
                       Edit
                     </Button>
                     <Button
-                      variant="destructive"
+                      variant="outline"
                       size="sm"
                       onClick={() => handleDelete(code.id)}
                     >

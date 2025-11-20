@@ -1,0 +1,50 @@
+# =============================================================================
+# ADMIN LOGIN LOCALE
+# =============================================================================
+# Location: /app/login/page.tsx
+# Admin authentication page
+
+# -----------------------------------------------------------------------------
+# Page Header
+# -----------------------------------------------------------------------------
+header:
+  title: "Admin Login"
+  subtitle: "Sign in to access the admin dashboard"
+
+# -----------------------------------------------------------------------------
+# Login Form
+# -----------------------------------------------------------------------------
+form:
+  fields:
+    email:
+      label: "Email Address"
+      placeholder: "admin@example.com"
+
+    password:
+      label: "Password"
+      placeholder: "••••••••"
+
+    remember_me:
+      label: "Remember me for 30 days"
+
+  # Submit button states
+  submit:
+    default: "Sign In"
+    loading: "Signing in..."
+
+  # Error message
+  error:
+    invalid_credentials: "Invalid email or password. Please try again."
+    unexpected: "An unexpected error occurred. Please try again."
+
+# -----------------------------------------------------------------------------
+# Additional Info
+# -----------------------------------------------------------------------------
+footer:
+  restricted_notice: "This area is restricted to administrators only."
+
+# -----------------------------------------------------------------------------
+# Loading State
+# -----------------------------------------------------------------------------
+loading:
+  message: "Loading..."

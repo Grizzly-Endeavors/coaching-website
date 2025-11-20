@@ -146,13 +146,13 @@ export default function BlogPostForm({
     <div>
       {/* Header */}
       <div className="mb-8">
-        <Link href="/admin/blog" className="text-[#8b5cf6] hover:text-[#a78bfa] text-sm mb-2 inline-block">
+        <Link href="/admin/blog" className="text-purple-primary hover:text-purple-hover text-sm mb-2 inline-block">
           ← Back to Blog Posts
         </Link>
-        <h1 className="text-3xl font-bold text-[#e5e7eb] mb-2">
+        <h1 className="text-3xl font-bold text-text-primary mb-2">
           {mode === 'create' ? 'Create New Blog Post' : 'Edit Blog Post'}
         </h1>
-        <p className="text-[#9ca3af]">
+        <p className="text-text-secondary">
           {mode === 'create'
             ? 'Upload a markdown file or write your content below'
             : 'Update your blog post content and settings'}
@@ -161,36 +161,36 @@ export default function BlogPostForm({
 
       {/* File Upload (only for create mode) */}
       {mode === 'create' && (
-        <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 mb-6">
-          <h2 className="text-lg font-bold text-[#e5e7eb] mb-4">Upload Markdown File</h2>
+        <div className="bg-background-surface border border-border rounded-lg p-6 mb-6">
+          <h2 className="text-lg font-bold text-text-primary mb-4">Upload Markdown File</h2>
           <div className="flex items-center space-x-4">
             <input
               type="file"
               accept=".md"
               onChange={handleFileUpload}
               disabled={uploading}
-              className="block w-full text-sm text-[#9ca3af]
+              className="block w-full text-sm text-text-secondary
                 file:mr-4 file:py-2 file:px-4
                 file:rounded-lg file:border-0
                 file:text-sm file:font-medium
-                file:bg-[#8b5cf6] file:text-white
+                file:bg-purple-primary file:text-white
                 file:cursor-pointer file:transition-all
-                hover:file:bg-[#a78bfa]
+                hover:file:bg-purple-hover
                 disabled:opacity-50 disabled:cursor-not-allowed"
             />
-            {uploading && <span className="text-[#9ca3af] text-sm">Uploading...</span>}
+            {uploading && <span className="text-text-secondary text-sm">Uploading...</span>}
           </div>
-          <p className="text-[#6b7280] text-xs mt-2">
+          <p className="text-text-muted text-xs mt-2">
             Upload a .md file with frontmatter (title, excerpt, tags) to auto-populate the form
           </p>
         </div>
       )}
 
       {/* Form */}
-      <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 mb-6">
+      <div className="bg-background-surface border border-border rounded-lg p-6 mb-6">
         <div className="space-y-6">
           <div className="w-full">
-            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">
+            <label className="block text-sm font-medium text-text-primary mb-2">
               Title <span className="text-red-500">*</span>
             </label>
             <input
@@ -199,12 +199,12 @@ export default function BlogPostForm({
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all"
             />
           </div>
 
           <div className="w-full">
-            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">
+            <label className="block text-sm font-medium text-text-primary mb-2">
               Slug <span className="text-red-500">*</span>
             </label>
             <input
@@ -213,44 +213,44 @@ export default function BlogPostForm({
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all"
             />
           </div>
 
           <div className="w-full">
-            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Excerpt</label>
+            <label className="block text-sm font-medium text-text-primary mb-2">Excerpt</label>
             <textarea
               placeholder="Brief description of the post (optional)"
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
               rows={3}
-              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all resize-vertical min-h-[100px]"
+              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all resize-vertical min-h-[100px]"
             />
           </div>
 
           <div className="w-full">
-            <label className="block text-sm font-medium text-[#e5e7eb] mb-2">Tags</label>
+            <label className="block text-sm font-medium text-text-primary mb-2">Tags</label>
             <input
               type="text"
               placeholder="support, guides, tips (comma-separated)"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
-              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all"
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium text-[#e5e7eb]">Content (Markdown)</label>
+              <label className="block text-sm font-medium text-text-primary">Content (Markdown)</label>
               <button
                 onClick={() => setShowPreview(!showPreview)}
-                className="text-[#8b5cf6] hover:text-[#a78bfa] text-sm font-medium transition-colors"
+                className="text-purple-primary hover:text-purple-hover text-sm font-medium transition-colors"
               >
                 {showPreview ? 'Edit' : 'Preview'}
               </button>
             </div>
             {showPreview ? (
-              <div className="w-full px-4 py-3 bg-[#0f0f23] border border-[#2a2a40] rounded-lg text-[#e5e7eb] min-h-[400px] prose prose-invert prose-purple max-w-none">
+              <div className="w-full px-4 py-3 bg-background-primary border border-border rounded-lg text-text-primary min-h-[400px] prose prose-invert prose-purple max-w-none">
                 <div
                   dangerouslySetInnerHTML={{
                     __html: renderMarkdownPreview(content),
@@ -263,25 +263,25 @@ export default function BlogPostForm({
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="# Your post title&#10;&#10;Your content goes here in markdown format..."
                 rows={20}
-                className="w-full px-4 py-3 bg-[#0f0f23] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all resize-vertical font-mono text-sm"
+                className="w-full px-4 py-3 bg-background-primary border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all resize-vertical font-mono text-sm"
               />
             )}
           </div>
 
           {/* Published checkbox (only for edit mode) */}
           {mode === 'edit' && (
-            <div className="flex items-center space-x-3 pt-4 border-t border-[#2a2a40]">
+            <div className="flex items-center space-x-3 pt-4 border-t border-border">
               <input
                 type="checkbox"
                 id="published"
                 checked={published}
                 onChange={(e) => setPublished(e.target.checked)}
-                className="w-4 h-4 bg-[#0f0f23] border-[#2a2a40] rounded text-[#8b5cf6] focus:ring-2 focus:ring-[#8b5cf6] focus:ring-offset-0"
+                className="w-4 h-4 bg-background-primary border-border rounded text-purple-primary focus:ring-2 focus:ring-purple-primary focus:ring-offset-0"
               />
-              <label htmlFor="published" className="text-sm text-[#e5e7eb] cursor-pointer">
+              <label htmlFor="published" className="text-sm text-text-primary cursor-pointer">
                 Published
               </label>
-              <span className="text-xs text-[#6b7280]">
+              <span className="text-xs text-text-muted">
                 ({published ? 'Visible to public' : 'Hidden from public'})
               </span>
             </div>
@@ -290,7 +290,7 @@ export default function BlogPostForm({
       </div>
 
       {/* Actions */}
-      <div className="flex items-center justify-between bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6">
+      <div className="flex items-center justify-between bg-background-surface border border-border rounded-lg p-6">
         {mode === 'edit' && onDelete ? (
           <Button
             variant="secondary"
@@ -305,7 +305,7 @@ export default function BlogPostForm({
             variant="secondary"
             onClick={onCancel}
             disabled={isSubmitting}
-            className="bg-transparent hover:bg-[#2a2a40]"
+            className="bg-transparent hover:bg-background-elevated"
           >
             Cancel
           </Button>
@@ -316,7 +316,7 @@ export default function BlogPostForm({
               variant="secondary"
               onClick={onCancel}
               disabled={isSubmitting}
-              className="bg-transparent hover:bg-[#2a2a40]"
+              className="bg-transparent hover:bg-background-elevated"
             >
               Cancel
             </Button>

@@ -26,37 +26,37 @@ export function BlogContent({ content }: BlogContentProps) {
           // Headings
           h1: ({ node, ...props }) => (
             <h1
-              className="text-4xl font-bold text-[#e5e7eb] mb-6 mt-8 tracking-tight"
+              className="text-4xl font-bold text-text-primary mb-6 mt-8 tracking-tight"
               {...props}
             />
           ),
           h2: ({ node, ...props }) => (
             <h2
-              className="text-3xl font-bold text-[#e5e7eb] mb-4 mt-8 tracking-tight border-b border-[#2a2a40] pb-2"
+              className="text-3xl font-bold text-text-primary mb-4 mt-8 tracking-tight border-b border-border pb-2"
               {...props}
             />
           ),
           h3: ({ node, ...props }) => (
             <h3
-              className="text-2xl font-semibold text-[#e5e7eb] mb-3 mt-6"
+              className="text-2xl font-semibold text-text-primary mb-3 mt-6"
               {...props}
             />
           ),
           h4: ({ node, ...props }) => (
             <h4
-              className="text-xl font-semibold text-[#e5e7eb] mb-2 mt-4"
+              className="text-xl font-semibold text-text-primary mb-2 mt-4"
               {...props}
             />
           ),
           h5: ({ node, ...props }) => (
             <h5
-              className="text-lg font-semibold text-[#e5e7eb] mb-2 mt-4"
+              className="text-lg font-semibold text-text-primary mb-2 mt-4"
               {...props}
             />
           ),
           h6: ({ node, ...props }) => (
             <h6
-              className="text-base font-semibold text-[#e5e7eb] mb-2 mt-4"
+              className="text-base font-semibold text-text-primary mb-2 mt-4"
               {...props}
             />
           ),
@@ -64,7 +64,7 @@ export function BlogContent({ content }: BlogContentProps) {
           // Paragraphs
           p: ({ node, ...props }) => (
             <p
-              className="text-[#9ca3af] leading-relaxed mb-4"
+              className="text-text-secondary leading-relaxed mb-4"
               {...props}
             />
           ),
@@ -72,7 +72,7 @@ export function BlogContent({ content }: BlogContentProps) {
           // Links
           a: ({ node, ...props }) => (
             <a
-              className="text-[#8b5cf6] hover:text-[#a78bfa] underline decoration-[#8b5cf6]/50 hover:decoration-[#a78bfa] transition-colors"
+              className="text-purple-primary hover:text-purple-hover underline decoration-purple-primary/50 hover:decoration-purple-hover transition-colors"
               target={props.href?.startsWith('http') ? '_blank' : undefined}
               rel={props.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
               {...props}
@@ -82,24 +82,24 @@ export function BlogContent({ content }: BlogContentProps) {
           // Lists
           ul: ({ node, ...props }) => (
             <ul
-              className="list-disc list-inside text-[#9ca3af] mb-4 space-y-2 ml-4"
+              className="list-disc list-inside text-text-secondary mb-4 space-y-2 ml-4"
               {...props}
             />
           ),
           ol: ({ node, ...props }) => (
             <ol
-              className="list-decimal list-inside text-[#9ca3af] mb-4 space-y-2 ml-4"
+              className="list-decimal list-inside text-text-secondary mb-4 space-y-2 ml-4"
               {...props}
             />
           ),
           li: ({ node, ...props }) => (
-            <li className="text-[#9ca3af] leading-relaxed" {...props} />
+            <li className="text-text-secondary leading-relaxed" {...props} />
           ),
 
           // Blockquotes
           blockquote: ({ node, ...props }) => (
             <blockquote
-              className="border-l-4 border-[#8b5cf6] pl-4 py-2 my-4 bg-[#1a1a2e] italic text-[#9ca3af]"
+              className="border-l-4 border-purple-primary pl-4 py-2 my-4 bg-background-surface italic text-text-secondary"
               {...props}
             />
           ),
@@ -107,7 +107,7 @@ export function BlogContent({ content }: BlogContentProps) {
           // Code blocks
           pre: ({ node, ...props }) => (
             <pre
-              className="bg-[#0f0f23] border border-[#2a2a40] rounded-lg p-4 overflow-x-auto mb-4 text-sm"
+              className="bg-background-primary border border-border rounded-lg p-4 overflow-x-auto mb-4 text-sm"
               {...props}
             />
           ),
@@ -117,7 +117,7 @@ export function BlogContent({ content }: BlogContentProps) {
             if (isInline) {
               return (
                 <code
-                  className="bg-[#1a1a2e] text-[#a78bfa] px-1.5 py-0.5 rounded text-sm font-mono border border-[#2a2a40]"
+                  className="bg-background-surface text-purple-hover px-1.5 py-0.5 rounded text-sm font-mono border border-border"
                   {...props}
                 >
                   {children}
@@ -127,7 +127,7 @@ export function BlogContent({ content }: BlogContentProps) {
 
             return (
               <code
-                className={`${className || ''} text-[#e5e7eb] font-mono`}
+                className={`${className || ''} text-text-primary font-mono`}
                 {...props}
               >
                 {children}
@@ -139,29 +139,29 @@ export function BlogContent({ content }: BlogContentProps) {
           table: ({ node, ...props }) => (
             <div className="overflow-x-auto my-6">
               <table
-                className="min-w-full divide-y divide-[#2a2a40] border border-[#2a2a40]"
+                className="min-w-full divide-y divide-border border border-border"
                 {...props}
               />
             </div>
           ),
           thead: ({ node, ...props }) => (
-            <thead className="bg-[#1a1a2e]" {...props} />
+            <thead className="bg-background-surface" {...props} />
           ),
           tbody: ({ node, ...props }) => (
-            <tbody className="bg-[#0f0f23] divide-y divide-[#2a2a40]" {...props} />
+            <tbody className="bg-background-primary divide-y divide-border" {...props} />
           ),
           tr: ({ node, ...props }) => (
-            <tr className="hover:bg-[#1a1a2e] transition-colors" {...props} />
+            <tr className="hover:bg-background-surface transition-colors" {...props} />
           ),
           th: ({ node, ...props }) => (
             <th
-              className="px-4 py-3 text-left text-xs font-semibold text-[#e5e7eb] uppercase tracking-wider"
+              className="px-4 py-3 text-left text-xs font-semibold text-text-primary uppercase tracking-wider"
               {...props}
             />
           ),
           td: ({ node, ...props }) => (
             <td
-              className="px-4 py-3 text-sm text-[#9ca3af]"
+              className="px-4 py-3 text-sm text-text-secondary"
               {...props}
             />
           ),
@@ -169,7 +169,7 @@ export function BlogContent({ content }: BlogContentProps) {
           // Horizontal rule
           hr: ({ node, ...props }) => (
             <hr
-              className="my-8 border-t border-[#2a2a40]"
+              className="my-8 border-t border-border"
               {...props}
             />
           ),
@@ -177,7 +177,7 @@ export function BlogContent({ content }: BlogContentProps) {
           // Images
           img: ({ node, ...props }) => (
             <img
-              className="rounded-lg my-6 max-w-full h-auto border border-[#2a2a40]"
+              className="rounded-lg my-6 max-w-full h-auto border border-border"
               loading="lazy"
               {...props}
             />
@@ -185,12 +185,12 @@ export function BlogContent({ content }: BlogContentProps) {
 
           // Strong/Bold
           strong: ({ node, ...props }) => (
-            <strong className="font-bold text-[#e5e7eb]" {...props} />
+            <strong className="font-bold text-text-primary" {...props} />
           ),
 
           // Emphasis/Italic
           em: ({ node, ...props }) => (
-            <em className="italic text-[#9ca3af]" {...props} />
+            <em className="italic text-text-secondary" {...props} />
           ),
         }}
       >
@@ -208,29 +208,29 @@ export function BlogContentSkeleton() {
   return (
     <div className="space-y-6 animate-pulse">
       {/* Title skeleton */}
-      <div className="h-10 bg-[#1a1a2e] rounded w-3/4" />
+      <div className="h-10 bg-background-surface rounded w-3/4" />
 
       {/* Paragraph skeletons */}
       <div className="space-y-3">
-        <div className="h-4 bg-[#1a1a2e] rounded" />
-        <div className="h-4 bg-[#1a1a2e] rounded" />
-        <div className="h-4 bg-[#1a1a2e] rounded w-5/6" />
+        <div className="h-4 bg-background-surface rounded" />
+        <div className="h-4 bg-background-surface rounded" />
+        <div className="h-4 bg-background-surface rounded w-5/6" />
       </div>
 
       <div className="space-y-3">
-        <div className="h-4 bg-[#1a1a2e] rounded" />
-        <div className="h-4 bg-[#1a1a2e] rounded" />
-        <div className="h-4 bg-[#1a1a2e] rounded w-4/5" />
+        <div className="h-4 bg-background-surface rounded" />
+        <div className="h-4 bg-background-surface rounded" />
+        <div className="h-4 bg-background-surface rounded w-4/5" />
       </div>
 
       {/* Code block skeleton */}
-      <div className="h-32 bg-[#0f0f23] border border-[#2a2a40] rounded-lg" />
+      <div className="h-32 bg-background-primary border border-border rounded-lg" />
 
       {/* More paragraph skeletons */}
       <div className="space-y-3">
-        <div className="h-4 bg-[#1a1a2e] rounded" />
-        <div className="h-4 bg-[#1a1a2e] rounded" />
-        <div className="h-4 bg-[#1a1a2e] rounded w-3/4" />
+        <div className="h-4 bg-background-surface rounded" />
+        <div className="h-4 bg-background-surface rounded" />
+        <div className="h-4 bg-background-surface rounded w-3/4" />
       </div>
     </div>
   );

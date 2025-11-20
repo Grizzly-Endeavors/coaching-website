@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { useLocale } from '@/lib/locales/client';
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -75,6 +76,7 @@ interface ToastItemProps {
 
 const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
   const { id, type, title, message, duration = 5000 } = toast;
+  const closeLabel = useLocale('common', 'aria_labels.close_dialog', { fallback: 'Close notification' });
 
   useEffect(() => {
     if (duration > 0) {
@@ -151,7 +153,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
         <button
           onClick={() => onRemove(id)}
           className="flex-shrink-0 text-gray-400 hover:text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 rounded"
-          aria-label="Close notification"
+          aria-label={closeLabel}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

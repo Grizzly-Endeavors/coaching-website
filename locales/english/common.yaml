@@ -1,0 +1,211 @@
+# =============================================================================
+# COMMON LOCALE - Shared UI elements across all pages
+# =============================================================================
+# Location: Used throughout the application
+# This file contains navigation, buttons, labels, and other shared UI text
+
+# -----------------------------------------------------------------------------
+# Navigation
+# -----------------------------------------------------------------------------
+# Location: /components/layout/Navigation.tsx (lines 21-26)
+navigation:
+  links:
+    home: "Home"
+    pricing: "Pricing"
+    blog: "Blog"
+    contact: "Contact"
+
+  # Mobile menu specific
+  mobile:
+    aria_labels:
+      open_menu: "Open menu"
+      close_menu: "Close menu"
+      mobile_navigation: "Mobile navigation"
+    buttons:
+      pricing: "Pricing"
+      get_coaching: "Get Coaching"
+
+# -----------------------------------------------------------------------------
+# Footer
+# -----------------------------------------------------------------------------
+# Location: /components/layout/Footer.tsx (lines 25-36)
+footer:
+  brand:
+    name: "Overwatch Coaching"
+    tagline: "Overwatch coaching focused on sustainable improvement. Teaching you how to think, not just what to do. GM1 across all roles with a playful, results-driven approach."
+
+  sections:
+    navigation:
+      title: "Navigation"
+      links:
+        home: "Home"
+        pricing: "Pricing"
+        blog: "Blog"
+        contact: "Contact"
+
+    resources:
+      title: "Resources"
+      links:
+        get_coaching: "Get Coaching"
+        admin_login: "Admin Login"
+
+  social:
+    aria_label: "Visit our {platform}"  # {platform} = Discord, Twitter, YouTube, Twitch
+
+  bottom:
+    copyright: "© {year} Overwatch Coaching. All rights reserved."
+    privacy_policy: "Privacy Policy"
+    terms_of_service: "Terms of Service"
+
+# -----------------------------------------------------------------------------
+# Common Buttons
+# -----------------------------------------------------------------------------
+buttons:
+  primary:
+    view_pricing: "View Pricing"
+    get_coaching: "Get Coaching"
+    book_session: "Book a Session"
+    book_coaching_session: "Book a Coaching Session"
+    contact_me: "Contact Me"
+    send_message: "Send Message"
+    submit: "Submit"
+    save: "Save"
+    cancel: "Cancel"
+    confirm: "Confirm"
+    back: "Back"
+    next: "Next"
+    continue: "Continue"
+    apply: "Apply"
+    close: "Close"
+    edit: "Edit"
+    delete: "Delete"
+    view_all: "View All"
+    view_details: "View Details"
+    go_to_booking: "Go to Booking"
+    back_to_home: "Back to Home"
+    create: "Create"
+    update: "Update"
+    select: "Select"
+    select_package: "Select Package"
+
+  secondary:
+    have_questions: "Have Questions?"
+    contact_us: "Contact Us"
+    clear_filter: "Clear filter"
+    learn_more: "Learn More"
+
+  loading:
+    sending: "Sending..."
+    processing: "Processing..."
+    loading: "Loading..."
+    validating: "Validating..."
+    signing_in: "Signing in..."
+    disconnecting: "Disconnecting..."
+    creating: "Creating..."
+    updating: "Updating..."
+    deleting: "Deleting..."
+
+# -----------------------------------------------------------------------------
+# Status Labels & Badges
+# -----------------------------------------------------------------------------
+# Used in admin tables and status displays
+status:
+  # Submission/Booking statuses
+  awaiting_payment: "Awaiting Payment"
+  payment_received: "Payment Received"
+  payment_failed: "Payment Failed"
+  in_progress: "In Progress"
+  completed: "Completed"
+  archived: "Archived"
+  pending: "Pending"
+  cancelled: "Cancelled"
+  confirmed: "Confirmed"
+
+  # Blog post statuses
+  published: "Published"
+  draft: "Draft"
+
+  # General statuses
+  active: "Active"
+  inactive: "Inactive"
+  enabled: "Enabled"
+  disabled: "Disabled"
+  connected: "Connected"
+  disconnected: "Disconnected"
+
+# -----------------------------------------------------------------------------
+# Common Labels
+# -----------------------------------------------------------------------------
+labels:
+  required: "*"
+  optional: "(optional)"
+  email: "Email"
+  email_address: "Email Address"
+  name: "Name"
+  message: "Message"
+  notes: "Notes"
+  date: "Date"
+  time: "Time"
+  status: "Status"
+  actions: "Actions"
+  loading: "Loading..."
+  search: "Search"
+  filter: "Filter"
+  sort: "Sort"
+  all: "All"
+  none: "None"
+
+# -----------------------------------------------------------------------------
+# Aria Labels (Accessibility)
+# -----------------------------------------------------------------------------
+# Used for screen readers and accessibility
+aria_labels:
+  main_navigation: "Main navigation"
+  page_navigation: "Page navigation"
+  current_page: "page"  # aria-current="page"
+  loading_spinner: "Loading"
+  close_dialog: "Close dialog"
+  open_menu: "Open menu"
+  close_menu: "Close menu"
+
+# -----------------------------------------------------------------------------
+# Time & Date Formats
+# -----------------------------------------------------------------------------
+time:
+  timezone: "EST"
+  timezone_note: "All times shown in EST timezone"
+  formats:
+    time_12h: "h:mm a"  # Example: 9:00 AM
+    time_24h: "HH:mm"   # Example: 09:00
+    date_short: "MMM d, yyyy"  # Example: Jan 1, 2024
+    date_long: "MMMM d, yyyy"  # Example: January 1, 2024
+    datetime: "MMM d, yyyy h:mm a"  # Example: Jan 1, 2024 9:00 AM
+
+# -----------------------------------------------------------------------------
+# Loading States
+# -----------------------------------------------------------------------------
+loading_states:
+  checking_connection: "Checking Discord connection..."
+  loading_times: "Loading available times..."
+  loading_dashboard: "Loading dashboard..."
+  loading_posts: "Loading blog posts..."
+  loading_submissions: "Loading submissions..."
+
+# -----------------------------------------------------------------------------
+# Empty States
+# -----------------------------------------------------------------------------
+empty_states:
+  no_results: "No results found"
+  no_data: "No data available"
+  try_again: "Please try again"
+  check_back: "Check back soon"
+
+# -----------------------------------------------------------------------------
+# Common Error Messages
+# -----------------------------------------------------------------------------
+errors:
+  generic: "An error occurred. Please try again."
+  network: "Network error. Please check your connection."
+  not_found: "Not found"
+  unauthorized: "Unauthorized access"
+  something_went_wrong: "Something went wrong"

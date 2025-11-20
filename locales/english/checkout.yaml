@@ -1,0 +1,81 @@
+# =============================================================================
+# CHECKOUT LOCALE
+# =============================================================================
+# Location: /app/checkout/success/page.tsx and /app/checkout/cancel/page.tsx
+# Success and cancellation pages after payment processing
+
+# -----------------------------------------------------------------------------
+# Success Page
+# -----------------------------------------------------------------------------
+# Location: /app/checkout/success/page.tsx
+success:
+  # Page titles (dynamic based on coaching type)
+  titles:
+    default: "Booking Confirmed!"
+    review_async: "Replay Review Confirmed!"
+    vod_review: "VOD Session Booked!"
+    live_coaching: "Coaching Session Booked!"
+
+  # Main message
+  thank_you:
+    default: "Thank you for your purchase! Your payment has been processed successfully."
+    friend_code: "Thank you! Your friend code has been applied successfully."
+
+  # Scheduled session display
+  scheduled:
+    title: "Your Session is Scheduled"
+    note: "Make sure to be available on Discord at this time!"
+
+  # What's next section
+  whats_next:
+    title: "What's Next?"
+
+    # Steps vary by coaching type
+    steps:
+      default:
+        - "Your booking has been confirmed"
+        - "Check Discord for a confirmation message from my bot"
+        - "I'll reach out with next steps"
+
+      review_async:
+        - "Your replay submission has been confirmed"
+        - "You'll receive a Discord DM confirmation shortly"
+        - "I'll review your replays and send detailed feedback within 2-3 business days"
+        - "Watch for a Discord DM when your review is ready!"
+
+      vod_review:
+        - "Your VOD review session has been booked"
+        - "You'll receive a Discord DM confirmation shortly"
+        - "I'll reach out on Discord closer to your session time"
+        - "See you at the scheduled time on Discord!"
+
+      live_coaching:
+        - "Your live coaching session has been booked"
+        - "You'll receive a Discord DM confirmation shortly"
+        - "I'll reach out on Discord closer to your session time"
+        - "Make sure you're ready to stream your gameplay on Discord!"
+
+  # Footer
+  session_id: "Session ID: {id}"
+  back_to_home: "Back to Home"
+
+# -----------------------------------------------------------------------------
+# Cancel Page
+# -----------------------------------------------------------------------------
+# Location: /app/checkout/cancel/page.tsx
+cancel:
+  title: "Payment Cancelled"
+  message: "Your payment was cancelled and no charges were made."
+
+  # What would you like to do section
+  what_next:
+    title: "What would you like to do?"
+    options:
+      - "Return to pricing to choose a different package"
+      - "Contact us if you have questions or need assistance"
+      - "Try again when you're ready - your cart is saved"
+
+  # Buttons
+  buttons:
+    view_pricing: "View Pricing"
+    contact_us: "Contact Us"

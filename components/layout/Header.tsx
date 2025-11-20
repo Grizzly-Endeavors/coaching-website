@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '../ui/Button';
+import { useLocaleFile } from '@/lib/locales/client';
 
 export interface HeaderProps {
   className?: string;
@@ -21,12 +22,13 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const common = useLocaleFile('common');
 
   const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/pricing', label: 'Pricing' },
-    { href: '/blog', label: 'Blog' },
-    { href: '/contact', label: 'Contact' },
+    { href: '/', label: common.navigation?.links?.home || 'Home' },
+    { href: '/pricing', label: common.navigation?.links?.pricing || 'Pricing' },
+    { href: '/blog', label: common.navigation?.links?.blog || 'Blog' },
+    { href: '/contact', label: common.navigation?.links?.contact || 'Contact' },
   ];
 
   // Handle scroll effect
@@ -55,10 +57,10 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
   return (
     <header className={`sticky top-0 z-40 w-full transition-all duration-300 ${
       scrolled
-        ? 'border-b border-[#2a2a40] bg-[#0f0f23]/80 backdrop-blur-md shadow-lg shadow-purple-600/10'
-        : 'border-b border-[#2a2a40] bg-[#0f0f23]/95 backdrop-blur-sm'
+        ? 'border-b border-border bg-background-primary/80 backdrop-blur-md shadow-lg shadow-purple-600/10'
+        : 'border-b border-border bg-background-primary/95 backdrop-blur-sm'
     } ${className}`}>
-      <nav className="container mx-auto px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
+      <nav className="container mx-auto px-4 sm:px-6 lg:px-8" aria-label={common.aria_labels?.main_navigation || 'Main navigation'}>
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <div className="flex items-center">
@@ -94,7 +96,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
             {/* CTA Button */}
             <Link href="/booking">
-              <Button variant="primary" size="sm">Get Coaching</Button>
+              <Button variant="primary" size="sm">{common.buttons?.primary?.get_coaching || 'Get Coaching'}</Button>
             </Link>
           </div>
 
@@ -102,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 text-gray-300 hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg transition-colors"
-            aria-label="Toggle menu"
+            aria-label={isMobileMenuOpen ? (common.navigation?.mobile?.aria_labels?.close_menu || 'Close menu') : (common.navigation?.mobile?.aria_labels?.open_menu || 'Open menu')}
             aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? (
@@ -119,13 +121,13 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-[#2a2a40]">
+          <div className="md:hidden py-4 border-t border-border">
             <ul className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="block px-4 py-2 text-base font-medium text-gray-300 hover:text-purple-400 hover:bg-[#1a1a2e] rounded-lg transition-colors duration-200"
+                    className="block px-4 py-2 text-base font-medium text-gray-300 hover:text-purple-400 hover:bg-background-surface rounded-lg transition-colors duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
@@ -138,7 +140,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
             <div className="mt-4 px-4">
               <Link href="/booking" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="primary" size="md" className="w-full">
-                  Get Coaching
+                  {common.navigation?.mobile?.buttons?.get_coaching || 'Get Coaching'}
                 </Button>
               </Link>
             </div>

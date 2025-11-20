@@ -1,0 +1,77 @@
+# =============================================================================
+# CONTACT PAGE LOCALE
+# =============================================================================
+# Location: /app/(public)/contact/page.tsx
+# Contact form, contact information, and messaging
+
+# -----------------------------------------------------------------------------
+# Hero Section
+# -----------------------------------------------------------------------------
+# Location: Lines 69-79
+hero:
+  title: "Let's Talk"
+  subtitle: "Questions about coaching? Not sure which format is right for you? Reach out and let's figure it out together."
+
+# -----------------------------------------------------------------------------
+# Contact Form Section
+# -----------------------------------------------------------------------------
+# Location: Lines 83-163
+form:
+  section_title: "Send a Message"
+
+  fields:
+    name:
+      label: "Name"
+      placeholder: "Your name"
+
+    email:
+      label: "Email"
+      placeholder: "your.email@example.com"
+
+    message:
+      label: "Message"
+      placeholder: "Tell me about your coaching needs or ask any questions..."
+      rows: 6
+
+  # Form states
+  states:
+    success:
+      title: "Message sent successfully! I'll get back to you soon."
+    error:
+      title: "Failed to send message. Please try again or contact me via Discord/email."
+
+  # Submit button states
+  submit:
+    default: "Send Message"
+    loading: "Sending..."
+
+  # Privacy note
+  privacy_note: "By submitting this form, you agree to our privacy policy and terms of service."
+
+# -----------------------------------------------------------------------------
+# Contact Information Section
+# -----------------------------------------------------------------------------
+# Location: Lines 166-241
+contact_info:
+  section_title: "Contact Information"
+
+  email:
+    title: "Email"
+    address: "coaching@example.com"
+    note: "I typically respond within 24 hours"
+
+  discord:
+    title: "Discord"
+    tag: "CoachName#1234"
+    note: "Preferred for quick questions"
+
+  response_time:
+    title: "Response Time"
+    description: "Within 24 hours on business days"
+    note: "Usually much faster via Discord"
+
+  # Quick booking card
+  booking_card:
+    title: "Ready to book?"
+    description: "Skip the contact form and head straight to the booking page to schedule your coaching session or submit a replay code."
+    button: "Go to Booking"

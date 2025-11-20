@@ -3,7 +3,11 @@ import { emailSchema, nameSchema } from './primitives';
 
 /**
  * Validation schema for contact form submissions
+ *
+ * Note: Error messages are hardcoded to work in Edge Runtime
+ * For localized UI validation errors, handle them in the UI layer
  */
+
 export const contactFormSchema = z.object({
   name: nameSchema,
   email: emailSchema,

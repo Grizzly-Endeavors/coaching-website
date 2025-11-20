@@ -5,6 +5,9 @@
 
 import Link from 'next/link';
 import { ArrowLeft, Search } from 'lucide-react';
+import { loadLocale } from '@/lib/locales';
+
+const blogLocale = loadLocale('blog');
 
 export default function BlogPostNotFound() {
   return (
@@ -17,12 +20,12 @@ export default function BlogPostNotFound() {
 
         {/* Title */}
         <h1 className="text-4xl font-bold text-[#e5e7eb] mb-4">
-          Blog Post Not Found
+          {blogLocale.not_found.title as string}
         </h1>
 
         {/* Description */}
         <p className="text-[#9ca3af] mb-8 leading-relaxed">
-          Sorry, we couldn't find the blog post you're looking for. It may have been removed, renamed, or never existed.
+          {blogLocale.not_found.description as string}
         </p>
 
         {/* Actions */}
@@ -32,7 +35,7 @@ export default function BlogPostNotFound() {
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#8b5cf6] text-white font-medium hover:bg-[#a78bfa] transition-all shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span>Back to Blog</span>
+            <span>{blogLocale.not_found.button as string}</span>
           </Link>
 
           <Link

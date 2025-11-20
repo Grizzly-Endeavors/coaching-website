@@ -11,18 +11,18 @@ export function AdminTable({ headers, children, className = '' }: AdminTableProp
     <div className={`overflow-x-auto ${className}`}>
       <table className="w-full">
         <thead>
-          <tr className="border-b border-[#2a2a40]">
+          <tr className="border-b border-border">
             {headers.map((header, index) => (
               <th
                 key={index}
-                className="px-4 py-3 text-left text-xs font-medium text-[#9ca3af] uppercase tracking-wider"
+                className="px-4 py-3 text-left text-xs font-medium text-text-secondary uppercase tracking-wider"
               >
                 {header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#2a2a40]">
+        <tbody className="divide-y divide-border">
           {children}
         </tbody>
       </table>
@@ -40,7 +40,7 @@ export function AdminTableRow({ children, onClick, className = '' }: AdminTableR
   return (
     <tr
       onClick={onClick}
-      className={`hover:bg-[#1a1a2e] transition-colors ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      className={`hover:bg-background-surface transition-colors ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       {children}
     </tr>
@@ -54,7 +54,7 @@ interface AdminTableCellProps {
 
 export function AdminTableCell({ children, className = '' }: AdminTableCellProps) {
   return (
-    <td className={`px-4 py-4 text-sm text-[#e5e7eb] ${className}`}>
+    <td className={`px-4 py-4 text-sm text-text-primary ${className}`}>
       {children}
     </td>
   );

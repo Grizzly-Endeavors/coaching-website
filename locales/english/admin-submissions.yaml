@@ -1,0 +1,89 @@
+# =============================================================================
+# ADMIN SUBMISSIONS LOCALE
+# =============================================================================
+# Location: /app/admin/submissions/page.tsx
+# Replay submission management interface
+
+# -----------------------------------------------------------------------------
+# Page Header
+# -----------------------------------------------------------------------------
+header:
+  title: "Replay Submissions"
+  subtitle: "Manage and review replay code submissions"
+
+# -----------------------------------------------------------------------------
+# Filters
+# -----------------------------------------------------------------------------
+filters:
+  search:
+    label: "Search by ID or Email"
+    placeholder: "Enter submission ID or email..."
+
+  status:
+    label: "Filter by Status"
+    options:
+      all: "All Submissions"
+      awaiting_payment: "Awaiting Payment"
+      payment_received: "Payment Received"
+      payment_failed: "Payment Failed"
+      in_progress: "In Progress"
+      completed: "Completed"
+      archived: "Archived"
+
+  sort:
+    label: "Sort by Date"
+    options:
+      newest: "Newest First"
+      oldest: "Oldest First"
+
+  # Results counter
+  results: "{count} submission{plural}"  # {count} = number, {plural} = s or empty
+
+# -----------------------------------------------------------------------------
+# Table Headers
+# -----------------------------------------------------------------------------
+table:
+  headers:
+    id: "ID"
+    date: "Date"
+    email: "Email"
+    coaching_type: "Coaching Type"
+    rank: "Rank"
+    role: "Role"
+    replays: "Replays"
+    status: "Status"
+    actions: "Actions"
+
+  # Replay count badge
+  replay_count:
+    singular: "{count} replay"
+    plural: "{count} replays"
+
+  # Actions
+  actions:
+    view_details: "View Details →"
+
+# -----------------------------------------------------------------------------
+# Empty States
+# -----------------------------------------------------------------------------
+empty_states:
+  no_submissions:
+    title: "No submissions found"
+    search: "No submissions match your search"
+    filter: "Try changing the filter to see more submissions"
+    default: "Submissions will appear here when users submit replay codes"
+
+# -----------------------------------------------------------------------------
+# Loading States
+# -----------------------------------------------------------------------------
+loading:
+  submissions: "Loading submissions..."
+
+# -----------------------------------------------------------------------------
+# Coaching Type Names
+# -----------------------------------------------------------------------------
+# Used to display human-readable coaching type names
+coaching_types:
+  review_async: "Async VOD Review"
+  vod_review: "Live VOD Review"
+  live_coaching: "Live Coaching"

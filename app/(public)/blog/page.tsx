@@ -10,6 +10,10 @@ import { TagFilter, TagFilterSkeleton } from '@/components/blog/TagFilter';
 import { Pagination, PaginationSkeleton } from '@/components/blog/Pagination';
 import type { BlogPostSummary } from '@/lib/types/blog.types';
 import { logger } from '@/lib/logger';
+import { loadLocale } from '@/lib/locales';
+
+const blogLocale = loadLocale('blog');
+const metadataLocale = loadLocale('metadata');
 
 interface BlogPageProps {
   searchParams: Promise<{
@@ -20,12 +24,12 @@ interface BlogPageProps {
 
 // Metadata for SEO
 export const metadata: Metadata = {
-  title: 'Blog - Overwatch Coaching',
-  description: 'Tips, strategies, and guides to improve your Overwatch gameplay. Learn from expert coaching insights on heroes, positioning, and game sense.',
+  title: metadataLocale.blog.listing.title as string,
+  description: metadataLocale.blog.listing.description as string,
   openGraph: {
-    title: 'Blog - Overwatch Coaching',
-    description: 'Tips, strategies, and guides to improve your Overwatch gameplay.',
-    type: 'website',
+    title: metadataLocale.blog.listing.og_title as string,
+    description: metadataLocale.blog.listing.og_description as string,
+    type: metadataLocale.blog.listing.og_type as 'website',
   },
 };
 
@@ -102,11 +106,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         {/* Header */}
         <div className="mb-12">
           <h1 className="text-4xl sm:text-5xl font-bold text-[#e5e7eb] mb-4 tracking-tight">
-            Blog
+            {blogLocale.listing.title as string}
           </h1>
           <p className="text-lg text-[#9ca3af] max-w-3xl">
-            Expert Overwatch coaching insights, strategies, and tips to help you climb the ranks.
-            Learn from detailed guides on heroes, positioning, game sense, and more.
+            {blogLocale.listing.description as string}
           </p>
         </div>
 
@@ -136,19 +139,19 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               </svg>
             </div>
             <h2 className="text-2xl font-bold text-[#e5e7eb] mb-2">
-              {currentTag ? 'No posts found with this tag' : 'No blog posts yet'}
+              {currentTag ? (blogLocale.listing.empty.no_filtered_posts.title as string) : (blogLocale.listing.empty.no_posts.title as string)}
             </h2>
             <p className="text-[#9ca3af] mb-6">
               {currentTag
-                ? 'Try selecting a different tag or clearing the filter.'
-                : 'Check back soon for expert Overwatch coaching content.'}
+                ? (blogLocale.listing.empty.no_filtered_posts.description as string)
+                : (blogLocale.listing.empty.no_posts.description as string)}
             </p>
             {currentTag && (
               <a
                 href="/blog"
                 className="inline-flex items-center px-6 py-3 rounded-lg bg-[#8b5cf6] text-white font-medium hover:bg-[#a78bfa] transition-colors shadow-lg shadow-purple-500/30"
               >
-                Clear filter
+                {blogLocale.listing.empty.no_filtered_posts.button as string}
               </a>
             )}
           </div>
@@ -175,23 +178,23 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
           <div className="mt-16 text-center">
             <div className="bg-gradient-to-r from-[#1a1a2e] to-[#2a2a40] rounded-lg p-8 border border-[#8b5cf6]/30">
               <h2 className="text-2xl font-bold text-[#e5e7eb] mb-3">
-                Ready to Improve Your Game?
+                {blogLocale.listing.cta.title as string}
               </h2>
               <p className="text-[#9ca3af] mb-6 max-w-2xl mx-auto">
-                Get personalized coaching and detailed VOD reviews to take your Overwatch skills to the next level.
+                {blogLocale.listing.cta.description as string}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="/booking"
                   className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#8b5cf6] text-white font-medium hover:bg-[#a78bfa] transition-all shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
                 >
-                  Book a Session
+                  {blogLocale.listing.cta.buttons.book_session as string}
                 </a>
                 <a
                   href="/booking#replay-submission"
                   className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#1a1a2e] text-[#e5e7eb] font-medium border border-[#2a2a40] hover:border-[#8b5cf6] transition-all"
                 >
-                  Submit Replay Code
+                  {blogLocale.listing.cta.buttons.submit_replay as string}
                 </a>
               </div>
             </div>

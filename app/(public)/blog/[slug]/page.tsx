@@ -11,6 +11,10 @@ import { BlogContent, BlogContentSkeleton } from '@/components/blog/BlogContent'
 import { estimateReadingTime } from '@/lib/markdown';
 import { logger } from '@/lib/logger';
 import type { BlogPostSummary } from '@/lib/types/blog.types';
+import { loadLocale, interpolate } from '@/lib/locales';
+
+const blogLocale = loadLocale('blog');
+const metadataLocale = loadLocale('metadata');
 
 // Force dynamic rendering since this page needs database access
 export const dynamic = 'force-dynamic';
@@ -56,23 +60,23 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: 'Post Not Found - Overwatch Coaching',
+      title: metadataLocale.blog.not_found.title as string,
     };
   }
 
   return {
-    title: `${post.title} - Overwatch Coaching Blog`,
-    description: post.excerpt || `Read ${post.title} on our Overwatch coaching blog.`,
+    title: interpolate(metadataLocale.blog.post.title as string, { title: post.title }),
+    description: post.excerpt || interpolate(metadataLocale.blog.post.default_description as string, { title: post.title }),
     openGraph: {
       title: post.title,
       description: post.excerpt || undefined,
-      type: 'article',
+      type: metadataLocale.blog.post.og_type as 'article',
       publishedTime: post.publishedAt,
-      authors: ['Overwatch Coach'],
+      authors: [metadataLocale.blog.post.og_authors as string],
       tags: post.tags,
     },
     twitter: {
-      card: 'summary_large_image',
+      card: metadataLocale.blog.post.twitter_card as 'summary_large_image',
       title: post.title,
       description: post.excerpt || undefined,
     },
@@ -130,7 +134,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             className="inline-flex items-center gap-2 text-[#8b5cf6] hover:text-[#a78bfa] transition-colors mb-8 group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span>Back to Blog</span>
+            <span>{blogLocale.post.back_to_blog as string}</span>
           </Link>
 
           {/* Title */}
@@ -142,7 +146,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="flex flex-wrap items-center gap-6 text-sm text-[#9ca3af]">
             <div className="flex items-center gap-2">
               <User className="w-4 h-4" />
-              <span>Overwatch Coach</span>
+              <span>{blogLocale.post.author as string}</span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
@@ -150,7 +154,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />
-              <span>{readingTime} min read</span>
+              <span>{interpolate(blogLocale.post.reading_time as string, { minutes: readingTime })}</span>
             </div>
           </div>
 
@@ -182,24 +186,23 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="bg-gradient-to-r from-[#1a1a2e] to-[#2a2a40] rounded-lg p-8 border border-[#8b5cf6]/30 text-center">
           <h2 className="text-2xl font-bold text-[#e5e7eb] mb-3">
-            Want to Level Up Your Game?
+            {blogLocale.post.cta.title as string}
           </h2>
           <p className="text-[#9ca3af] mb-6 max-w-2xl mx-auto">
-            Get personalized Overwatch coaching tailored to your rank and role.
-            Book a session or submit a replay code for detailed feedback.
+            {blogLocale.post.cta.description as string}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/booking"
               className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#8b5cf6] text-white font-medium hover:bg-[#a78bfa] transition-all shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
             >
-              Book a Coaching Session
+              {blogLocale.post.cta.buttons.book_session as string}
             </Link>
             <Link
               href="/booking#replay-submission"
               className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#1a1a2e] text-[#e5e7eb] font-medium border border-[#2a2a40] hover:border-[#8b5cf6] transition-all"
             >
-              Submit Replay Code
+              {blogLocale.post.cta.buttons.submit_replay as string}
             </Link>
           </div>
         </div>
@@ -221,7 +224,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             className="inline-flex items-center gap-2 text-[#8b5cf6] hover:text-[#a78bfa] transition-colors group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-            <span>Back to all posts</span>
+            <span>{blogLocale.post.back_to_all_posts as string}</span>
           </Link>
         </div>
       </div>

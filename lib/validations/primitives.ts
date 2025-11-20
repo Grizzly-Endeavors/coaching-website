@@ -4,13 +4,16 @@ import { z } from 'zod';
  * Reusable validation schemas for common fields
  * These primitives can be used across different validation schemas
  * to ensure consistency and reduce duplication
+ *
+ * Note: Error messages are hardcoded to work in Edge Runtime (middleware)
+ * For localized UI validation errors, handle them in the UI layer
  */
 
 // Email validation
 export const emailSchema = z
   .string()
   .min(1, 'Email is required')
-  .email('Please enter a valid email address');
+  .email('Invalid email address');
 
 // Name validation
 export const nameSchema = z
@@ -21,27 +24,27 @@ export const nameSchema = z
 // Phone validation
 export const phoneSchema = z
   .string()
-  .regex(/^\+?[\d\s\-()]+$/, 'Please enter a valid phone number')
+  .regex(/^\+?[\d\s\-()]+$/, 'Invalid phone number format')
   .optional();
 
 // URL validation
 export const urlSchema = z
   .string()
-  .url('Please enter a valid URL')
+  .url('Invalid URL format')
   .optional();
 
 // Replay code validation for Overwatch
 export const replayCodeSchema = z
   .string()
   .min(6, 'Replay code must be at least 6 characters')
-  .max(10, 'Replay code is too long')
+  .max(10, 'Replay code must not exceed 10 characters')
   .regex(/^[A-Z0-9]+$/, 'Replay code must contain only uppercase letters and numbers');
 
 // Slug validation for URLs
 export const slugSchema = z
   .string()
   .min(1, 'Slug is required')
-  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must be lowercase with hyphens');
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug must contain only lowercase letters, numbers, and hyphens');
 
 // Rich text content validation
 export const richTextSchema = z

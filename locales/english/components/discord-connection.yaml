@@ -1,0 +1,64 @@
+# =============================================================================
+# DISCORD CONNECTION COMPONENT LOCALE
+# =============================================================================
+# Location: /components/booking/DiscordConnection.tsx
+# Discord OAuth connection component used in booking flow
+
+# -----------------------------------------------------------------------------
+# Loading State
+# -----------------------------------------------------------------------------
+# Location: Lines 63-73
+loading:
+  message: "Checking Discord connection..."
+
+# -----------------------------------------------------------------------------
+# Connected State
+# -----------------------------------------------------------------------------
+# Location: Lines 76-118
+connected:
+  title: "Discord Connected"
+  username: "{username}"  # {username} = Discord username
+  session_expired: "(Session expired)"
+
+  # Disconnect button
+  button:
+    default: "Disconnect"
+    loading: "Disconnecting..."
+
+  # Expiration warning
+  expiration_warning:
+    title: "Your Discord session has expired. Reconnect to continue receiving notifications."
+
+  # Success message
+  success_message: "✅ You're in the coaching server! My bot will DM you with session details and when your review is ready."
+
+# -----------------------------------------------------------------------------
+# Disconnected State
+# -----------------------------------------------------------------------------
+# Location: Lines 121-158
+disconnected:
+  title: "Connect Your Discord Account"
+  required_indicator: "*"
+
+  description: "By connecting, you'll automatically join our coaching server. This is where all sessions take place and where my bot will DM you with updates about your reviews."
+
+  button: "Connect Discord"
+
+  # What happens next info
+  info:
+    title: "What happens next:"
+    description: "You'll authorize our app, automatically join the coaching server, and then continue with your booking."
+
+# -----------------------------------------------------------------------------
+# Error States
+# -----------------------------------------------------------------------------
+errors:
+  failed_to_check: "Failed to check connection status"
+  failed_to_disconnect: "Failed to disconnect. Please try again."
+  connection_required: "Please connect your Discord account first."
+
+# -----------------------------------------------------------------------------
+# Alerts
+# -----------------------------------------------------------------------------
+alerts:
+  disconnect_failed: "Failed to disconnect. Please try again."

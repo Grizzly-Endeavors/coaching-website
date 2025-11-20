@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Alert, AlertDescription } from '@/components/ui/Alert'
 import { Badge } from '@/components/ui/Badge'
+import { useLocaleFile } from '@/lib/locales/client'
 
 interface TimeSlot {
   datetime: string
@@ -36,6 +37,7 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
   const [slotsData, setSlotsData] = useState<Record<string, TimeSlot[]>>({}) // Map of date -> slots
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const locale = useLocaleFile('components/time-slot-picker')
 
   // Calculate the 3 days to display
   const threeDays = Array.from({ length: 3 }, (_, i) => {
@@ -107,22 +109,24 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
   }
 
   const getSessionTypeLabel = () => {
-    return sessionType === 'vod-review' ? 'VOD Review' : 'Live Coaching'
+    return sessionType === 'vod-review'
+      ? (locale.header?.session_types?.vod_review || 'VOD Review')
+      : (locale.header?.session_types?.live_coaching || 'Live Coaching')
   }
 
   const hasAnySlots = Object.values(slotsData).some(daySlots => daySlots.length > 0);
 
   return (
-    <Card className="bg-[#1a1a2e] border-[#2a2a40]">
+    <Card className="bg-background-surface border-border">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-white text-xl">Select Appointment Time</CardTitle>
+          <CardTitle className="text-white text-xl">{locale.header?.title || 'Select Appointment Time'}</CardTitle>
           <Badge className={sessionType === 'vod-review' ? 'bg-blue-600' : 'bg-purple-600'}>
             {getSessionTypeLabel()}
           </Badge>
         </div>
         <p className="text-sm text-gray-400 mt-2">
-          All times shown in EST timezone
+          {locale.header?.timezone_note || 'All times shown in EST timezone'}
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -133,7 +137,7 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
         )}
 
         {/* Navigation Header */}
-        <div className="flex items-center justify-between border-b border-[#2a2a40] pb-4">
+        <div className="flex items-center justify-between border-b border-border pb-4">
           <Button
             variant="ghost"
             size="sm"
@@ -169,7 +173,7 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent"></div>
-            <p className="text-gray-400 mt-3">Loading available times...</p>
+            <p className="text-gray-400 mt-3">{locale.loading?.spinner || 'Loading available times...'}</p>
           </div>
         ) : hasAnySlots ? (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
@@ -192,15 +196,15 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
                           className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-all ${
                             isSlotSelected(slot.datetime)
                               ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/50'
-                              : 'bg-[#0f0f23] text-gray-300 border border-[#2a2a40] hover:border-purple-500 hover:bg-[#1a1a2e]'
+                              : 'bg-background-primary text-gray-300 border border-border hover:border-purple-500 hover:bg-background-surface'
                           }`}
                         >
                           {slot.time}
                         </button>
                       ))
                   ) : (
-                    <div className="text-center text-gray-500 text-sm h-full flex items-center justify-center border border-dashed border-[#2a2a40] rounded-lg p-4">
-                      No slots
+                    <div className="text-center text-gray-500 text-sm h-full flex items-center justify-center border border-dashed border-border rounded-lg p-4">
+                      {locale.slots?.no_slots || 'No slots'}
                     </div>
                   )}
                 </div>
@@ -208,15 +212,15 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
             ))}
           </div>
         ) : (
-          <div className="text-center py-12 bg-[#0f0f23] rounded-lg border border-[#2a2a40]">
+          <div className="text-center py-12 bg-background-primary rounded-lg border border-border">
             <svg className="w-12 h-12 text-gray-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <p className="text-gray-400 font-medium mb-2">
-              No availability for these dates
+              {locale.empty_states?.no_availability?.title || 'No availability for these dates'}
             </p>
             <p className="text-gray-500 text-sm">
-              Try navigating to different dates or check back later
+              {locale.empty_states?.no_availability?.description || 'Try navigating to different dates or check back later'}
             </p>
           </div>
         )}
@@ -229,7 +233,10 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               <span>
-                <strong>Selected:</strong> {format(new Date(selectedSlot), 'EEEE, MMMM d')} at {format(new Date(selectedSlot), 'h:mm a')} EST
+                <strong>{locale.selected?.title || 'Selected:'}</strong> {(locale.selected?.format || '{day}, {date} at {time} EST')
+                  .replace('{day}', format(new Date(selectedSlot), 'EEEE'))
+                  .replace('{date}', format(new Date(selectedSlot), 'MMMM d'))
+                  .replace('{time}', format(new Date(selectedSlot), 'h:mm a'))}
               </span>
             </AlertDescription>
           </Alert>

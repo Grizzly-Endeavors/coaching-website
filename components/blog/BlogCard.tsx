@@ -23,17 +23,17 @@ export function BlogCard({ post }: BlogCardProps) {
       href={`/blog/${post.slug}`}
       className="group block h-full"
     >
-      <article className="h-full flex flex-col bg-[#1a1a2e] border border-[#2a2a40] rounded-lg overflow-hidden transition-all duration-300 hover:border-[#8b5cf6] hover:shadow-lg hover:shadow-purple-500/20">
+      <article className="h-full flex flex-col bg-background-surface border border-border rounded-lg overflow-hidden transition-all duration-300 hover:border-purple-primary hover:shadow-lg hover:shadow-purple-500/20">
         {/* Card Content */}
         <div className="flex-1 p-6">
           {/* Title */}
-          <h2 className="text-xl font-bold text-[#e5e7eb] mb-3 line-clamp-2 group-hover:text-[#a78bfa] transition-colors">
+          <h2 className="text-xl font-bold text-text-primary mb-3 line-clamp-2 group-hover:text-purple-hover transition-colors">
             {post.title}
           </h2>
 
           {/* Excerpt */}
           {post.excerpt && (
-            <p className="text-[#9ca3af] text-sm leading-relaxed line-clamp-3 mb-4">
+            <p className="text-text-secondary text-sm leading-relaxed line-clamp-3 mb-4">
               {post.excerpt}
             </p>
           )}
@@ -44,13 +44,13 @@ export function BlogCard({ post }: BlogCardProps) {
               {post.tags.slice(0, 3).map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-[#2a2a40] text-[#a78bfa] border border-[#8b5cf6]/30"
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-background-elevated text-purple-hover border border-purple-primary/30"
                 >
                   {tag}
                 </span>
               ))}
               {post.tags.length > 3 && (
-                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium text-[#6b7280]">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium text-text-muted">
                   +{post.tags.length - 3}
                 </span>
               )}
@@ -59,16 +59,16 @@ export function BlogCard({ post }: BlogCardProps) {
         </div>
 
         {/* Card Footer */}
-        <div className="px-6 py-4 bg-[#0f0f23] border-t border-[#2a2a40] flex items-center justify-between">
+        <div className="px-6 py-4 bg-background-primary border-t border-border flex items-center justify-between">
           <time
             dateTime={post.publishedAt}
-            className="text-xs text-[#6b7280]"
+            className="text-xs text-text-muted"
           >
             {formattedDate}
           </time>
 
           {post.readingTime && (
-            <span className="text-xs text-[#6b7280]">
+            <span className="text-xs text-text-muted">
               {post.readingTime} min read
             </span>
           )}
@@ -76,7 +76,7 @@ export function BlogCard({ post }: BlogCardProps) {
 
         {/* Hover Effect Border Glow */}
         <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#8b5cf6]/0 via-[#8b5cf6]/10 to-[#8b5cf6]/0" />
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-purple-primary/0 via-purple-primary/10 to-purple-primary/0" />
         </div>
       </article>
     </Link>
@@ -89,31 +89,31 @@ export function BlogCard({ post }: BlogCardProps) {
  */
 export function BlogCardSkeleton() {
   return (
-    <div className="h-full flex flex-col bg-[#1a1a2e] border border-[#2a2a40] rounded-lg overflow-hidden">
+    <div className="h-full flex flex-col bg-background-surface border border-border rounded-lg overflow-hidden">
       <div className="flex-1 p-6 space-y-4">
         {/* Title skeleton */}
-        <div className="h-6 bg-[#2a2a40] rounded animate-pulse" />
-        <div className="h-6 bg-[#2a2a40] rounded w-3/4 animate-pulse" />
+        <div className="h-6 bg-background-elevated rounded animate-pulse" />
+        <div className="h-6 bg-background-elevated rounded w-3/4 animate-pulse" />
 
         {/* Excerpt skeleton */}
         <div className="space-y-2 mt-4">
-          <div className="h-4 bg-[#2a2a40] rounded animate-pulse" />
-          <div className="h-4 bg-[#2a2a40] rounded animate-pulse" />
-          <div className="h-4 bg-[#2a2a40] rounded w-5/6 animate-pulse" />
+          <div className="h-4 bg-background-elevated rounded animate-pulse" />
+          <div className="h-4 bg-background-elevated rounded animate-pulse" />
+          <div className="h-4 bg-background-elevated rounded w-5/6 animate-pulse" />
         </div>
 
         {/* Tags skeleton */}
         <div className="flex gap-2 mt-4">
-          <div className="h-6 w-16 bg-[#2a2a40] rounded animate-pulse" />
-          <div className="h-6 w-20 bg-[#2a2a40] rounded animate-pulse" />
-          <div className="h-6 w-14 bg-[#2a2a40] rounded animate-pulse" />
+          <div className="h-6 w-16 bg-background-elevated rounded animate-pulse" />
+          <div className="h-6 w-20 bg-background-elevated rounded animate-pulse" />
+          <div className="h-6 w-14 bg-background-elevated rounded animate-pulse" />
         </div>
       </div>
 
       {/* Footer skeleton */}
-      <div className="px-6 py-4 bg-[#0f0f23] border-t border-[#2a2a40] flex items-center justify-between">
-        <div className="h-4 w-24 bg-[#2a2a40] rounded animate-pulse" />
-        <div className="h-4 w-16 bg-[#2a2a40] rounded animate-pulse" />
+      <div className="px-6 py-4 bg-background-primary border-t border-border flex items-center justify-between">
+        <div className="h-4 w-24 bg-background-elevated rounded animate-pulse" />
+        <div className="h-4 w-16 bg-background-elevated rounded animate-pulse" />
       </div>
     </div>
   );

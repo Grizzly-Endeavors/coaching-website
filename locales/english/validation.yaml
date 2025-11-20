@@ -1,0 +1,143 @@
+# =============================================================================
+# VALIDATION MESSAGES LOCALE
+# =============================================================================
+# Location: /lib/validations/*.ts
+# All form validation error messages
+
+# -----------------------------------------------------------------------------
+# Email Validation
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/primitives.ts (lines 10-13)
+email:
+  required: "Email is required"
+  invalid: "Please enter a valid email address"
+
+# -----------------------------------------------------------------------------
+# Name Validation
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/primitives.ts (lines 16-19)
+name:
+  too_short: "Name must be at least 2 characters"
+  too_long: "Name must not exceed 100 characters"
+
+# -----------------------------------------------------------------------------
+# Phone Validation
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/primitives.ts (lines 22-25)
+phone:
+  invalid: "Please enter a valid phone number"
+
+# -----------------------------------------------------------------------------
+# URL Validation
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/primitives.ts (lines 28-31)
+url:
+  invalid: "Please enter a valid URL"
+
+# -----------------------------------------------------------------------------
+# Replay Code Validation
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/primitives.ts (lines 34-38)
+replay_code:
+  too_short: "Replay code must be at least 6 characters"
+  too_long: "Replay code is too long"
+  invalid_format: "Replay code must contain only uppercase letters and numbers"
+
+# -----------------------------------------------------------------------------
+# Slug Validation
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/primitives.ts (lines 41-44)
+slug:
+  required: "Slug is required"
+  invalid_format: "Slug must be lowercase with hyphens"
+
+# -----------------------------------------------------------------------------
+# Content Validation
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/primitives.ts (lines 47-50, 54-56)
+content:
+  too_short: "Content must be at least 10 characters"
+  too_long: "Content must not exceed 50,000 characters"
+
+message:
+  too_short: "Message must be at least 10 characters"
+  too_long: "Message must not exceed 2,000 characters"
+
+short_text:
+  required: "This field is required"
+  too_long: "Text must not exceed 500 characters"
+
+# -----------------------------------------------------------------------------
+# Contact Form Validation
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/contact.ts (lines 10-12)
+contact_form:
+  message:
+    too_short: "Message must be at least 10 characters"
+    too_long: "Message must not exceed 1,000 characters"
+
+# -----------------------------------------------------------------------------
+# Booking/Replay Submission Validation
+# -----------------------------------------------------------------------------
+# Location: /lib/validations/booking.ts
+
+# Coaching type
+coaching_type:
+  required: "Please select a coaching type"
+
+# Rank
+rank:
+  required: "Please select your rank"
+
+# Role
+role:
+  required: "Please select your role"
+
+# Hero
+hero:
+  too_short: "Please specify which hero you played"
+  too_long: "Hero name is too long"
+
+# Map name
+map:
+  required: "Map name is required"
+  too_long: "Map name is too long"
+
+# Replay notes
+replay_notes:
+  too_long: "Notes are too long (max 500 characters)"
+
+# Replay array
+replays:
+  min_required: "At least one replay code is required"
+  max_allowed: "Maximum 5 replay codes allowed"
+
+# -----------------------------------------------------------------------------
+# Login Form Validation
+# -----------------------------------------------------------------------------
+# Location: /app/login/page.tsx (lines 12-21)
+login:
+  email:
+    required: "Email is required"
+    invalid: "Please enter a valid email address"
+
+  password:
+    required: "Password is required"
+    too_short: "Password must be at least 8 characters"
+
+# -----------------------------------------------------------------------------
+# Friend Code Validation
+# -----------------------------------------------------------------------------
+# Location: /components/booking/FriendCodeDialog.tsx
+friend_code:
+  required: "Please enter a friend code"
+  invalid: "Invalid friend code"
+
+# -----------------------------------------------------------------------------
+# Generic Field Validation
+# -----------------------------------------------------------------------------
+generic:
+  required: "{field} is required"  # {field} = field name
+  too_short: "{field} must be at least {min} characters"  # {field}, {min}
+  too_long: "{field} must not exceed {max} characters"  # {field}, {max}
+  invalid: "Please enter a valid {field}"  # {field}

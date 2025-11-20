@@ -1,0 +1,87 @@
+# =============================================================================
+# ADMIN BLOG MANAGEMENT LOCALE
+# =============================================================================
+# Location: /app/admin/blog/page.tsx
+# Blog post listing and management interface
+
+# -----------------------------------------------------------------------------
+# Page Header
+# -----------------------------------------------------------------------------
+header:
+  title: "Blog Posts"
+  subtitle: "Manage your blog posts and content"
+
+  # Actions
+  create_button: "Create New Post"
+  create_button_icon: "+"
+
+# -----------------------------------------------------------------------------
+# Filter Tabs
+# -----------------------------------------------------------------------------
+filters:
+  all: "All Posts ({count})"
+  published: "Published ({count})"
+  drafts: "Drafts ({count})"
+
+# -----------------------------------------------------------------------------
+# Table Headers
+# -----------------------------------------------------------------------------
+table:
+  headers:
+    title: "Title"
+    status: "Status"
+    tags: "Tags"
+    published_date: "Published Date"
+    last_updated: "Last Updated"
+    actions: "Actions"
+
+  # Status badges
+  status:
+    published: "Published"
+    draft: "Draft"
+
+  # Actions
+  actions:
+    edit: "Edit"
+    publish: "Publish"
+    unpublish: "Unpublish"
+    delete: "Delete"
+
+  # Tags display
+  tags:
+    more: "+{count}"  # {count} = number of additional tags
+
+# -----------------------------------------------------------------------------
+# Empty States
+# -----------------------------------------------------------------------------
+empty_states:
+  no_posts:
+    title: "No posts found"
+    all_posts: "Create your first blog post to get started"
+    filtered: "No {filter} posts yet"  # {filter} = published/draft
+    button: "Create Your First Post"
+
+# -----------------------------------------------------------------------------
+# Confirmation Dialogs
+# -----------------------------------------------------------------------------
+confirmations:
+  delete:
+    message: "Are you sure you want to delete \"{title}\"? This action cannot be undone."
+    # {title} = post title
+
+# -----------------------------------------------------------------------------
+# Success/Error Messages
+# -----------------------------------------------------------------------------
+messages:
+  delete_success: "Post deleted successfully"
+  delete_error: "Failed to delete post"
+  publish_success: "Post published successfully"
+  unpublish_success: "Post unpublished successfully"
+  update_error: "Failed to update post"
+  fetch_error: "Error fetching posts"
+
+# -----------------------------------------------------------------------------
+# Loading States
+# -----------------------------------------------------------------------------
+loading:
+  posts: "Loading blog posts..."

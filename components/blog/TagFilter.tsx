@@ -51,11 +51,11 @@ export function TagFilter({ tags, currentTag }: TagFilterProps) {
   return (
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-3">
-        <span className="text-sm font-semibold text-[#e5e7eb]">Filter by tag:</span>
+        <span className="text-sm font-semibold text-text-primary">Filter by tag:</span>
         {currentTag && (
           <button
             onClick={handleClearFilter}
-            className="text-xs text-[#8b5cf6] hover:text-[#a78bfa] transition-colors"
+            className="text-xs text-purple-primary hover:text-purple-hover transition-colors"
           >
             Clear filter
           </button>
@@ -75,8 +75,8 @@ export function TagFilter({ tags, currentTag }: TagFilterProps) {
                 transition-all duration-200
                 ${
                   isActive
-                    ? 'bg-[#8b5cf6] text-white shadow-lg shadow-purple-500/30 scale-105'
-                    : 'bg-[#1a1a2e] text-[#9ca3af] border border-[#2a2a40] hover:border-[#8b5cf6] hover:text-[#a78bfa]'
+                    ? 'bg-purple-primary text-white shadow-lg shadow-purple-500/30 scale-105'
+                    : 'bg-background-surface text-text-secondary border border-border hover:border-purple-primary hover:text-purple-hover'
                 }
               `}
               aria-pressed={isActive}
@@ -97,13 +97,13 @@ export function TagFilter({ tags, currentTag }: TagFilterProps) {
 export function TagFilterSkeleton() {
   return (
     <div className="mb-8 animate-pulse">
-      <div className="h-5 w-32 bg-[#1a1a2e] rounded mb-3" />
+      <div className="h-5 w-32 bg-background-surface rounded mb-3" />
       <div className="flex flex-wrap gap-2">
-        <div className="h-9 w-20 bg-[#1a1a2e] rounded-lg" />
-        <div className="h-9 w-24 bg-[#1a1a2e] rounded-lg" />
-        <div className="h-9 w-28 bg-[#1a1a2e] rounded-lg" />
-        <div className="h-9 w-16 bg-[#1a1a2e] rounded-lg" />
-        <div className="h-9 w-32 bg-[#1a1a2e] rounded-lg" />
+        <div className="h-9 w-20 bg-background-surface rounded-lg" />
+        <div className="h-9 w-24 bg-background-surface rounded-lg" />
+        <div className="h-9 w-28 bg-background-surface rounded-lg" />
+        <div className="h-9 w-16 bg-background-surface rounded-lg" />
+        <div className="h-9 w-32 bg-background-surface rounded-lg" />
       </div>
     </div>
   );

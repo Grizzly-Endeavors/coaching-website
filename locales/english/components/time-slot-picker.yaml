@@ -1,0 +1,78 @@
+# =============================================================================
+# TIME SLOT PICKER COMPONENT LOCALE
+# =============================================================================
+# Location: /components/booking/TimeSlotPicker.tsx
+# Calendar-style time slot selection component
+
+# -----------------------------------------------------------------------------
+# Header
+# -----------------------------------------------------------------------------
+# Location: Lines 118-126
+header:
+  title: "Select Appointment Time"
+  timezone_note: "All times shown in EST timezone"
+
+  # Session type badge
+  session_types:
+    vod_review: "VOD Review"
+    live_coaching: "Live Coaching"
+
+# -----------------------------------------------------------------------------
+# Navigation
+# -----------------------------------------------------------------------------
+# Location: Lines 136-165
+navigation:
+  # Month/year display
+  current_month: "{month} {year}"  # {month} = month name, {year} = year
+
+  # Navigation buttons (aria-labels handled by icons)
+  previous: "Previous"
+  next: "Next"
+
+# -----------------------------------------------------------------------------
+# Time Slot Display
+# -----------------------------------------------------------------------------
+# Location: Lines 169-222
+slots:
+  # Day headers
+  day_format:
+    day_name: "{day}"  # {day} = Mon, Tue, Wed, etc.
+    day_number: "{number}"  # {number} = 1, 2, 3, etc.
+    month: "{month}"  # {month} = Jan, Feb, etc.
+
+  # Empty state for individual day
+  no_slots: "No slots"
+
+  # Time button format
+  time_format: "{time}"  # {time} = "9:00 AM", "2:30 PM", etc.
+
+# -----------------------------------------------------------------------------
+# Empty States
+# -----------------------------------------------------------------------------
+# Location: Lines 210-221
+empty_states:
+  no_availability:
+    title: "No availability for these dates"
+    description: "Try navigating to different dates or check back later"
+
+# -----------------------------------------------------------------------------
+# Selected Slot Display
+# -----------------------------------------------------------------------------
+# Location: Lines 225-236
+selected:
+  title: "Selected:"
+  format: "{day}, {date} at {time} EST"
+  # {day} = Monday, {date} = January 1, {time} = 9:00 AM
+
+# -----------------------------------------------------------------------------
+# Loading State
+# -----------------------------------------------------------------------------
+# Location: Lines 169-173
+loading:
+  spinner: "Loading available times..."
+
+# -----------------------------------------------------------------------------
+# Error Display
+# -----------------------------------------------------------------------------
+error:
+  default: "An error occurred"

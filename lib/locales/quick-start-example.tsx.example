@@ -1,0 +1,325 @@
+/**
+ * Quick Start Examples
+ * Copy these patterns into your actual components
+ */
+
+// =============================================================================
+// Example 1: Server Component (Home Page)
+// =============================================================================
+
+import { loadLocale } from '@/lib/locales';
+import { interpolate } from '@/lib/locales/utils';
+
+export function HomePageExample() {
+  const home = loadLocale('home');
+  const common = loadLocale('common');
+
+  return (
+    <div>
+      {/* Hero Section */}
+      <section>
+        <h1>{home.hero.title}</h1>
+        <p>{home.hero.subtitle}</p>
+        <button>{home.hero.buttons.get_coaching}</button>
+        <button>{home.hero.buttons.view_pricing}</button>
+      </section>
+
+      {/* Background Section */}
+      <section>
+        <h2>{home.background.section_title}</h2>
+        <p>{home.background.bio.paragraph_1}</p>
+        <p>{home.background.bio.paragraph_2}</p>
+
+        {/* Dynamic list from YAML */}
+        <div>
+          {home.background.achievements.map((achievement, index) => (
+            <div key={index}>
+              <h3>{achievement.title}</h3>
+              <p>{achievement.value}</p>
+              <span>{achievement.description}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Footer with interpolation */}
+      <footer>
+        <p>
+          {interpolate(common.footer.bottom.copyright, {
+            year: new Date().getFullYear(),
+          })}
+        </p>
+      </footer>
+    </div>
+  );
+}
+
+// =============================================================================
+// Example 2: Client Component with Hooks
+// =============================================================================
+
+'use client';
+
+import { useLocale, useLocales, useCommonLocale } from '@/lib/locales/client';
+import { useState } from 'react';
+
+export function BookingFormExample() {
+  const [count, setCount] = useState(1);
+
+  // Get entire locale file
+  const common = useCommonLocale();
+
+  // Get specific strings
+  const submitText = useLocale('common', 'buttons.primary.submit');
+  const emailLabel = useLocale('booking', 'form.fields.email.label');
+
+  // Get multiple strings at once
+  const { save, cancel, back } = useLocales('common', [
+    'buttons.primary.save',
+    'buttons.primary.cancel',
+    'buttons.primary.back',
+  ]);
+
+  return (
+    <form>
+      <label>{emailLabel}</label>
+      <input type="email" />
+
+      <button type="submit">{submitText}</button>
+      <button type="button">{cancel}</button>
+
+      {/* Using status labels */}
+      <div>
+        <span>{common.status.pending}</span>
+        <span>{common.status.completed}</span>
+      </div>
+    </form>
+  );
+}
+
+// =============================================================================
+// Example 3: Validation Messages
+// =============================================================================
+
+import { loadLocale as loadLocaleServer } from '@/lib/locales';
+import { interpolate as interpolateUtil } from '@/lib/locales/utils';
+
+export function ValidationExample() {
+  const validation = loadLocaleServer('validation');
+
+  // Simple validation messages
+  const emailRequired = validation.email.required;
+  const emailInvalid = validation.email.invalid;
+
+  // Validation with interpolation
+  const passwordTooShort = interpolateUtil(validation.generic.too_short, {
+    field: 'Password',
+    min: 8,
+  });
+  // Result: "Password must be at least 8 characters"
+
+  return (
+    <div>
+      <span className="error">{emailRequired}</span>
+      <span className="error">{emailInvalid}</span>
+      <span className="error">{passwordTooShort}</span>
+    </div>
+  );
+}
+
+// =============================================================================
+// Example 4: Layout with LocaleProvider
+// =============================================================================
+
+import { loadAllLocales } from '@/lib/locales';
+import { LocaleProvider } from '@/lib/locales/client';
+
+export default function RootLayoutExample({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Load all locales once at the root
+  const locales = loadAllLocales();
+
+  return (
+    <html lang="en">
+      <body>
+        {/* Wrap your app to enable client component locale access */}
+        <LocaleProvider locales={locales}>
+          {children}
+        </LocaleProvider>
+      </body>
+    </html>
+  );
+}
+
+// =============================================================================
+// Example 5: Type-Safe Hook (Recommended)
+// =============================================================================
+
+import { createTypedLocaleHook } from '@/lib/locales/client';
+import type { HomeLocale, CommonLocale } from '@/lib/locales/types';
+
+// Create typed hooks for better autocomplete
+export const useHomeLocale = createTypedLocaleHook<HomeLocale>('home');
+export const useCommonTyped = createTypedLocaleHook<CommonLocale>('common');
+
+// Use in a component
+'use client';
+
+export function TypeSafeComponentExample() {
+  const home = useHomeLocale();
+  const common = useCommonTyped();
+
+  // TypeScript autocomplete works perfectly!
+  return (
+    <div>
+      <h1>{home.hero.title}</h1>
+      <p>{home.hero.subtitle}</p>
+      <button>{common.buttons.primary.submit}</button>
+
+      {/* Autocomplete for nested arrays */}
+      {home.background.achievements.map((achievement) => (
+        <div key={achievement.title}>
+          <span>{achievement.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// =============================================================================
+// Example 6: Pluralization and Date Formatting
+// =============================================================================
+
+'use client';
+
+import { usePlural, useFormatDate, useInterpolate } from '@/lib/locales/client';
+
+export function DynamicContentExample({
+  itemCount,
+  publishedAt,
+  userName,
+}: {
+  itemCount: number;
+  publishedAt: Date;
+  userName: string;
+}) {
+  // Pluralization
+  const itemText = usePlural(itemCount, {
+    zero: 'No items',
+    one: '1 item',
+    other: '{count} items',
+  });
+
+  // Date formatting
+  const formattedDate = useFormatDate(publishedAt, 'date_long');
+  const formattedTime = useFormatDate(publishedAt, 'time_12h');
+
+  // String interpolation
+  const greeting = useInterpolate('Welcome back, {name}!', {
+    name: userName,
+  });
+
+  return (
+    <div>
+      <p>{greeting}</p>
+      <p>You have {itemText}</p>
+      <time>
+        Published on {formattedDate} at {formattedTime}
+      </time>
+    </div>
+  );
+}
+
+// =============================================================================
+// Example 7: Navigation Component
+// =============================================================================
+
+import { loadLocale as loadNav } from '@/lib/locales';
+import Link from 'next/link';
+
+export function NavigationExample() {
+  const common = loadNav('common');
+  const nav = common.navigation.links;
+
+  return (
+    <nav>
+      <Link href="/">{nav.home}</Link>
+      <Link href="/pricing">{nav.pricing}</Link>
+      <Link href="/blog">{nav.blog}</Link>
+      <Link href="/contact">{nav.contact}</Link>
+    </nav>
+  );
+}
+
+// =============================================================================
+// Example 8: Error Handling with Fallbacks
+// =============================================================================
+
+import { getLocaleString } from '@/lib/locales';
+
+export function ErrorHandlingExample() {
+  const data = loadLocaleServer('common');
+
+  // Safe access with fallback
+  const title = getLocaleString(data, 'hero.title', 'Default Title');
+
+  // Missing key will return fallback
+  const missing = getLocaleString(data, 'nonexistent.key', 'Fallback Text');
+
+  return (
+    <div>
+      <h1>{title}</h1>
+      <p>{missing}</p>
+    </div>
+  );
+}
+
+// =============================================================================
+// Example 9: Admin Panel with Status Labels
+// =============================================================================
+
+'use client';
+
+import { useCommonLocale } from '@/lib/locales/client';
+
+export function AdminDashboardExample() {
+  const common = useCommonLocale();
+  const status = common.status;
+
+  const submissions = [
+    { id: 1, status: 'pending' },
+    { id: 2, status: 'completed' },
+    { id: 3, status: 'in_progress' },
+  ];
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>{common.labels.status}</th>
+          <th>{common.labels.actions}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {submissions.map((submission) => (
+          <tr key={submission.id}>
+            <td>{submission.id}</td>
+            <td>
+              {/* Map status to locale string */}
+              <span className={`badge badge-${submission.status}`}>
+                {status[submission.status]}
+              </span>
+            </td>
+            <td>
+              <button>{common.buttons.primary.view_details}</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}

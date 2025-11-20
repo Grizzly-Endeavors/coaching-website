@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { loadLocale } from '@/lib/locales/loader';
 
 /**
  * Footer component props interface
@@ -21,17 +22,18 @@ export interface FooterProps {
  */
 export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
   const currentYear = new Date().getFullYear();
+  const common = loadLocale('common');
 
   const footerLinks = {
     navigation: [
-      { href: '/', label: 'Home' },
-      { href: '/pricing', label: 'Pricing' },
-      { href: '/blog', label: 'Blog' },
-      { href: '/contact', label: 'Contact' },
+      { href: '/', label: common.footer?.sections?.navigation?.links?.home || 'Home' },
+      { href: '/pricing', label: common.footer?.sections?.navigation?.links?.pricing || 'Pricing' },
+      { href: '/blog', label: common.footer?.sections?.navigation?.links?.blog || 'Blog' },
+      { href: '/contact', label: common.footer?.sections?.navigation?.links?.contact || 'Contact' },
     ],
     resources: [
-      { href: '/booking', label: 'Get Coaching' },
-      { href: '/login', label: 'Admin Login' },
+      { href: '/booking', label: common.footer?.sections?.resources?.links?.get_coaching || 'Get Coaching' },
+      { href: '/login', label: common.footer?.sections?.resources?.links?.admin_login || 'Admin Login' },
     ],
   };
 
@@ -75,7 +77,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
   ];
 
   return (
-    <footer className={`w-full border-t border-[#2a2a40] bg-[#0f0f23] ${className}`}>
+    <footer className={`w-full border-t border-border bg-background-primary ${className}`}>
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12">
           {/* Brand Section */}
@@ -85,11 +87,11 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 <span className="text-xl font-bold text-white">OW</span>
               </div>
               <span className="text-xl font-bold text-gray-100">
-                Overwatch Coaching
+                {common.footer?.brand?.name || 'Overwatch Coaching'}
               </span>
             </Link>
             <p className="text-sm text-gray-400 max-w-md mb-6">
-              Overwatch coaching focused on sustainable improvement. Teaching you how to think, not just what to do. GM1 across all roles with a playful, results-driven approach.
+              {common.footer?.brand?.tagline || 'Overwatch coaching focused on sustainable improvement. Teaching you how to think, not just what to do. GM1 across all roles with a playful, results-driven approach.'}
             </p>
 
             {/* Social Links */}
@@ -99,7 +101,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                   key={social.name}
                   href={social.href}
                   className="text-gray-400 hover:text-purple-400 transition-colors duration-200"
-                  aria-label={`Visit our ${social.name}`}
+                  aria-label={(common.footer?.social?.aria_label || 'Visit our {platform}').replace('{platform}', social.name)}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -112,7 +114,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
           {/* Navigation Links */}
           <div>
             <h3 className="text-sm font-semibold text-gray-100 uppercase tracking-wider mb-4">
-              Navigation
+              {common.footer?.sections?.navigation?.title || 'Navigation'}
             </h3>
             <ul className="space-y-3">
               {footerLinks.navigation.map((link) => (
@@ -131,7 +133,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
           {/* Resources */}
           <div>
             <h3 className="text-sm font-semibold text-gray-100 uppercase tracking-wider mb-4">
-              Resources
+              {common.footer?.sections?.resources?.title || 'Resources'}
             </h3>
             <ul className="space-y-3">
               {footerLinks.resources.map((link) => (
@@ -149,23 +151,23 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-[#2a2a40]">
+        <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-sm text-gray-400">
-              &copy; {currentYear} Overwatch Coaching. All rights reserved.
+              {(common.footer?.bottom?.copyright || '© {year} Overwatch Coaching. All rights reserved.').replace('{year}', currentYear.toString())}
             </p>
             <div className="flex items-center gap-6">
               <Link
                 href="/privacy"
                 className="text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200"
               >
-                Privacy Policy
+                {common.footer?.bottom?.privacy_policy || 'Privacy Policy'}
               </Link>
               <Link
                 href="/terms"
                 className="text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200"
               >
-                Terms of Service
+                {common.footer?.bottom?.terms_of_service || 'Terms of Service'}
               </Link>
             </div>
           </div>
