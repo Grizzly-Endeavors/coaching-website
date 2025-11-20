@@ -40,10 +40,10 @@ export const Input: React.FC<InputProps> = ({
 }) => {
   const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
 
-  const baseClasses = `w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 placeholder-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed ${
+  const baseClasses = `w-full px-4 py-2.5 bg-[#1a1a1a] border rounded-lg text-gray-200 placeholder-gray-500 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed ${
     error
       ? 'border-red-500 focus:ring-red-500'
-      : 'border-[#2a2a40] hover:border-purple-600/50'
+      : 'border-[#2e2e2e] hover:border-orange-600/50'
   }`;
 
   const renderInput = () => {

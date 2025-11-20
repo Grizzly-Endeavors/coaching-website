@@ -34,13 +34,13 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-[#0f0f23] disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-[#0a0a0a] disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantClasses = {
-    primary: 'bg-purple-600 text-white hover:bg-purple-500 shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] active:scale-95',
-    secondary: 'bg-[#2a2a40] text-purple-400 hover:bg-[#363650] border border-purple-600/30 hover:border-purple-500/50 hover:shadow-[0_0_15px_rgba(139,92,246,0.2)]',
-    outline: 'bg-transparent border-2 border-purple-600 text-purple-400 hover:bg-purple-600 hover:text-white',
-    ghost: 'bg-transparent text-purple-400 hover:bg-purple-600/10 hover:text-purple-300',
+    primary: 'bg-orange-500 text-white hover:bg-orange-400 shadow-[0_0_20px_rgba(255,140,66,0.3)] hover:shadow-[0_0_30px_rgba(255,140,66,0.5)] active:scale-95',
+    secondary: 'bg-[#242424] text-orange-400 hover:bg-[#2e2e2e] border border-orange-600/30 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(255,140,66,0.2)]',
+    outline: 'bg-transparent border-2 border-orange-600 text-orange-400 hover:bg-orange-600 hover:text-white',
+    ghost: 'bg-transparent text-orange-400 hover:bg-orange-600/10 hover:text-orange-300',
   };
 
   const sizeClasses = {

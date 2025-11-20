@@ -35,8 +35,8 @@ export const Card: React.FC<CardProps> = ({
   ...props
 }) => {
   const variantClasses = {
-    surface: 'bg-[#1a1a2e]',
-    elevated: 'bg-[#2a2a40]',
+    surface: 'bg-[#1a1a1a]',
+    elevated: 'bg-[#242424]',
   };
 
   const paddingClasses = {
@@ -47,11 +47,11 @@ export const Card: React.FC<CardProps> = ({
   };
 
   const borderClasses = purpleBorder
-    ? 'border-2 border-purple-600'
-    : 'border border-[#2a2a40]';
+    ? 'border-2 border-orange-600'
+    : 'border border-[#2e2e2e]';
 
   const hoverClasses = hover
-    ? 'hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] hover:border-purple-600/50 transition-all duration-300 cursor-pointer hover:-translate-y-1'
+    ? 'hover:shadow-[0_0_20px_rgba(255,140,66,0.15)] hover:border-orange-600/50 transition-all duration-300 cursor-pointer hover:-translate-y-1'
     : '';
 
   return (
@@ -133,7 +133,7 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const CardFooter: React.FC<CardFooterProps> = ({ className = '', children, ...props }) => {
   return (
-    <div className={`mt-6 pt-4 border-t border-[#2a2a40] ${className}`} {...props}>
+    <div className={`mt-6 pt-4 border-t border-[#2e2e2e] ${className}`} {...props}>
       {children}
     </div>
   );

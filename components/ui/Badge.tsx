@@ -29,12 +29,12 @@ export const Badge: React.FC<BadgeProps> = ({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-full border';
 
   const variantClasses = {
-    purple: 'bg-purple-600/10 text-purple-400 border-purple-600/30',
+    purple: 'bg-orange-500/10 text-orange-400 border-orange-500/30',
     success: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
     warning: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
     error: 'bg-red-500/10 text-red-400 border-red-500/30',
     pending: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-    in_progress: 'bg-purple-600/10 text-purple-400 border-purple-600/30',
+    in_progress: 'bg-orange-500/10 text-orange-400 border-orange-500/30',
     completed: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
     outline: 'bg-transparent text-gray-400 border-gray-600',
   };
@@ -61,10 +61,10 @@ export const getStatusBadgeVariant = (status: string): BadgeProps['variant'] => 
     PENDING: 'pending',
     IN_PROGRESS: 'in_progress',
     COMPLETED: 'completed',
-    SCHEDULED: 'purple',
+    SCHEDULED: 'purple', // Uses orange (primary accent)
     CANCELLED: 'error',
     NO_SHOW: 'warning',
-    ARCHIVED: 'purple',
+    ARCHIVED: 'purple', // Uses orange (primary accent)
   };
 
   return statusMap[status] || 'purple';
