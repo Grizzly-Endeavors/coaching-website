@@ -89,7 +89,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
               </span>
             </Link>
             <p className="text-sm text-gray-400 max-w-md mb-6">
-              Professional Overwatch coaching services to help you climb the ranks and improve your gameplay. Expert analysis, personalized strategies, and proven results.
+              Overwatch coaching focused on sustainable improvement. Teaching you how to think, not just what to do. GM1 across all roles with a playful, results-driven approach.
             </p>
 
             {/* Social Links */}

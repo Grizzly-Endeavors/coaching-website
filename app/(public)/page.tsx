@@ -5,14 +5,14 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Home | Overwatch Coaching',
-  description: 'Professional Overwatch coaching services. Learn about your coach - experience, achievements, and coaching philosophy. Helping players improve since 2016.',
+  description: 'Overwatch coaching focused on sustainable improvement. GM1 across all roles, 4.4k High GM on DPS. Teaching you how to think, not just what to do.',
 };
 
 const achievements = [
   {
-    title: 'Peak Rank',
-    value: 'Grandmaster',
-    description: 'Multiple seasons in top 500',
+    title: 'DPS Peak',
+    value: '4.4k',
+    description: 'High Grandmaster',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
@@ -20,9 +20,9 @@ const achievements = [
     ),
   },
   {
-    title: 'Students Coached',
-    value: '500+',
-    description: 'Across all ranks and roles',
+    title: 'All Roles',
+    value: 'GM1',
+    description: 'Tank, DPS, Support',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -30,9 +30,9 @@ const achievements = [
     ),
   },
   {
-    title: 'Experience',
-    value: '8+ Years',
-    description: 'Competitive Overwatch',
+    title: 'Coaching Since',
+    value: '2016',
+    description: 'Since game launch',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -40,12 +40,12 @@ const achievements = [
     ),
   },
   {
-    title: 'Success Rate',
-    value: '95%',
-    description: 'Students see rank improvement',
+    title: 'Approach',
+    value: 'Holistic',
+    description: 'Mindset & mechanics',
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
       </svg>
     ),
   },
@@ -68,20 +68,20 @@ const expertise = [
 
 const philosophyPoints = [
   {
-    title: 'Personalized Approach',
-    description: 'Every player is different. I tailor my coaching to your specific playstyle, strengths, and areas for improvement.',
+    title: 'Mindset Matters Most',
+    description: 'Your mental approach to the game is more important than any mechanical skill. We focus on building sustainable habits and a healthy relationship with improvement.',
   },
   {
-    title: 'Fundamental Focus',
-    description: 'While mechanics matter, I emphasize game sense, positioning, and decision-making - skills that transfer across all heroes.',
+    title: 'Quality Over Quantity',
+    description: 'Consistent short bursts of focused practice are way more effective than endless hours of aimless grinding. Make the most of your time.',
   },
   {
-    title: 'Actionable Feedback',
-    description: 'You won\'t just hear what you did wrong - you\'ll get specific, actionable steps to improve that you can apply immediately.',
+    title: 'Teaching How to Think',
+    description: 'Overwatch is too complex for cookie-cutter advice. I teach you the frameworks to figure out what to do on the fly, not memorize specific plays.',
   },
   {
-    title: 'Positive Growth Mindset',
-    description: 'Improvement takes time and practice. I create a supportive environment that encourages learning from mistakes.',
+    title: 'No Quick Fixes',
+    description: 'Real improvement requires commitment. You have to show up and do the work day after day - but I\'ll make sure that work actually matters.',
   },
 ];
 
@@ -93,10 +93,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6">
-              About Your Coach
+              Level Up Your Game
             </h1>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Helping players reach their competitive potential through expert guidance and personalized coaching
+              Sustainable improvement through teaching you how to think, not just what to do
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/pricing">
@@ -133,16 +133,16 @@ export default function HomePage() {
 
               {/* Bio */}
               <div className="order-1 lg:order-2">
-                <h2 className="text-4xl font-bold text-gray-100 mb-6">My Background</h2>
+                <h2 className="text-4xl font-bold text-gray-100 mb-6">How I Got Here</h2>
                 <div className="space-y-4 text-gray-300 leading-relaxed">
                   <p>
-                    I've been playing Overwatch competitively since the game's launch in 2016, reaching Grandmaster and top 500 across multiple seasons. What started as a passion for the game evolved into a commitment to help others improve.
+                    My dad bought us both Overwatch when it first launched. Before then, I hadn't played any shooters - hero or otherwise. But Overwatch was different. I was immediately drawn to the characters and the strategy within the game.
                   </p>
                   <p>
-                    Over the past several years, I've coached hundreds of players from Bronze to Master, helping them understand the fundamentals that separate good players from great ones. My approach focuses on sustainable improvement rather than quick fixes.
+                    I've always had a knack for breaking things down and explaining them. As I started connecting with others and making friends in the days after launch, I found myself naturally helping others understand matchups, how team comps work together, and how to get value with their hero's abilities.
                   </p>
                   <p>
-                    I specialize in all three roles (Tank, DPS, Support) and have in-depth knowledge of hero matchups, team compositions, and the ever-evolving meta. Whether you're stuck in a rank or looking to push into the next tier, I can help you get there.
+                    I've been coaching in parallel with playing organized Overwatch almost the whole time, and I'm only just now stepping away from the player side. Getting to GM on every role shaped my coaching the most - it taught me the steps for identifying issues and addressing them in a sustainable way.
                   </p>
                 </div>
               </div>
@@ -243,7 +243,7 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4">
-                Why Choose My Coaching?
+                What Sets Me Apart
               </h2>
             </div>
 
@@ -254,9 +254,9 @@ export default function HomePage() {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <div>
-                    <h3 className="font-bold text-gray-100 text-lg mb-2">Proven Track Record</h3>
+                    <h3 className="font-bold text-gray-100 text-lg mb-2">Playful Roasting Style</h3>
                     <p className="text-gray-400">
-                      Over 500 students coached with a 95% satisfaction rate. My students consistently climb ranks and achieve their competitive goals.
+                      Sessions feel less like being lectured and more like improving with a friend who keeps it real. Expect some "So... what did you think was gonna happen?" moments. It's just more fun this way.
                     </p>
                   </div>
                 </div>
@@ -266,9 +266,9 @@ export default function HomePage() {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <div>
-                    <h3 className="font-bold text-gray-100 text-lg mb-2">High-Level Experience</h3>
+                    <h3 className="font-bold text-gray-100 text-lg mb-2">Pattern Recognition Focus</h3>
                     <p className="text-gray-400">
-                      Multiple seasons in Grandmaster and top 500 means I understand what it takes to compete at the highest levels and can break it down for any rank.
+                      I review replays beforehand to filter out one-off mistakes from the ongoing patterns that are really holding you back. This is what separates external coaching from self-review.
                     </p>
                   </div>
                 </div>
@@ -278,9 +278,9 @@ export default function HomePage() {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <div>
-                    <h3 className="font-bold text-gray-100 text-lg mb-2">Personalized Attention</h3>
+                    <h3 className="font-bold text-gray-100 text-lg mb-2">All Roles at GM Level</h3>
                     <p className="text-gray-400">
-                      No cookie-cutter advice. Every coaching session is tailored to your unique playstyle, goals, and current skill level.
+                      Reaching GM1 on Tank, DPS, and Support means I understand what actually matters at every level. That high-level play is so fast it forces you to focus on what's important.
                     </p>
                   </div>
                 </div>
@@ -290,9 +290,9 @@ export default function HomePage() {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <div>
-                    <h3 className="font-bold text-gray-100 text-lg mb-2">Fast Turnaround</h3>
+                    <h3 className="font-bold text-gray-100 text-lg mb-2">Still Fun While Pushing Hard</h3>
                     <p className="text-gray-400">
-                      VOD reviews typically delivered within 2-3 days, and live coaching sessions available with flexible scheduling.
+                      At the end of the day, it's still a game. Even when you're trying to push yourself as hard as you can, it's not worth suffering for. Sustainable improvement means keeping the fun in it.
                     </p>
                   </div>
                 </div>
@@ -307,10 +307,10 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-6">
-              Ready to Start Improving?
+              Ready to Be the Best You Can Be?
             </h2>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Let's work together to take your Overwatch skills to the next level. Check out pricing options or get started with coaching today.
+              If you're engaged and willing to put in the work, I'll go above and beyond to help you get where you're trying to go. Let's get started.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/booking">

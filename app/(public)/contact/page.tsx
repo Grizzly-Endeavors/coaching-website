@@ -70,10 +70,10 @@ export default function ContactPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6">
-              Get In Touch
+              Let's Talk
             </h1>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Have questions about coaching? Want to discuss a custom package? Reach out and I'll get back to you as soon as possible.
+              Questions about coaching? Not sure which format is right for you? Reach out and let's figure it out together.
             </p>
           </div>
         </div>

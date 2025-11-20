@@ -7,16 +7,16 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 const pricingOptions = [
   {
     id: 'review-async',
-    name: 'Review on My Time',
+    name: 'Asynchronous VOD Review',
     price: '$25',
-    description: 'I review your replay code and send detailed notes via Discord or email',
+    description: 'Send me your replay codes and I\'ll send back structured notes with focused improvements',
     features: [
-      'Detailed written analysis of your gameplay',
-      'Timestamped feedback on key moments',
+      'I review your replays on my time',
+      'Structured written notes focusing on 1-2 key patterns',
       'Notes delivered via Discord or email',
+      'Most accessible option',
       'Review at your own pace',
-      '2-3 day turnaround time',
-      'Perfect for players who want detailed feedback they can reference anytime',
+      'Perfect for players who want focused feedback they can reference anytime',
     ],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,16 +27,16 @@ const pricingOptions = [
   },
   {
     id: 'vod-review',
-    name: 'VOD Review',
+    name: 'Live VOD Review',
     price: '$40',
-    description: 'I stream your replay over Discord and review it with you live',
+    description: 'We go through your replay together - I pause at key points and guide your thinking',
     features: [
-      'Live review session over Discord',
-      'Real-time discussion and Q&A',
-      'I stream the replay and provide commentary',
-      'Collaborative analysis',
-      'Session recording provided',
-      'Direct interaction and immediate answers',
+      'Live session over Discord (typically 60 minutes)',
+      'I review the code beforehand and focus on 1-2 key lessons',
+      'I pause and ask what you were thinking',
+      'I guide your thought process toward the answers',
+      'Teaching you how to think, not just what to do',
+      'Primary offering - most effective for learning',
     ],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -49,14 +49,14 @@ const pricingOptions = [
     id: 'live-coaching',
     name: 'Live Coaching',
     price: '$50',
-    description: 'You stream your game and I make corrections on the fly while you play',
+    description: 'I sit over your shoulder while you play and help break stubborn habits in real-time',
     features: [
-      'Real-time coaching during your gameplay',
-      'Instant feedback and corrections',
-      'You stream via Discord while playing',
-      'Live guidance on positioning and decision-making',
-      'Most interactive coaching experience',
-      'Immediate application of concepts',
+      'You stream your live gameplay via Discord',
+      'Real-time corrections as you play',
+      'Best for breaking stubborn habits you can\'t shake',
+      'The game moves faster than you can think - I catch patterns before they happen',
+      'Most effective for players who know what to do but struggle with execution',
+      'Helps disrupt bad patterns so you can continue improving on your own',
     ],
     icon: (
       <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,10 +99,10 @@ export default function PricingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6">
-              Coaching Pricing
+              Coaching Options
             </h1>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Choose the coaching style that fits your learning preferences and schedule
+              Three formats designed around sustainable improvement - pick what works for your situation
             </p>
           </div>
         </div>
@@ -229,10 +229,10 @@ export default function PricingPage() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-100 mb-2">
-                      Review on My Time
+                      Asynchronous VOD Review
                     </h3>
                     <p className="text-gray-400 leading-relaxed">
-                      Best for players who prefer detailed written feedback they can review at their own pace. Great if you want to focus on specific moments and have a reference document to come back to.
+                      The most accessible option. You send replay codes when it works for you, and I review them when I have the chance. You get structured notes with one or two focused things to work on - no information overload.
                     </p>
                   </div>
                 </div>
@@ -245,10 +245,10 @@ export default function PricingPage() {
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-100 mb-2">
-                      VOD Review
+                      Live VOD Review
                     </h3>
                     <p className="text-gray-400 leading-relaxed">
-                      Perfect for players who want the benefits of watching their gameplay analyzed live with the coach. You'll get real-time explanations and can ask questions as we go through your replay together.
+                      My primary offering. By asking questions about your thinking and guiding you toward the answers, you learn how to analyze your own gameplay. This is about teaching you to think, not just telling you what to do.
                     </p>
                   </div>
                 </div>
@@ -264,7 +264,7 @@ export default function PricingPage() {
                       Live Coaching
                     </h3>
                     <p className="text-gray-400 leading-relaxed">
-                      Ideal for players who learn best by doing. Get instant feedback while you play, allowing you to correct mistakes in real-time and build better habits immediately.
+                      For specific situations where you know what you need to do but have a stubborn habit you can't break. I catch patterns as they're happening and redirect you before you fall into them. Most effective for high-level execution issues.
                     </p>
                   </div>
                 </div>
@@ -287,37 +287,37 @@ export default function PricingPage() {
             <div className="space-y-6">
               <Card variant="surface" padding="lg">
                 <h3 className="text-xl font-bold text-gray-100 mb-3">
-                  How do I get started?
-                </h3>
-                <p className="text-gray-400 leading-relaxed">
-                  Select your preferred package, submit your replay codes or schedule your session, and then complete the secure payment.
-                </p>
-              </Card>
-
-              <Card variant="surface" padding="lg">
-                <h3 className="text-xl font-bold text-gray-100 mb-3">
                   What rank do I need to be?
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  All ranks are welcome! I've coached players from Bronze to Grandmaster. The coaching is tailored to your current skill level and goals.
+                  Anyone who wants to be the best they can be while still having fun. I work best with players who want to work with me - if you're engaged and willing to put in the effort, I'll go above and beyond to help you get where you're trying to go.
                 </p>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <h3 className="text-xl font-bold text-gray-100 mb-3">
-                  How long are the sessions?
+                  Is coaching really worth it for a video game?
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  VOD Review and Live Coaching sessions are typically 60 minutes. Review on My Time depends on the replay length but includes comprehensive written analysis.
+                  VODs and coaching aren't as boring as they're made out to be. It's absolutely worth investing in - even for a video game. A lot of people are turned away before they even try, but most find it way more valuable and enjoyable than they expected.
                 </p>
               </Card>
 
               <Card variant="surface" padding="lg">
                 <h3 className="text-xl font-bold text-gray-100 mb-3">
-                  Can I ask questions during the session?
+                  What's your coaching style like?
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  Absolutely! VOD Review and Live Coaching sessions are interactive - feel free to ask questions at any time. For Review on My Time, you can reach out with follow-up questions via Discord or email.
+                  Playful roasting. There will likely be some "So... what did you think was gonna happen?" moments. It makes sessions feel less like being lectured and more like improving with a friend who keeps it real. It's just more fun this way (for both of us).
+                </p>
+              </Card>
+
+              <Card variant="surface" padding="lg">
+                <h3 className="text-xl font-bold text-gray-100 mb-3">
+                  How long does it take to see improvement?
+                </h3>
+                <p className="text-gray-400 leading-relaxed">
+                  There are no quick fixes - you have to commit to showing up and doing the work day after day. But with quality practice focused on what actually matters, you'll see progress faster than grinding aimlessly for hours.
                 </p>
               </Card>
 
@@ -326,7 +326,7 @@ export default function PricingPage() {
                   What payment methods do you accept?
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
-                  We accept all major credit cards (Visa, Mastercard, American Express) through our secure Stripe payment processor.
+                  All major credit cards (Visa, Mastercard, American Express) through our secure Stripe payment processor.
                 </p>
               </Card>
             </div>
@@ -339,10 +339,10 @@ export default function PricingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-6">
-              Ready to Level Up?
+              Ready to Start?
             </h2>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Choose your coaching style and start improving today
+              Pick the format that works for you and let's get to work
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/contact">
