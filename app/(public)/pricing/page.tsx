@@ -94,7 +94,7 @@ export default function PricingPage() {
                   variant="surface"
                   padding="lg"
                   hover
-                  className={`relative ${
+                  className={`relative flex flex-col h-full ${
                     option.highlight
                       ? 'border-2 border-purple-500 shadow-[0_0_30px_rgba(139,92,246,0.3)]'
                       : ''
@@ -121,7 +121,7 @@ export default function PricingPage() {
                     </p>
                   </CardHeader>
 
-                  <CardContent className="pt-6">
+                  <CardContent className="pt-6 flex-1 flex flex-col">
                     <ul className="space-y-3 mb-8">
                       {option.features.map((feature, index) => (
                         <li key={index} className="flex items-start text-sm">
@@ -141,7 +141,7 @@ export default function PricingPage() {
                       ))}
                     </ul>
 
-                    <Link href={`/booking?type=${option.id}`} className="block">
+                    <Link href={`/booking?type=${option.id}`} className="block mt-auto">
                       <Button
                         variant={option.highlight ? 'primary' : 'outline'}
                         size="lg"
