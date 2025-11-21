@@ -24,6 +24,18 @@ export default function AdminLoginForm({ locale }: AdminLoginFormProps) {
   // Get redirect URL from query params or default to /admin
   const callbackUrl = searchParams.get('callbackUrl') || '/admin';
 
+  const handleDiscordLogin = async () => {
+    setIsLoading(true);
+    setLoginError('');
+    try {
+      await signIn('discord', { callbackUrl });
+    } catch (error) {
+      logger.error('Discord login error:', error instanceof Error ? error : new Error(String(error)));
+      setLoginError('Failed to initiate Discord login.');
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -225,6 +237,36 @@ export default function AdminLoginForm({ locale }: AdminLoginFormProps) {
               )}
             </button>
           </form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#2a2a40]"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-[#1a1a2e] text-[#6b7280]">Or continue with</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleDiscordLogin}
+            disabled={isLoading}
+            className="
+              w-full px-6 py-3 rounded-lg
+              bg-[#5865F2] hover:bg-[#4752C4]
+              text-white font-medium
+              focus:outline-none focus:ring-2 focus:ring-[#5865F2] focus:ring-offset-2 focus:ring-offset-[#1a1a2e]
+              disabled:opacity-50 disabled:cursor-not-allowed
+              transition-all duration-200
+              shadow-lg shadow-[#5865F2]/20
+              flex items-center justify-center
+            "
+          >
+            <svg className="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 2.382 2.382 0 0 0-.332.677 19.791 19.791 0 0 0-6.044 0 2.382 2.382 0 0 0-.332-.677.074.074 0 0 0-.079-.037A19.793 19.793 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .077.01c.121.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.076.076 0 0 0-.04.106c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-2.595-8.413-3.674-12.218a.07.07 0 0 0-.032-.027ZM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.956 2.419-2.157 2.419Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.086 2.157 2.419 0 1.334-.956 2.419-2.157 2.419Z" />
+            </svg>
+            Sign in with Discord
+          </button>
 
           {/* Additional Info */}
           <div className="mt-6 text-center">
