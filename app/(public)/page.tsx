@@ -35,7 +35,7 @@ const iconComponents = {
   ),
 };
 
-const achievements = (homeLocale.background.achievements as Array<{title: string; value: string; description: string}>).map((achievement, index) => ({
+const achievements = (homeLocale.background.achievements as Array<{ title: string; value: string; description: string }>).map((achievement, index) => ({
   ...achievement,
   icon: Object.values(iconComponents)[index],
 }));
@@ -55,19 +55,19 @@ const expertise = [
   },
 ];
 
-const philosophyPoints = homeLocale.philosophy.points as Array<{title: string; description: string}>;
+const philosophyPoints = homeLocale.philosophy.points as Array<{ title: string; description: string }>;
 
 export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-[#0f0f23] via-[#1a1a2e] to-[#0f0f23] py-20">
+      <section className="bg-gradient-to-b from-background-primary via-background-surface to-background-primary py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold text-text-primary mb-6">
               {homeLocale.hero.title as string}
             </h1>
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+            <p className="text-xl text-text-secondary mb-8 leading-relaxed">
               {homeLocale.hero.subtitle as string}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -87,26 +87,26 @@ export default function HomePage() {
       </section>
 
       {/* Background & Credentials */}
-      <section className="py-20 bg-[#0f0f23]">
+      <section className="py-20 bg-background-primary">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
               {/* Profile Image Placeholder */}
               <div className="order-2 lg:order-1">
-                <div className="aspect-square bg-gradient-to-br from-purple-600/20 to-purple-800/20 rounded-2xl border border-purple-600/30 flex items-center justify-center">
+                <div className="aspect-square bg-gradient-to-br from-purple-primary/20 to-purple-800/20 rounded-2xl border border-purple-primary/30 flex items-center justify-center">
                   <div className="text-center p-8">
-                    <svg className="w-32 h-32 text-purple-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-32 h-32 text-purple-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
-                    <p className="text-gray-400 text-lg">{homeLocale.background.image_placeholder.line1 as string}<br />{homeLocale.background.image_placeholder.line2 as string}</p>
+                    <p className="text-text-muted text-lg">{homeLocale.background.image_placeholder.line1 as string}<br />{homeLocale.background.image_placeholder.line2 as string}</p>
                   </div>
                 </div>
               </div>
 
               {/* Bio */}
               <div className="order-1 lg:order-2">
-                <h2 className="text-4xl font-bold text-gray-100 mb-6">{homeLocale.background.section_title as string}</h2>
-                <div className="space-y-4 text-gray-300 leading-relaxed">
+                <h2 className="text-4xl font-bold text-text-primary mb-6">{homeLocale.background.section_title as string}</h2>
+                <div className="space-y-4 text-text-secondary leading-relaxed">
                   <p>
                     {homeLocale.background.bio.paragraph_1 as string}
                   </p>
@@ -125,12 +125,12 @@ export default function HomePage() {
               {achievements.map((achievement) => (
                 <Card key={achievement.title} variant="surface" hover className="text-center">
                   <CardContent className="pt-6">
-                    <div className="flex items-center justify-center w-16 h-16 bg-purple-600/20 rounded-lg mx-auto mb-4">
-                      <div className="text-purple-400">{achievement.icon}</div>
+                    <div className="flex items-center justify-center w-16 h-16 bg-purple-primary/20 rounded-lg mx-auto mb-4">
+                      <div className="text-purple-primary">{achievement.icon}</div>
                     </div>
-                    <h3 className="text-sm font-semibold text-gray-400 mb-2">{achievement.title}</h3>
-                    <p className="text-3xl font-bold text-gray-100 mb-1">{achievement.value}</p>
-                    <p className="text-sm text-gray-400">{achievement.description}</p>
+                    <h3 className="text-sm font-semibold text-text-muted mb-2">{achievement.title}</h3>
+                    <p className="text-3xl font-bold text-text-primary mb-1">{achievement.value}</p>
+                    <p className="text-sm text-text-muted">{achievement.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -140,14 +140,14 @@ export default function HomePage() {
       </section>
 
       {/* Coaching Philosophy */}
-      <section className="py-20 bg-[#1a1a2e]">
+      <section className="py-20 bg-background-surface">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4">
+              <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-4">
                 {homeLocale.philosophy.section_title as string}
               </h2>
-              <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              <p className="text-lg text-text-muted max-w-2xl mx-auto">
                 {homeLocale.philosophy.section_subtitle as string}
               </p>
             </div>
@@ -156,12 +156,12 @@ export default function HomePage() {
               {philosophyPoints.map((point, index) => (
                 <Card key={index} variant="surface" padding="lg">
                   <div className="flex items-start">
-                    <div className="flex items-center justify-center w-8 h-8 bg-purple-600 text-white rounded-full text-sm font-bold mr-4 mt-1 flex-shrink-0">
+                    <div className="flex items-center justify-center w-8 h-8 bg-purple-primary text-white rounded-full text-sm font-bold mr-4 mt-1 flex-shrink-0">
                       {index + 1}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold text-gray-100 mb-2">{point.title}</h3>
-                      <p className="text-gray-400 leading-relaxed">{point.description}</p>
+                      <h3 className="text-xl font-bold text-text-primary mb-2">{point.title}</h3>
+                      <p className="text-text-muted leading-relaxed">{point.description}</p>
                     </div>
                   </div>
                 </Card>
@@ -172,14 +172,14 @@ export default function HomePage() {
       </section>
 
       {/* Hero Expertise */}
-      <section className="py-20 bg-[#0f0f23]">
+      <section className="py-20 bg-background-primary">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4">
+              <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-4">
                 {homeLocale.expertise.section_title as string}
               </h2>
-              <p className="text-lg text-gray-400 max-w-2xl mx-auto">
+              <p className="text-lg text-text-muted max-w-2xl mx-auto">
                 {homeLocale.expertise.section_subtitle as string}
               </p>
             </div>
@@ -195,7 +195,7 @@ export default function HomePage() {
                       {role.heroes.map((hero) => (
                         <span
                           key={hero}
-                          className="px-3 py-1 bg-purple-600/20 text-purple-400 rounded-full text-sm font-medium border border-purple-600/30"
+                          className="px-3 py-1 bg-purple-primary/20 text-purple-primary rounded-full text-sm font-medium border border-purple-primary/30"
                         >
                           {hero}
                         </span>
@@ -210,25 +210,25 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose Me */}
-      <section className="py-20 bg-[#1a1a2e]">
+      <section className="py-20 bg-background-surface">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4">
+              <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-4">
                 {homeLocale.differentiators.section_title as string}
               </h2>
             </div>
 
             <Card variant="surface" padding="lg">
               <div className="space-y-6">
-                {(homeLocale.differentiators.points as Array<{title: string; description: string}>).map((point, index) => (
+                {(homeLocale.differentiators.points as Array<{ title: string; description: string }>).map((point, index) => (
                   <div key={index} className="flex items-start">
-                    <svg className="w-6 h-6 text-purple-400 mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-6 h-6 text-purple-primary mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <div>
-                      <h3 className="font-bold text-gray-100 text-lg mb-2">{point.title}</h3>
-                      <p className="text-gray-400">
+                      <h3 className="font-bold text-text-primary text-lg mb-2">{point.title}</h3>
+                      <p className="text-text-muted">
                         {point.description}
                       </p>
                     </div>
@@ -241,13 +241,13 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-b from-[#0f0f23] to-[#1a1a2e]">
+      <section className="py-20 bg-gradient-to-b from-background-primary to-background-surface">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-6">
               {homeLocale.cta.title as string}
             </h2>
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+            <p className="text-xl text-text-secondary mb-8 leading-relaxed">
               {homeLocale.cta.description as string}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">

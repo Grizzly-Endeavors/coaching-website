@@ -48,7 +48,7 @@ const pricingOptions: Array<PricingOption & { icon: React.ReactElement }> = Obje
 }));
 
 const coachingProcess = pricingLocale.how_it_works.steps as Array<{
-  step: number;
+  number: number;
   title: string;
   description: string;
 }>;
@@ -173,9 +173,9 @@ export default function PricingPage() {
           <div className="max-w-5xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {coachingProcess.map((item) => (
-                <div key={item.step} className="text-center">
+                <div key={item.number} className="text-center">
                   <div className="flex items-center justify-center w-16 h-16 bg-purple-600 text-white rounded-full text-2xl font-bold mb-4 mx-auto shadow-[0_0_20px_rgba(139,92,246,0.4)]">
-                    {item.step}
+                    {item.number}
                   </div>
                   <h3 className="text-xl font-bold text-gray-100 mb-2">{item.title}</h3>
                   <p className="text-gray-400">{item.description}</p>

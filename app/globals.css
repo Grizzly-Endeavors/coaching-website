@@ -5,10 +5,14 @@
      COLORS - Background System
      ============================================ */
 
-  --color-background-primary: #0f0f23;    /* Main page background */
-  --color-background-surface: #1a1a2e;    /* Card backgrounds */
-  --color-background-elevated: #2a2a40;   /* Elevated surfaces, inputs */
-  --color-background-hover: #363650;      /* Hover states for elevated surfaces */
+  --color-background-primary: #0f0f23;
+  /* Main page background */
+  --color-background-surface: #1a1a2e;
+  /* Card backgrounds */
+  --color-background-elevated: #2a2a40;
+  /* Elevated surfaces, inputs */
+  --color-background-hover: #363650;
+  /* Hover states for elevated surfaces */
 
   /* ============================================
      COLORS - Brand Purple Scale
@@ -20,56 +24,65 @@
   --color-purple-300: #d8b4fe;
   --color-purple-400: #c084fc;
   --color-purple-500: #a855f7;
-  --color-purple-600: #8b5cf6;    /* Primary brand color */
+  --color-purple-600: #8b5cf6;
+  /* Primary brand color */
   --color-purple-700: #7c3aed;
   --color-purple-800: #6d28d9;
   --color-purple-900: #5b21b6;
   --color-purple-950: #4c1d95;
 
   /* Brand semantic colors */
-  --color-purple-primary: #8b5cf6;         /* Primary brand color */
-  --color-purple-hover: #a78bfa;           /* Hover state */
-  --color-purple-active: #7c3aed;          /* Active/pressed state */
-  --color-purple-glow: rgba(139, 92, 246, 0.3);  /* Glow effects */
+  --color-purple-primary: #8b5cf6;
+  /* Primary brand color */
+  --color-purple-hover: #a78bfa;
+  /* Hover state */
+  --color-purple-active: #7c3aed;
+  /* Active/pressed state */
+  --color-purple-glow: rgba(139, 92, 246, 0.3);
+  /* Glow effects */
 
   /* ============================================
      COLORS - Text System
      ============================================ */
 
-  --color-text-primary: #e5e7eb;      /* Primary text, headings */
-  --color-text-secondary: #9ca3af;    /* Secondary text, body copy */
-  --color-text-muted: #6b7280;        /* Muted text, placeholders */
-  --color-text-inverse: #0f0f23;      /* Text on light backgrounds */
+  --color-text-primary: #e5e7eb;
+  /* Primary text, headings */
+  --color-text-secondary: #9ca3af;
+  /* Secondary text, body copy */
+  --color-text-muted: #6b7280;
+  /* Muted text, placeholders */
+  --color-text-inverse: #0f0f23;
+  /* Text on light backgrounds */
 
   /* ============================================
      COLORS - Border System
      ============================================ */
 
-  --color-border: #2a2a40;              /* Default borders */
-  --color-border-hover: #363650;        /* Hover state borders */
-  --color-border-focus: #8b5cf6;        /* Focus state borders */
+  --color-border: #2a2a40;
+  /* Default borders */
+  --color-border-hover: #363650;
+  /* Hover state borders */
+  --color-border-focus: #8b5cf6;
+  /* Focus state borders */
 
   /* ============================================
      COLORS - Status/Feedback
      ============================================ */
 
-  --color-status-success: #10b981;    /* Success states, emerald */
-  --color-status-warning: #f59e0b;    /* Warning states, amber */
-  --color-status-error: #ef4444;      /* Error states, red */
-  --color-status-info: #3b82f6;       /* Info states, blue */
+  --color-status-success: #10b981;
+  /* Success states, emerald */
+  --color-status-warning: #f59e0b;
+  /* Warning states, amber */
+  --color-status-error: #ef4444;
+  /* Error states, red */
+  --color-status-info: #3b82f6;
+  /* Info states, blue */
 
   /* ============================================
      SPACING SYSTEM
      ============================================ */
 
-  --spacing-xs: 0.25rem;     /* 4px */
-  --spacing-sm: 0.5rem;      /* 8px */
-  --spacing-md: 1rem;        /* 16px */
-  --spacing-lg: 1.5rem;      /* 24px */
-  --spacing-xl: 2rem;        /* 32px */
-  --spacing-2xl: 3rem;       /* 48px */
-  --spacing-3xl: 4rem;       /* 64px */
-  --spacing-4xl: 6rem;       /* 96px */
+  /* Removed conflicting spacing variables that were breaking max-width utilities */
 
   /* ============================================
      TYPOGRAPHY - Font Families
@@ -82,16 +95,26 @@
      TYPOGRAPHY - Font Sizes
      ============================================ */
 
-  --font-size-xs: 0.75rem;      /* 12px */
-  --font-size-sm: 0.875rem;     /* 14px */
-  --font-size-base: 1rem;       /* 16px */
-  --font-size-lg: 1.125rem;     /* 18px */
-  --font-size-xl: 1.25rem;      /* 20px */
-  --font-size-2xl: 1.5rem;      /* 24px */
-  --font-size-3xl: 1.875rem;    /* 30px */
-  --font-size-4xl: 2.25rem;     /* 36px */
-  --font-size-5xl: 3rem;        /* 48px */
-  --font-size-6xl: 3.75rem;     /* 60px */
+  --font-size-xs: 0.75rem;
+  /* 12px */
+  --font-size-sm: 0.875rem;
+  /* 14px */
+  --font-size-base: 1rem;
+  /* 16px */
+  --font-size-lg: 1.125rem;
+  /* 18px */
+  --font-size-xl: 1.25rem;
+  /* 20px */
+  --font-size-2xl: 1.5rem;
+  /* 24px */
+  --font-size-3xl: 1.875rem;
+  /* 30px */
+  --font-size-4xl: 2.25rem;
+  /* 36px */
+  --font-size-5xl: 3rem;
+  /* 48px */
+  --font-size-6xl: 3.75rem;
+  /* 60px */
 
   /* ============================================
      TYPOGRAPHY - Font Weights
@@ -115,13 +138,20 @@
      BORDERS & RADII
      ============================================ */
 
-  --radius-sm: 0.375rem;    /* 6px */
-  --radius: 0.5rem;         /* 8px - default */
-  --radius-md: 0.5rem;      /* 8px */
-  --radius-lg: 0.75rem;     /* 12px */
-  --radius-xl: 1rem;        /* 16px */
-  --radius-2xl: 1.5rem;     /* 24px */
-  --radius-full: 9999px;    /* Pill shape */
+  --radius-sm: 0.375rem;
+  /* 6px */
+  --radius: 0.5rem;
+  /* 8px - default */
+  --radius-md: 0.5rem;
+  /* 8px */
+  --radius-lg: 0.75rem;
+  /* 12px */
+  --radius-xl: 1rem;
+  /* 16px */
+  --radius-2xl: 1.5rem;
+  /* 24px */
+  --radius-full: 9999px;
+  /* Pill shape */
 
   --border-width-thin: 1px;
   --border-width-medium: 2px;
@@ -199,42 +229,92 @@
      ============================================ */
 
   @keyframes fadeIn {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes fadeInUp {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes fadeInDown {
-    0% { opacity: 0; transform: translateY(-20px); }
-    100% { opacity: 1; transform: translateY(0); }
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
-    50% { box-shadow: 0 0 30px rgba(139, 92, 246, 0.5); }
+
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+
+    50% {
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+    }
   }
 
   @keyframes slideInRight {
-    0% { transform: translateX(-100%); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
+    0% {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
 
   @keyframes slideInLeft {
-    0% { transform: translateX(100%); opacity: 0; }
-    100% { transform: translateX(0); opacity: 1; }
+    0% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    100% {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
 
   @keyframes bounceSubtle {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-5px);
+    }
   }
 }
 
 @layer base {
+
   /* Smooth scrolling for anchor links */
   html {
     scroll-behavior: smooth;
@@ -363,13 +443,14 @@
 }
 
 @layer components {
+
   /* Primary button with purple glow effect */
   .btn-primary {
     @apply bg-purple-primary hover:bg-purple-hover text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-purple-glow active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-primary:hover:not(:disabled) {
-    box-shadow: 0 0 25px var(--purple-glow);
+    box-shadow: 0 0 25px var(--color-purple-glow);
   }
 
   /* Secondary button with border */
@@ -420,11 +501,11 @@
 
   /* Glow effect utility */
   .glow-effect {
-    box-shadow: 0 0 20px var(--purple-glow);
+    box-shadow: 0 0 20px var(--color-purple-glow);
   }
 
   .glow-effect-lg {
-    box-shadow: 0 0 30px var(--purple-glow);
+    box-shadow: 0 0 30px var(--color-purple-glow);
   }
 
   .glow-effect-xl {
@@ -473,22 +554,22 @@
 
   /* Hero gradient background */
   .hero-gradient {
-    background: linear-gradient(
-      135deg,
-      var(--bg-primary) 0%,
-      var(--bg-surface) 50%,
-      var(--bg-primary) 100%
-    );
+    background: linear-gradient(135deg,
+        var(--color-background-primary) 0%,
+        var(--color-background-surface) 50%,
+        var(--color-background-primary) 100%);
   }
 
   /* Content max width container */
-  .content-container {
-    max-width: var(--content-max-width);
+  .container {
+    max-width: 1280px;
+    /* Hardcoded for safety */
     @apply mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
 
 @layer utilities {
+
   /* Text utilities */
   .text-balance {
     text-wrap: balance;
@@ -533,7 +614,7 @@
   /* Custom scrollbar */
   .scrollbar-custom {
     scrollbar-width: thin;
-    scrollbar-color: var(--purple-primary) var(--bg-elevated);
+    scrollbar-color: var(--color-purple-primary) var(--color-background-elevated);
   }
 
   .scrollbar-custom::-webkit-scrollbar {
@@ -542,17 +623,17 @@
   }
 
   .scrollbar-custom::-webkit-scrollbar-track {
-    background: var(--bg-elevated);
+    background: var(--color-background-elevated);
     border-radius: 4px;
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb {
-    background: var(--purple-primary);
+    background: var(--color-purple-primary);
     border-radius: 4px;
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-    background: var(--purple-hover);
+    background: var(--color-purple-hover);
   }
 }
 
@@ -560,7 +641,7 @@
 .hljs {
   @apply bg-background-elevated rounded-lg p-4 overflow-x-auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--purple-primary) var(--bg-elevated);
+  scrollbar-color: var(--color-purple-primary) var(--color-background-elevated);
 }
 
 .hljs::-webkit-scrollbar {
@@ -569,17 +650,17 @@
 }
 
 .hljs::-webkit-scrollbar-track {
-  background: var(--bg-elevated);
+  background: var(--color-background-elevated);
   border-radius: 4px;
 }
 
 .hljs::-webkit-scrollbar-thumb {
-  background: var(--purple-primary);
+  background: var(--color-purple-primary);
   border-radius: 4px;
 }
 
 .hljs::-webkit-scrollbar-thumb:hover {
-  background: var(--purple-hover);
+  background: var(--color-purple-hover);
 }
 
 .hljs-comment,
@@ -652,6 +733,7 @@
   0% {
     background-position: -1000px 0;
   }
+
   100% {
     background-position: 1000px 0;
   }
@@ -659,12 +741,10 @@
 
 .animate-shimmer {
   animation: shimmer 2s infinite linear;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(139, 92, 246, 0.1) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(to right,
+      transparent 0%,
+      rgba(139, 92, 246, 0.1) 50%,
+      transparent 100%);
   background-size: 1000px 100%;
 }
 
@@ -672,12 +752,10 @@
 .skeleton {
   @apply bg-background-elevated rounded;
   animation: shimmer 2s infinite linear;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(139, 92, 246, 0.1) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(to right,
+      transparent 0%,
+      rgba(139, 92, 246, 0.1) 50%,
+      transparent 100%);
   background-size: 1000px 100%;
 }
 
@@ -729,6 +807,7 @@
 
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

@@ -101,14 +101,14 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   ]);
 
   return (
-    <div className="min-h-screen bg-[#0f0f23] py-16 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-background-primary py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl sm:text-5xl font-bold text-[#e5e7eb] mb-4 tracking-tight">
+          <h1 className="text-4xl sm:text-5xl font-bold text-text-primary mb-4 tracking-tight">
             {blogLocale.listing.title as string}
           </h1>
-          <p className="text-lg text-[#9ca3af] max-w-3xl">
+          <p className="text-lg text-text-secondary max-w-3xl">
             {blogLocale.listing.description as string}
           </p>
         </div>
@@ -123,9 +123,9 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         {/* Blog Post Grid */}
         {posts.length === 0 ? (
           <div className="text-center py-16">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-[#1a1a2e] mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-background-surface mb-4">
               <svg
-                className="w-8 h-8 text-[#6b7280]"
+                className="w-8 h-8 text-text-muted"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -138,10 +138,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
                 />
               </svg>
             </div>
-            <h2 className="text-2xl font-bold text-[#e5e7eb] mb-2">
+            <h2 className="text-2xl font-bold text-text-primary mb-2">
               {currentTag ? (blogLocale.listing.empty.no_filtered_posts.title as string) : (blogLocale.listing.empty.no_posts.title as string)}
             </h2>
-            <p className="text-[#9ca3af] mb-6">
+            <p className="text-text-secondary mb-6">
               {currentTag
                 ? (blogLocale.listing.empty.no_filtered_posts.description as string)
                 : (blogLocale.listing.empty.no_posts.description as string)}
@@ -149,7 +149,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {currentTag && (
               <a
                 href="/blog"
-                className="inline-flex items-center px-6 py-3 rounded-lg bg-[#8b5cf6] text-white font-medium hover:bg-[#a78bfa] transition-colors shadow-lg shadow-purple-500/30"
+                className="inline-flex items-center px-6 py-3 rounded-lg bg-purple-primary text-white font-medium hover:bg-purple-hover transition-colors shadow-lg shadow-purple-glow"
               >
                 {blogLocale.listing.empty.no_filtered_posts.button as string}
               </a>
@@ -176,23 +176,23 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         {/* Call to Action */}
         {posts.length > 0 && (
           <div className="mt-16 text-center">
-            <div className="bg-gradient-to-r from-[#1a1a2e] to-[#2a2a40] rounded-lg p-8 border border-[#8b5cf6]/30">
-              <h2 className="text-2xl font-bold text-[#e5e7eb] mb-3">
+            <div className="bg-gradient-to-r from-background-surface to-background-elevated rounded-lg p-8 border border-purple-primary/30">
+              <h2 className="text-2xl font-bold text-text-primary mb-3">
                 {blogLocale.listing.cta.title as string}
               </h2>
-              <p className="text-[#9ca3af] mb-6 max-w-2xl mx-auto">
+              <p className="text-text-secondary mb-6 max-w-2xl mx-auto">
                 {blogLocale.listing.cta.description as string}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="/booking"
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#8b5cf6] text-white font-medium hover:bg-[#a78bfa] transition-all shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-purple-primary text-white font-medium hover:bg-purple-hover transition-all shadow-lg shadow-purple-glow hover:shadow-purple-glow-md"
                 >
                   {blogLocale.listing.cta.buttons.book_session as string}
                 </a>
                 <a
                   href="/booking#replay-submission"
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#1a1a2e] text-[#e5e7eb] font-medium border border-[#2a2a40] hover:border-[#8b5cf6] transition-all"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-background-surface text-text-primary font-medium border border-border hover:border-purple-primary transition-all"
                 >
                   {blogLocale.listing.cta.buttons.submit_replay as string}
                 </a>

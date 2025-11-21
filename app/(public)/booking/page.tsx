@@ -286,13 +286,13 @@ function BookingContent() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Header Section */}
-      <section className="bg-gradient-to-b from-[#0f0f23] via-[#1a1a2e] to-[#0f0f23] py-20">
+      <section className="bg-gradient-to-b from-background-primary via-background-surface to-background-primary py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-100 mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold text-text-primary mb-6">
               Get Coaching
             </h1>
-            <p className="text-xl text-gray-300 mb-8 leading-relaxed">
+            <p className="text-xl text-text-secondary mb-8 leading-relaxed">
               {!discordConnected
                 ? 'First, connect your Discord account to get started'
                 : selectedType
@@ -304,14 +304,14 @@ function BookingContent() {
       </section>
 
       {/* Content Section */}
-      <section className="py-20 bg-[#0f0f23] flex-grow">
+      <section className="py-20 bg-background-primary flex-grow">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Discord Connection - Always show first if not connected */}
           {!discordConnected && (
             <div className="max-w-2xl mx-auto mb-12">
               <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-100 mb-4">Step 1: Connect Discord</h2>
-                <p className="text-gray-400 leading-relaxed">
+                <h2 className="text-3xl font-bold text-text-primary mb-4">Step 1: Connect Discord</h2>
+                <p className="text-text-muted leading-relaxed">
                   All coaching sessions are conducted over Discord. You'll join our coaching server where we'll schedule sessions, conduct reviews, and I'll send you notifications when your review is ready.
                 </p>
               </div>
@@ -323,9 +323,9 @@ function BookingContent() {
           {discordConnected && !selectedType && (
             <div className="max-w-5xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold text-gray-100 mb-4">Step 2: Select Your Coaching Style</h2>
-                <p className="text-gray-400 leading-relaxed">
-                  Not sure which one to choose? <a href="/pricing" className="text-purple-400 hover:text-purple-300 underline">View detailed pricing and comparisons</a>
+                <h2 className="text-3xl font-bold text-text-primary mb-4">Step 2: Select Your Coaching Style</h2>
+                <p className="text-text-muted leading-relaxed">
+                  Not sure which one to choose? <a href="/pricing" className="text-purple-primary hover:text-purple-hover underline">View detailed pricing and comparisons</a>
                 </p>
               </div>
 
@@ -335,15 +335,15 @@ function BookingContent() {
                     key={type.id}
                     variant="surface"
                     hover
-                    className="cursor-pointer transition-all duration-200 hover:border-purple-500"
+                    className="cursor-pointer transition-all duration-200 hover:border-purple-primary"
                     onClick={() => handleTypeSelection(type.id)}
                   >
                     <CardContent className="text-center py-8">
-                      <div className="flex items-center justify-center w-16 h-16 bg-purple-600/20 rounded-lg mx-auto mb-4">
-                        <div className="text-purple-400">{type.icon}</div>
+                      <div className="flex items-center justify-center w-16 h-16 bg-purple-primary/20 rounded-lg mx-auto mb-4">
+                        <div className="text-purple-primary">{type.icon}</div>
                       </div>
-                      <h3 className="text-xl font-bold text-gray-100 mb-3">{type.name}</h3>
-                      <p className="text-gray-400 text-sm leading-relaxed mb-4">
+                      <h3 className="text-xl font-bold text-text-primary mb-3">{type.name}</h3>
+                      <p className="text-text-muted text-sm leading-relaxed mb-4">
                         {type.description}
                       </p>
                       <Button variant="outline" size="sm" className="w-full">
@@ -366,14 +366,14 @@ function BookingContent() {
               </div>
 
               <div className="mb-8">
-                <h2 className="text-3xl font-bold text-gray-100 mb-4">
+                <h2 className="text-3xl font-bold text-text-primary mb-4">
                   {selectedType === 'review-async' ? 'Submit Your Replay Codes' : 'Submit Codes & Schedule Session'}
                 </h2>
-                <p className="text-gray-400 leading-relaxed mb-4">
+                <p className="text-text-muted leading-relaxed mb-4">
                   {getCoachingTypeDescription()}
                 </p>
-                <div className="bg-purple-600/10 border border-purple-600/30 rounded-lg p-4">
-                  <p className="text-purple-400 font-medium">
+                <div className="bg-purple-primary/10 border border-purple-primary/30 rounded-lg p-4">
+                  <p className="text-purple-primary font-medium">
                     {getTurnaroundMessage()}
                   </p>
                 </div>
@@ -382,409 +382,409 @@ function BookingContent() {
               {/* For VOD Review and Live Coaching: Show form and time picker side-by-side */}
               {(selectedType === 'vod-review' || selectedType === 'live-coaching') ? (
                 <>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                  {/* Left column: Form */}
-                  <div>
-                    <Card variant="surface" padding="lg">
-                <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
-                  {/* Contact Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <Input
-                      label="Email Address"
-                      name="email"
-                      type="email"
-                      inputType="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      error={errors.email}
-                      required
-                      placeholder="your.email@example.com"
-                      disabled={isSubmitting}
-                      helperText="Where should I send the review?"
-                    />
-
-                    <Input
-                      label="Discord Tag"
-                      name="discordTag"
-                      type="text"
-                      value={formData.discordTag}
-                      onChange={handleChange}
-                      error={errors.discordTag}
-                      placeholder="YourName#1234"
-                      disabled={isSubmitting}
-                      helperText="Optional - for follow-up questions"
-                    />
-                  </div>
-
-                  {/* Player Information */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                    {/* Left column: Form */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Current Rank <span className="text-red-500">*</span>
-                      </label>
-                      <select
-                        name="rank"
-                        value={formData.rank || ''}
-                        onChange={handleChange}
-                        required
-                        disabled={isSubmitting}
-                        className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'}`}
-                      >
-                        <option value="" disabled>Select your rank</option>
-                        {rankOptions.map((rank) => (
-                          <option key={rank} value={rank}>{rank}</option>
-                        ))}
-                      </select>
-                      {errors.rank && (
-                        <p className="mt-1.5 text-sm text-red-400">{errors.rank}</p>
-                      )}
+                      <Card variant="surface" padding="lg">
+                        <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
+                          {/* Contact Information */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <Input
+                              label="Email Address"
+                              name="email"
+                              type="email"
+                              inputType="email"
+                              value={formData.email}
+                              onChange={handleChange}
+                              error={errors.email}
+                              required
+                              placeholder="your.email@example.com"
+                              disabled={isSubmitting}
+                              helperText="Where should I send the review?"
+                            />
+
+                            <Input
+                              label="Discord Tag"
+                              name="discordTag"
+                              type="text"
+                              value={formData.discordTag}
+                              onChange={handleChange}
+                              error={errors.discordTag}
+                              placeholder="YourName#1234"
+                              disabled={isSubmitting}
+                              helperText="Optional - for follow-up questions"
+                            />
+                          </div>
+
+                          {/* Player Information */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                              <label className="block text-sm font-medium text-text-secondary mb-2">
+                                Current Rank <span className="text-status-error">*</span>
+                              </label>
+                              <select
+                                name="rank"
+                                value={formData.rank || ''}
+                                onChange={handleChange}
+                                required
+                                disabled={isSubmitting}
+                                className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-status-error' : 'border-border hover:border-purple-primary/50'}`}
+                              >
+                                <option value="" disabled>Select your rank</option>
+                                {rankOptions.map((rank) => (
+                                  <option key={rank} value={rank}>{rank}</option>
+                                ))}
+                              </select>
+                              {errors.rank && (
+                                <p className="mt-1.5 text-sm text-status-error">{errors.rank}</p>
+                              )}
+                            </div>
+
+                            <div>
+                              <label className="block text-sm font-medium text-text-secondary mb-2">
+                                Role <span className="text-status-error">*</span>
+                              </label>
+                              <select
+                                name="role"
+                                value={formData.role || ''}
+                                onChange={handleChange}
+                                required
+                                disabled={isSubmitting}
+                                className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-status-error' : 'border-border hover:border-purple-primary/50'}`}
+                              >
+                                <option value="" disabled>Select your role</option>
+                                {roleOptions.map((role) => (
+                                  <option key={role} value={role}>{role}</option>
+                                ))}
+                              </select>
+                              {errors.role && (
+                                <p className="mt-1.5 text-sm text-status-error">{errors.role}</p>
+                              )}
+                            </div>
+                          </div>
+
+                          <Input
+                            label="Hero Played"
+                            name="hero"
+                            type="text"
+                            value={formData.hero}
+                            onChange={handleChange}
+                            error={errors.hero}
+                            placeholder="e.g., Ana, Reinhardt, Tracer"
+                            disabled={isSubmitting}
+                            helperText="Optional - helps me provide more specific feedback"
+                          />
+
+                          {/* Replay Codes Section */}
+                          <div className="space-y-4">
+                            <h3 className="text-lg font-semibold text-text-primary">
+                              Replay Codes <span className="text-status-error">*</span>
+                            </h3>
+
+                            {errors.replays && typeof errors.replays === 'string' && (
+                              <p className="text-sm text-status-error">{errors.replays}</p>
+                            )}
+
+                            <div className="space-y-3">
+                              {[0, 1, 2].map((index) => (
+                                <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                  <Input
+                                    label={index === 0 ? "Replay Code" : `Replay Code ${index + 1} (optional)`}
+                                    name={`replay-code-${index}`}
+                                    type="text"
+                                    value={formData.replays?.[index]?.code || ''}
+                                    onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
+                                    error={Array.isArray(errors.replays) ? errors.replays?.[index]?.code : undefined}
+                                    required={index === 0}
+                                    placeholder="ABC123"
+                                    disabled={isSubmitting}
+                                    className="font-mono"
+                                  />
+
+                                  <Input
+                                    label={index === 0 ? "Map Name" : `Map Name ${index + 1} (optional)`}
+                                    name={`map-name-${index}`}
+                                    type="text"
+                                    value={formData.replays?.[index]?.mapName || ''}
+                                    onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
+                                    error={Array.isArray(errors.replays) ? errors.replays?.[index]?.mapName : undefined}
+                                    required={index === 0}
+                                    placeholder="e.g., King's Row, Ilios"
+                                    disabled={isSubmitting}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* General Notes Section */}
+                          <div>
+                            <Input
+                              label="Notes for Coach"
+                              name="general-notes"
+                              inputType="textarea"
+                              rows={3}
+                              value={generalNotes}
+                              onChange={(e) => setGeneralNotes(e.target.value)}
+                              placeholder="Any specific moments or questions about your replays? What would you like to focus on?"
+                              disabled={isSubmitting}
+                              helperText="Optional - help me understand what you'd like to work on"
+                            />
+                          </div>
+
+                          {submitStatus === 'error' && (
+                            <div className="p-4 bg-status-error/10 border border-status-error/30 rounded-lg">
+                              <p className="text-status-error font-medium">
+                                Failed to submit. Please try again or contact me directly.
+                              </p>
+                            </div>
+                          )}
+
+                        </form>
+                      </Card>
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Role <span className="text-red-500">*</span>
-                      </label>
-                      <select
-                        name="role"
-                        value={formData.role || ''}
-                        onChange={handleChange}
-                        required
-                        disabled={isSubmitting}
-                        className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'}`}
-                      >
-                        <option value="" disabled>Select your role</option>
-                        {roleOptions.map((role) => (
-                          <option key={role} value={role}>{role}</option>
-                        ))}
-                      </select>
-                      {errors.role && (
-                        <p className="mt-1.5 text-sm text-red-400">{errors.role}</p>
-                      )}
+                    {/* Right column: Time Slot Picker */}
+                    <div id="time-slot-picker" className="lg:sticky lg:top-4 lg:self-start">
+                      <TimeSlotPicker
+                        sessionType={selectedType}
+                        onSelectSlot={setSelectedTimeSlot}
+                        selectedSlot={selectedTimeSlot}
+                      />
                     </div>
                   </div>
 
-                  <Input
-                    label="Hero Played"
-                    name="hero"
-                    type="text"
-                    value={formData.hero}
-                    onChange={handleChange}
-                    error={errors.hero}
-                    placeholder="e.g., Ana, Reinhardt, Tracer"
-                    disabled={isSubmitting}
-                    helperText="Optional - helps me provide more specific feedback"
-                  />
-
-                  {/* Replay Codes Section */}
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-100">
-                      Replay Codes <span className="text-red-500">*</span>
-                    </h3>
-
-                    {errors.replays && typeof errors.replays === 'string' && (
-                      <p className="text-sm text-red-400">{errors.replays}</p>
+                  {/* Error and Submit Section - Below both columns */}
+                  <div className="max-w-2xl mx-auto space-y-4">
+                    {submitStatus === 'error' && (
+                      <div className="p-4 bg-status-error/10 border border-status-error/30 rounded-lg text-center">
+                        <p className="text-status-error font-medium">
+                          Failed to submit. Please try again or contact me directly.
+                        </p>
+                      </div>
                     )}
 
-                    <div className="space-y-3">
-                      {[0, 1, 2].map((index) => (
-                        <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <Input
-                            label={index === 0 ? "Replay Code" : `Replay Code ${index + 1} (optional)`}
-                            name={`replay-code-${index}`}
-                            type="text"
-                            value={formData.replays?.[index]?.code || ''}
-                            onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
-                            error={Array.isArray(errors.replays) ? errors.replays?.[index]?.code : undefined}
-                            required={index === 0}
-                            placeholder="ABC123"
-                            disabled={isSubmitting}
-                            className="font-mono"
-                          />
+                    {errors.timeSlot && (
+                      <div className="p-4 bg-status-error/10 border border-status-error/30 rounded-lg text-center">
+                        <p className="text-status-error font-medium">
+                          {errors.timeSlot}
+                        </p>
+                      </div>
+                    )}
 
-                          <Input
-                            label={index === 0 ? "Map Name" : `Map Name ${index + 1} (optional)`}
-                            name={`map-name-${index}`}
-                            type="text"
-                            value={formData.replays?.[index]?.mapName || ''}
-                            onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
-                            error={Array.isArray(errors.replays) ? errors.replays?.[index]?.mapName : undefined}
-                            required={index === 0}
-                            placeholder="e.g., King's Row, Ilios"
-                            disabled={isSubmitting}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* General Notes Section */}
-                  <div>
-                    <Input
-                      label="Notes for Coach"
-                      name="general-notes"
-                      inputType="textarea"
-                      rows={3}
-                      value={generalNotes}
-                      onChange={(e) => setGeneralNotes(e.target.value)}
-                      placeholder="Any specific moments or questions about your replays? What would you like to focus on?"
+                    <Button
+                      type="button"
+                      variant="primary"
+                      size="lg"
+                      className="w-full"
+                      loading={isSubmitting}
                       disabled={isSubmitting}
-                      helperText="Optional - help me understand what you'd like to work on"
-                    />
+                      onClick={() => formRef.current?.requestSubmit()}
+                    >
+                      {isSubmitting ? 'Processing...' : 'Continue to Payment'}
+                    </Button>
+
+                    <div className="text-center">
+                      <button
+                        type="button"
+                        onClick={() => setFriendCodeDialogOpen(true)}
+                        className="text-xs text-text-muted hover:text-text-secondary underline transition-colors"
+                      >
+                        or use a code
+                      </button>
+                    </div>
+
+                    <p className="text-sm text-text-muted text-center">
+                      By submitting, you agree to our terms of service and privacy policy
+                    </p>
                   </div>
-
-                  {submitStatus === 'error' && (
-                    <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-                      <p className="text-red-400 font-medium">
-                        Failed to submit. Please try again or contact me directly.
-                      </p>
-                    </div>
-                  )}
-
-                </form>
-              </Card>
-            </div>
-
-            {/* Right column: Time Slot Picker */}
-            <div id="time-slot-picker" className="lg:sticky lg:top-4 lg:self-start">
-              <TimeSlotPicker
-                sessionType={selectedType}
-                onSelectSlot={setSelectedTimeSlot}
-                selectedSlot={selectedTimeSlot}
-              />
-            </div>
-          </div>
-
-          {/* Error and Submit Section - Below both columns */}
-          <div className="max-w-2xl mx-auto space-y-4">
-            {submitStatus === 'error' && (
-              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-center">
-                <p className="text-red-400 font-medium">
-                  Failed to submit. Please try again or contact me directly.
-                </p>
-              </div>
-            )}
-
-            {errors.timeSlot && (
-              <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg text-center">
-                <p className="text-red-400 font-medium">
-                  {errors.timeSlot}
-                </p>
-              </div>
-            )}
-
-            <Button
-              type="button"
-              variant="primary"
-              size="lg"
-              className="w-full"
-              loading={isSubmitting}
-              disabled={isSubmitting}
-              onClick={() => formRef.current?.requestSubmit()}
-            >
-              {isSubmitting ? 'Processing...' : 'Continue to Payment'}
-            </Button>
-
-            <div className="text-center">
-              <button
-                type="button"
-                onClick={() => setFriendCodeDialogOpen(true)}
-                className="text-xs text-gray-500 hover:text-gray-400 underline transition-colors"
-              >
-                or use a code
-              </button>
-            </div>
-
-            <p className="text-sm text-gray-400 text-center">
-              By submitting, you agree to our terms of service and privacy policy
-            </p>
-          </div>
-        </>
-        ) : (
-          /* For Review Async: Show only the form */
-          <Card variant="surface" padding="lg">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Contact Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Input
-                  label="Email Address"
-                  name="email"
-                  type="email"
-                  inputType="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  error={errors.email}
-                  required
-                  placeholder="your.email@example.com"
-                  disabled={isSubmitting}
-                  helperText="Where should I send the review?"
-                />
-
-                <Input
-                  label="Discord Tag"
-                  name="discordTag"
-                  type="text"
-                  value={formData.discordTag}
-                  onChange={handleChange}
-                  error={errors.discordTag}
-                  placeholder="YourName#1234"
-                  disabled={isSubmitting}
-                  helperText="Optional - for follow-up questions"
-                />
-              </div>
-
-              {/* Player Information */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Current Rank <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="rank"
-                    value={formData.rank || ''}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                    className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'}`}
-                  >
-                    <option value="" disabled>Select your rank</option>
-                    {rankOptions.map((rank) => (
-                      <option key={rank} value={rank}>{rank}</option>
-                    ))}
-                  </select>
-                  {errors.rank && (
-                    <p className="mt-1.5 text-sm text-red-400">{errors.rank}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Role <span className="text-red-500">*</span>
-                  </label>
-                  <select
-                    name="role"
-                    value={formData.role || ''}
-                    onChange={handleChange}
-                    required
-                    disabled={isSubmitting}
-                    className={`w-full px-4 py-2.5 bg-[#1a1a2e] border rounded-lg text-gray-200 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-red-500' : 'border-[#2a2a40] hover:border-purple-600/50'}`}
-                  >
-                    <option value="" disabled>Select your role</option>
-                    {roleOptions.map((role) => (
-                      <option key={role} value={role}>{role}</option>
-                    ))}
-                  </select>
-                  {errors.role && (
-                    <p className="mt-1.5 text-sm text-red-400">{errors.role}</p>
-                  )}
-                </div>
-              </div>
-
-              <Input
-                label="Hero Played"
-                name="hero"
-                type="text"
-                value={formData.hero}
-                onChange={handleChange}
-                error={errors.hero}
-                placeholder="e.g., Ana, Reinhardt, Tracer"
-                disabled={isSubmitting}
-                helperText="Optional - helps me provide more specific feedback"
-              />
-
-              {/* Replay Codes Section */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-gray-100">
-                  Replay Codes <span className="text-red-500">*</span>
-                </h3>
-
-                {errors.replays && typeof errors.replays === 'string' && (
-                  <p className="text-sm text-red-400">{errors.replays}</p>
-                )}
-
-                <div className="space-y-3">
-                  {[0, 1, 2].map((index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                </>
+              ) : (
+                /* For Review Async: Show only the form */
+                <Card variant="surface" padding="lg">
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Contact Information */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <Input
-                        label={index === 0 ? "Replay Code" : `Replay Code ${index + 1} (optional)`}
-                        name={`replay-code-${index}`}
-                        type="text"
-                        value={formData.replays?.[index]?.code || ''}
-                        onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
-                        error={Array.isArray(errors.replays) ? errors.replays?.[index]?.code : undefined}
-                        required={index === 0}
-                        placeholder="ABC123"
+                        label="Email Address"
+                        name="email"
+                        type="email"
+                        inputType="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        error={errors.email}
+                        required
+                        placeholder="your.email@example.com"
                         disabled={isSubmitting}
-                        className="font-mono"
+                        helperText="Where should I send the review?"
                       />
 
                       <Input
-                        label={index === 0 ? "Map Name" : `Map Name ${index + 1} (optional)`}
-                        name={`map-name-${index}`}
+                        label="Discord Tag"
+                        name="discordTag"
                         type="text"
-                        value={formData.replays?.[index]?.mapName || ''}
-                        onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
-                        error={Array.isArray(errors.replays) ? errors.replays?.[index]?.mapName : undefined}
-                        required={index === 0}
-                        placeholder="e.g., King's Row, Ilios"
+                        value={formData.discordTag}
+                        onChange={handleChange}
+                        error={errors.discordTag}
+                        placeholder="YourName#1234"
                         disabled={isSubmitting}
+                        helperText="Optional - for follow-up questions"
                       />
                     </div>
-                  ))}
-                </div>
-              </div>
 
-              {/* General Notes Section */}
-              <div>
-                <Input
-                  label="Notes for Coach"
-                  name="general-notes"
-                  inputType="textarea"
-                  rows={3}
-                  value={generalNotes}
-                  onChange={(e) => setGeneralNotes(e.target.value)}
-                  placeholder="Any specific moments or questions about your replays? What would you like to focus on?"
-                  disabled={isSubmitting}
-                  helperText="Optional - help me understand what you'd like to work on"
-                />
-              </div>
+                    {/* Player Information */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label className="block text-sm font-medium text-text-secondary mb-2">
+                          Current Rank <span className="text-status-error">*</span>
+                        </label>
+                        <select
+                          name="rank"
+                          value={formData.rank || ''}
+                          onChange={handleChange}
+                          required
+                          disabled={isSubmitting}
+                          className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-status-error' : 'border-border hover:border-purple-primary/50'}`}
+                        >
+                          <option value="" disabled>Select your rank</option>
+                          {rankOptions.map((rank) => (
+                            <option key={rank} value={rank}>{rank}</option>
+                          ))}
+                        </select>
+                        {errors.rank && (
+                          <p className="mt-1.5 text-sm text-status-error">{errors.rank}</p>
+                        )}
+                      </div>
 
-              {submitStatus === 'error' && (
-                <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-                  <p className="text-red-400 font-medium">
-                    Failed to submit. Please try again or contact me directly.
-                  </p>
-                </div>
+                      <div>
+                        <label className="block text-sm font-medium text-text-secondary mb-2">
+                          Role <span className="text-status-error">*</span>
+                        </label>
+                        <select
+                          name="role"
+                          value={formData.role || ''}
+                          onChange={handleChange}
+                          required
+                          disabled={isSubmitting}
+                          className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-status-error' : 'border-border hover:border-purple-primary/50'}`}
+                        >
+                          <option value="" disabled>Select your role</option>
+                          {roleOptions.map((role) => (
+                            <option key={role} value={role}>{role}</option>
+                          ))}
+                        </select>
+                        {errors.role && (
+                          <p className="mt-1.5 text-sm text-status-error">{errors.role}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <Input
+                      label="Hero Played"
+                      name="hero"
+                      type="text"
+                      value={formData.hero}
+                      onChange={handleChange}
+                      error={errors.hero}
+                      placeholder="e.g., Ana, Reinhardt, Tracer"
+                      disabled={isSubmitting}
+                      helperText="Optional - helps me provide more specific feedback"
+                    />
+
+                    {/* Replay Codes Section */}
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold text-text-primary">
+                        Replay Codes <span className="text-status-error">*</span>
+                      </h3>
+
+                      {errors.replays && typeof errors.replays === 'string' && (
+                        <p className="text-sm text-status-error">{errors.replays}</p>
+                      )}
+
+                      <div className="space-y-3">
+                        {[0, 1, 2].map((index) => (
+                          <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <Input
+                              label={index === 0 ? "Replay Code" : `Replay Code ${index + 1} (optional)`}
+                              name={`replay-code-${index}`}
+                              type="text"
+                              value={formData.replays?.[index]?.code || ''}
+                              onChange={(e) => handleReplayChange(index, 'code', e.target.value)}
+                              error={Array.isArray(errors.replays) ? errors.replays?.[index]?.code : undefined}
+                              required={index === 0}
+                              placeholder="ABC123"
+                              disabled={isSubmitting}
+                              className="font-mono"
+                            />
+
+                            <Input
+                              label={index === 0 ? "Map Name" : `Map Name ${index + 1} (optional)`}
+                              name={`map-name-${index}`}
+                              type="text"
+                              value={formData.replays?.[index]?.mapName || ''}
+                              onChange={(e) => handleReplayChange(index, 'mapName', e.target.value)}
+                              error={Array.isArray(errors.replays) ? errors.replays?.[index]?.mapName : undefined}
+                              required={index === 0}
+                              placeholder="e.g., King's Row, Ilios"
+                              disabled={isSubmitting}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* General Notes Section */}
+                    <div>
+                      <Input
+                        label="Notes for Coach"
+                        name="general-notes"
+                        inputType="textarea"
+                        rows={3}
+                        value={generalNotes}
+                        onChange={(e) => setGeneralNotes(e.target.value)}
+                        placeholder="Any specific moments or questions about your replays? What would you like to focus on?"
+                        disabled={isSubmitting}
+                        helperText="Optional - help me understand what you'd like to work on"
+                      />
+                    </div>
+
+                    {submitStatus === 'error' && (
+                      <div className="p-4 bg-status-error/10 border border-status-error/30 rounded-lg">
+                        <p className="text-status-error font-medium">
+                          Failed to submit. Please try again or contact me directly.
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="pt-4">
+                      <Button
+                        type="submit"
+                        variant="primary"
+                        size="lg"
+                        className="w-full"
+                        loading={isSubmitting}
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? 'Processing...' : 'Continue to Payment'}
+                      </Button>
+                    </div>
+
+                    <div className="text-center">
+                      <button
+                        type="button"
+                        onClick={() => setFriendCodeDialogOpen(true)}
+                        className="text-xs text-text-muted hover:text-text-secondary underline transition-colors"
+                      >
+                        or use a code
+                      </button>
+                    </div>
+
+                    <p className="text-sm text-text-muted text-center">
+                      By submitting, you agree to our terms of service and privacy policy
+                    </p>
+                  </form>
+                </Card>
               )}
-
-              <div className="pt-4">
-                <Button
-                  type="submit"
-                  variant="primary"
-                  size="lg"
-                  className="w-full"
-                  loading={isSubmitting}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Processing...' : 'Continue to Payment'}
-                </Button>
-              </div>
-
-              <div className="text-center">
-                <button
-                  type="button"
-                  onClick={() => setFriendCodeDialogOpen(true)}
-                  className="text-xs text-gray-500 hover:text-gray-400 underline transition-colors"
-                >
-                  or use a code
-                </button>
-              </div>
-
-              <p className="text-sm text-gray-400 text-center">
-                By submitting, you agree to our terms of service and privacy policy
-              </p>
-            </form>
-          </Card>
-        )}
             </div>
           )}
         </div>
