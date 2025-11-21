@@ -96,6 +96,7 @@ export async function POST(request: NextRequest) {
         rank: validatedData.rank,
         role: validatedData.role,
         hero: validatedData.hero || null,
+        inGameName: validatedData.inGameName || null,
         status: 'AWAITING_PAYMENT', // Changed from PENDING to AWAITING_PAYMENT
         replays: {
           create: validatedData.replays.map((replay) => ({

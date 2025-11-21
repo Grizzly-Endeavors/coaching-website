@@ -194,6 +194,12 @@ export default function SubmissionDetailPage() {
                   <p className="text-[#e5e7eb]">{submission.hero}</p>
                 </div>
               )}
+              {submission.inGameName && (
+                <div>
+                  <label className="text-sm text-[#9ca3af] block mb-1">In-Game Name</label>
+                  <p className="text-[#e5e7eb]">{submission.inGameName}</p>
+                </div>
+              )}
               <div>
                 <label className="text-sm text-[#9ca3af] block mb-1">Submitted</label>
                 <p className="text-[#e5e7eb]">

@@ -53,6 +53,10 @@ export const replaySubmissionSchema = z.object({
     .min(2, 'Hero name must be at least 2 characters')
     .max(50, 'Hero name must not exceed 50 characters')
     .optional(),
+  inGameName: z.string()
+    .min(1, 'In-game name is required')
+    .max(50, 'In-game name must not exceed 50 characters')
+    .optional(), // Optional to match existing schema pattern, but can be enforced if needed
   replays: z.array(replayCodeObjectSchema)
     .min(1, 'At least one replay code is required')
     .max(5, 'Maximum 5 replay codes allowed'),

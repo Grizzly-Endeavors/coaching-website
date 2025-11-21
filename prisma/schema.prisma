@@ -19,6 +19,7 @@ model ReplaySubmission {
   rank         String // e.g., "Gold", "Diamond"
   role         String // Tank, DPS, Support
   hero         String? // Specific hero played
+  inGameName   String?          @map("in_game_name")
 
   // Discord OAuth fields
   discordId           String?   @map("discord_id") // Discord user ID from OAuth

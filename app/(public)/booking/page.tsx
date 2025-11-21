@@ -33,6 +33,7 @@ interface FormErrors {
   rank?: string;
   role?: string;
   hero?: string;
+  inGameName?: string;
   replays?: Array<ReplayFieldErrors> | string;
   timeSlot?: string;
 }
@@ -52,6 +53,7 @@ function BookingContent() {
     rank: undefined,
     role: undefined,
     hero: '',
+    inGameName: '',
     replays: [
       { code: '', mapName: '', notes: '' },
       { code: '', mapName: '', notes: '' },
@@ -463,17 +465,31 @@ function BookingContent() {
                             </div>
                           </div>
 
-                          <Input
-                            label="Hero Played"
-                            name="hero"
-                            type="text"
-                            value={formData.hero}
-                            onChange={handleChange}
-                            error={errors.hero}
-                            placeholder="e.g., Ana, Reinhardt, Tracer"
-                            disabled={isSubmitting}
-                            helperText="Optional - helps me provide more specific feedback"
-                          />
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <Input
+                              label="Hero Played"
+                              name="hero"
+                              type="text"
+                              value={formData.hero}
+                              onChange={handleChange}
+                              error={errors.hero}
+                              placeholder="e.g., Ana, Reinhardt, Tracer"
+                              disabled={isSubmitting}
+                              helperText="Optional - helps me provide more specific feedback"
+                            />
+
+                            <Input
+                              label="In-Game Name"
+                              name="inGameName"
+                              type="text"
+                              value={formData.inGameName || ''}
+                              onChange={handleChange}
+                              error={errors.inGameName}
+                              placeholder="BattleTag#1234"
+                              disabled={isSubmitting}
+                              helperText="Optional - helps me find you in the replay"
+                            />
+                          </div>
 
                           {/* Replay Codes Section */}
                           <div className="space-y-4">
@@ -679,17 +695,31 @@ function BookingContent() {
                       </div>
                     </div>
 
-                    <Input
-                      label="Hero Played"
-                      name="hero"
-                      type="text"
-                      value={formData.hero}
-                      onChange={handleChange}
-                      error={errors.hero}
-                      placeholder="e.g., Ana, Reinhardt, Tracer"
-                      disabled={isSubmitting}
-                      helperText="Optional - helps me provide more specific feedback"
-                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <Input
+                        label="Hero Played"
+                        name="hero"
+                        type="text"
+                        value={formData.hero}
+                        onChange={handleChange}
+                        error={errors.hero}
+                        placeholder="e.g., Ana, Reinhardt, Tracer"
+                        disabled={isSubmitting}
+                        helperText="Optional - helps me provide more specific feedback"
+                      />
+
+                      <Input
+                        label="In-Game Name"
+                        name="inGameName"
+                        type="text"
+                        value={formData.inGameName || ''}
+                        onChange={handleChange}
+                        error={errors.inGameName}
+                        placeholder="BattleTag#1234"
+                        disabled={isSubmitting}
+                        helperText="Optional - helps me find you in the replay"
+                      />
+                    </div>
 
                     {/* Replay Codes Section */}
                     <div className="space-y-4">
@@ -802,6 +832,7 @@ function BookingContent() {
             rank: formData.rank,
             role: formData.role,
             hero: formData.hero,
+            inGameName: formData.inGameName,
             replays: (formData.replays || []).filter(replay => replay.code.trim() !== '').map(replay => ({
               ...replay,
               notes: replay === formData.replays?.[0] && generalNotes.trim() ? generalNotes.trim() : replay.notes
