@@ -6,7 +6,6 @@
  * - 30 minutes before the session (to both client and admin)
  */
 
-import cron, { ScheduledTask } from 'node-cron';
 import { prisma } from './prisma';
 import { logger } from './logger';
 import {
@@ -15,7 +14,7 @@ import {
   send30MinuteAdminReminder,
 } from './discord';
 
-let reminderCronJob: ScheduledTask | null = null;
+let reminderTimeout: NodeJS.Timeout | null = null;
 
 /**
  * Check for bookings that need reminders and send them
@@ -153,19 +152,42 @@ async function checkAndSendReminders(): Promise<void> {
 }
 
 /**
- * Start the reminder cron job
+ * Schedule the next execution on the next 5-minute mark
+ */
+function scheduleNextRun() {
+  const now = new Date();
+  const minutes = now.getMinutes();
+  const seconds = now.getSeconds();
+  const millis = now.getMilliseconds();
+
+  // Calculate delay to next 5-minute mark
+  const minutesToNext = 5 - (minutes % 5);
+  const delay = minutesToNext * 60 * 1000 - seconds * 1000 - millis;
+
+  // Ensure strictly positive delay (at least 1 second) to avoid tight loops if calc is close to 0
+  const safeDelay = delay <= 0 ? 5 * 60 * 1000 : delay;
+
+  reminderTimeout = setTimeout(() => {
+    checkAndSendReminders()
+      .catch((error) => {
+        logger.error('Error in scheduled reminder check', error instanceof Error ? error : new Error(String(error)));
+      })
+      .finally(() => {
+        // Schedule the next run after this one starts/completes
+        scheduleNextRun();
+      });
+  }, safeDelay);
+}
+
+/**
+ * Start the reminder service
  * Runs every 5 minutes to check for bookings that need reminders
  */
 export function startReminderService(): void {
-  if (reminderCronJob) {
+  if (reminderTimeout) {
     logger.warn('Reminder service is already running');
     return;
   }
-
-  // Run every 5 minutes
-  reminderCronJob = cron.schedule('*/5 * * * *', async () => {
-    await checkAndSendReminders();
-  });
 
   logger.info('Reminder service started (running every 5 minutes)');
 
@@ -173,15 +195,18 @@ export function startReminderService(): void {
   checkAndSendReminders().catch((error) => {
     logger.error('Error in initial reminder check', error instanceof Error ? error : new Error(String(error)));
   });
+
+  // Schedule the next run
+  scheduleNextRun();
 }
 
 /**
- * Stop the reminder cron job
+ * Stop the reminder service
  */
 export function stopReminderService(): void {
-  if (reminderCronJob) {
-    reminderCronJob.stop();
-    reminderCronJob = null;
+  if (reminderTimeout) {
+    clearTimeout(reminderTimeout);
+    reminderTimeout = null;
     logger.info('Reminder service stopped');
   }
 }
@@ -190,5 +215,5 @@ export function stopReminderService(): void {
  * Check if the reminder service is running
  */
 export function isReminderServiceRunning(): boolean {
-  return reminderCronJob !== null;
+  return reminderTimeout !== null;
 }
