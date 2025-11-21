@@ -87,7 +87,7 @@ form:
 
     discord_tag:
       label: "Discord Tag"
-      placeholder: "YourName#1234"
+      placeholder: "YourName"
       helper: "Optional - for follow-up questions"
 
     rank:
