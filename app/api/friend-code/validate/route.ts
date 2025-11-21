@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { replaySubmissionSchema } from '@/lib/validations';
-import { sendVodRequestNotification } from '@/lib/discord';
+import { sendVodRequestNotification, sendBookingConfirmationNotification } from '@/lib/discord';
 import { handleApiError } from '@/lib/api-error-handler';
 import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
 import { logger } from '@/lib/logger';
@@ -240,6 +240,45 @@ export async function POST(request: NextRequest) {
       hasBooking: !!submission.booking,
       friendCode: friendCode.substring(0, 3) + '***', // Log partial code for security
     });
+
+    // Send Discord confirmation notification to user (non-blocking)
+    if (submission.discordId) {
+      sendBookingConfirmationNotification({
+        id: submission.id,
+        email: submission.email,
+        discordId: submission.discordId,
+        discordUsername: submission.discordUsername,
+        coachingType: submission.coachingType,
+        rank: submission.rank,
+        role: submission.role,
+        hero: submission.hero,
+        scheduledAt: submission.booking?.scheduledAt || null,
+        replays: submission.replays.map((r) => ({
+          code: r.code,
+          mapName: r.mapName,
+        })),
+      })
+        .then((result) => {
+          if (result.success) {
+            logger.info('Booking confirmation sent to user via Discord (friend code)', {
+              submissionId: submission.id,
+              discordUsername: submission.discordUsername,
+            });
+          } else {
+            logger.error('Failed to send booking confirmation via Discord', {
+              submissionId: submission.id,
+              error: result.error,
+            });
+          }
+        })
+        .catch((error) => {
+          logger.error('Error sending booking confirmation via Discord', error instanceof Error ? error : new Error(String(error)));
+        });
+    } else {
+      logger.warn('User has no Discord ID, skipping booking confirmation notification', {
+        submissionId: submission.id,
+      });
+    }
 
     // Send Discord notification to admin (non-blocking)
     sendVodRequestNotification({
