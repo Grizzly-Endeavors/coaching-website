@@ -181,9 +181,12 @@ export async function GET(request: NextRequest) {
     };
 
     const returnTo = request.cookies.get('discord_oauth_return')?.value || '/submit-replay';
-    const response = NextResponse.redirect(
-      new URL(`${returnTo}?discord_connected=true`, request.url)
-    );
+
+    // Use DOMAIN_NAME if available, otherwise fall back to request.url (which might be localhost)
+    const baseUrl = process.env.DOMAIN_NAME || request.url;
+    const redirectUrl = new URL(`${returnTo}?discord_connected=true`, baseUrl);
+
+    const response = NextResponse.redirect(redirectUrl);
 
     // Store Discord data in secure cookie (valid for 7 days)
     response.cookies.set('discord_user_data', JSON.stringify(discordData), {
@@ -204,8 +207,9 @@ export async function GET(request: NextRequest) {
     logger.error('Error in Discord OAuth callback:', error instanceof Error ? error : new Error(String(error)));
 
     const returnTo = request.cookies.get('discord_oauth_return')?.value || '/submit-replay';
+    const baseUrl = process.env.DOMAIN_NAME || request.url;
     const response = NextResponse.redirect(
-      new URL(`${returnTo}?discord_error=server_error`, request.url)
+      new URL(`${returnTo}?discord_error=server_error`, baseUrl)
     );
 
     // Clear OAuth cookies
