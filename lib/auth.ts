@@ -28,6 +28,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   providers: [
     Discord({
+      id: 'discord-admin',
+      name: 'Discord Admin',
       clientId: process.env.DISCORD_CLIENT_ID,
       clientSecret: process.env.DISCORD_CLIENT_SECRET,
     }),
@@ -94,7 +96,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === 'discord') {
+      if (account?.provider === 'discord-admin') {
         if (!user.email) return false;
 
         try {
@@ -116,7 +118,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.name = user.name;
 
         // If logging in with Discord, map to the Admin ID
-        if (account?.provider === 'discord' && user.email) {
+        if (account?.provider === 'discord-admin' && user.email) {
           try {
             const admin = await prisma.admin.findUnique({
               where: { email: user.email.toLowerCase() },
