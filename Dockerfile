@@ -41,6 +41,9 @@ COPY --from=builder /app/package.json ./package.json
 # Copy Prisma files
 COPY --from=builder /app/prisma ./prisma
 
+# Copy locales
+COPY --from=builder /app/locales ./locales
+
 USER nextjs
 
 EXPOSE 3000
