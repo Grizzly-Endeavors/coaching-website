@@ -28,7 +28,7 @@ export default function AdminLoginForm({ locale }: AdminLoginFormProps) {
     setIsLoading(true);
     setLoginError('');
     try {
-      await signIn('discord', { callbackUrl });
+      await signIn('discord-admin', { callbackUrl });
     } catch (error) {
       logger.error('Discord login error:', error instanceof Error ? error : new Error(String(error)));
       setLoginError('Failed to initiate Discord login.');
