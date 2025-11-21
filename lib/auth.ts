@@ -1,5 +1,6 @@
 import NextAuth, { DefaultSession } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import Discord from 'next-auth/providers/discord';
 import { compare } from 'bcryptjs';
 import { prisma } from './prisma';
 import { loginRateLimiter } from './rate-limiter';
@@ -26,6 +27,10 @@ declare module 'next-auth' {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
   providers: [
+    Discord({
+      clientId: process.env.DISCORD_CLIENT_ID,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET,
+    }),
     Credentials({
       name: 'credentials',
       credentials: {
@@ -88,11 +93,41 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signIn: '/login',
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async signIn({ user, account }) {
+      if (account?.provider === 'discord') {
+        if (!user.email) return false;
+
+        try {
+          const admin = await prisma.admin.findUnique({
+            where: { email: user.email.toLowerCase() },
+          });
+          return !!admin;
+        } catch (error) {
+          logger.error('Error checking admin status for Discord login', error instanceof Error ? error : new Error(String(error)));
+          return false;
+        }
+      }
+      return true;
+    },
+    async jwt({ token, user, account }) {
       if (user) {
         token.id = user.id;
         token.email = user.email;
         token.name = user.name;
+
+        // If logging in with Discord, map to the Admin ID
+        if (account?.provider === 'discord' && user.email) {
+          try {
+            const admin = await prisma.admin.findUnique({
+              where: { email: user.email.toLowerCase() },
+            });
+            if (admin) {
+              token.id = admin.id;
+            }
+          } catch (error) {
+            logger.error('Error mapping Discord user to Admin ID', error instanceof Error ? error : new Error(String(error)));
+          }
+        }
       }
       return token;
     },
