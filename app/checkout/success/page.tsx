@@ -1,122 +1,11 @@
 'use client';
 
-import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 
 function SuccessContent() {
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const sessionId = searchParams.get('session_id');
-  const friendCode = searchParams.get('friend_code');
-  const submissionId = searchParams.get('submission_id');
-  const [paymentDetails, setPaymentDetails] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (sessionId) {
-      // Fetch payment details to get coaching type
-      fetch(`/api/payment/details?session_id=${sessionId}`)
-        .then(res => res.json())
-        .then(data => {
-          setPaymentDetails(data);
-          setLoading(false);
-        })
-        .catch(() => {
-          setLoading(false);
-        });
-    } else if (friendCode && submissionId) {
-      // For friend code, fetch submission details directly
-      fetch(`/api/admin/submissions/${submissionId}`)
-        .then(res => res.json())
-        .then(data => {
-          setPaymentDetails({
-            coachingType: data.coachingType,
-            submission: data,
-          });
-          setLoading(false);
-        })
-        .catch(() => {
-          setLoading(false);
-        });
-    } else {
-      setLoading(false);
-    }
-  }, [sessionId, friendCode, submissionId]);
-
-  const getNextSteps = () => {
-    if (!paymentDetails?.coachingType) {
-      return [
-        'Your booking has been confirmed',
-        'Check Discord for a confirmation message from my bot',
-        'I\'ll reach out with next steps'
-      ];
-    }
-
-    switch (paymentDetails.coachingType) {
-      case 'review-async':
-        return [
-          'Your replay submission has been confirmed',
-          'You\'ll receive a Discord DM confirmation shortly',
-          'I\'ll review your replays and send detailed feedback within 2-3 business days',
-          'Watch for a Discord DM when your review is ready!'
-        ];
-      case 'vod-review':
-        return [
-          'Your VOD review session has been booked',
-          'You\'ll receive a Discord DM confirmation shortly',
-          'I\'ll reach out on Discord closer to your session time',
-          'See you at the scheduled time on Discord!'
-        ];
-      case 'live-coaching':
-        return [
-          'Your live coaching session has been booked',
-          'You\'ll receive a Discord DM confirmation shortly',
-          'I\'ll reach out on Discord closer to your session time',
-          'Make sure you\'re ready to stream your gameplay on Discord!'
-        ];
-      default:
-        return [
-          'Your booking has been confirmed',
-          'Check Discord for a confirmation message from my bot',
-          'I\'ll reach out with next steps'
-        ];
-    }
-  };
-
-  const getTitle = () => {
-    if (!paymentDetails?.coachingType) {
-      return 'Booking Confirmed!';
-    }
-
-    switch (paymentDetails.coachingType) {
-      case 'review-async':
-        return 'Replay Review Confirmed!';
-      case 'vod-review':
-        return 'VOD Session Booked!';
-      case 'live-coaching':
-        return 'Coaching Session Booked!';
-      default:
-        return 'Booking Confirmed!';
-    }
-  };
-
-  const formatAppointmentTime = (dateTime: string) => {
-    const date = new Date(dateTime);
-    return new Intl.DateTimeFormat('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZoneName: 'short',
-      timeZone: 'America/New_York',
-    }).format(date);
-  };
-
   return (
     <div className="min-h-screen bg-[#0f0f23] py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -141,60 +30,21 @@ function SuccessContent() {
                 </div>
               </div>
               <CardTitle className="text-3xl mb-4 text-green-400">
-                {loading ? 'Payment Successful!' : getTitle()}
+                Booking confirmed
               </CardTitle>
             </CardHeader>
             <CardContent className="text-center">
-              <p className="text-gray-300 mb-6 text-lg">
-                {friendCode
-                  ? 'Thank you! Your friend code has been applied successfully.'
-                  : 'Thank you for your purchase! Your payment has been processed successfully.'}
+              <p className="text-gray-300 mb-8 text-lg flex items-center justify-center gap-2">
+                <span className="text-2xl">👀</span> Sloan will message you shortly
               </p>
 
-              {/* Show scheduled time for VOD/Live coaching */}
-              {paymentDetails?.submission?.booking?.scheduledAt && (
-                <div className="bg-purple-600/10 border border-purple-600/30 rounded-lg p-6 mb-6">
-                  <h3 className="text-xl font-bold text-gray-100 mb-2">
-                    Your Session is Scheduled
-                  </h3>
-                  <p className="text-2xl font-semibold text-purple-400">
-                    {formatAppointmentTime(paymentDetails.submission.booking.scheduledAt)}
-                  </p>
-                  <p className="text-gray-400 mt-2 text-sm">
-                    Make sure to be available on Discord at this time!
-                  </p>
-                </div>
-              )}
-
-              <div className="bg-[#1a1a2e] rounded-lg p-6 mb-8">
-                <h3 className="text-xl font-bold text-gray-100 mb-4">
-                  What's Next?
-                </h3>
-                <ul className="text-left space-y-3 text-gray-300">
-                  {getNextSteps().map((step, index) => (
-                    <li key={index} className="flex items-start">
-                      <svg
-                        className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <span>{step}</span>
-                    </li>
-                  ))}
-                </ul>
+              <div className="flex justify-center mb-8">
+                <img
+                  src="https://media1.tenor.com/m/9o57HqlEMb4AAAAd/venture-overwatch.gif"
+                  alt="Venture Overwatch GIF"
+                  className="rounded-lg max-w-full h-auto"
+                />
               </div>
-
-              {sessionId && (
-                <p className="text-sm text-gray-400 mb-6">
-                  Session ID: {sessionId}
-                </p>
-              )}
 
               <div className="flex justify-center">
                 <Link href="/">
