@@ -18,6 +18,7 @@ export interface Submission {
   rank: string;
   role: string;
   hero: string | null;
+  inGameName: string | null;
   status: string;
   reviewNotes: string | null;
   reviewUrl: string | null;
