@@ -76,7 +76,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            <ul className="flex items-center gap-6">
+            <ul className="flex items-center gap-6 list-none">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <Link
@@ -122,12 +122,12 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-border">
-            <ul className="flex flex-col gap-2">
+            <ul className="flex flex-col gap-2 list-none">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="block px-4 py-2 text-base font-medium text-gray-300 hover:text-purple-400 hover:bg-background-surface rounded-lg transition-colors duration-200"
+                    className="block px-4 py-2 text-base font-medium text-gray-300 hover:text-purple-400 hover:bg-background-surface rounded-lg transition-colors duration-200 text-center"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.label}
