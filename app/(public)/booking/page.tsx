@@ -410,7 +410,7 @@ function BookingContent() {
                               value={formData.discordTag}
                               onChange={handleChange}
                               error={errors.discordTag}
-                              placeholder="YourName#1234"
+                              placeholder="YourName"
                               disabled={isSubmitting}
                               helperText="Optional - for follow-up questions"
                             />
@@ -626,7 +626,7 @@ function BookingContent() {
                         value={formData.discordTag}
                         onChange={handleChange}
                         error={errors.discordTag}
-                        placeholder="YourName#1234"
+                        placeholder="YourName"
                         disabled={isSubmitting}
                         helperText="Optional - for follow-up questions"
                       />
