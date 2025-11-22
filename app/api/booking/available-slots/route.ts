@@ -3,12 +3,26 @@ import { prisma } from '@/lib/prisma'
 import { addMinutes, format, parse, startOfDay, endOfDay, isBefore, isAfter } from 'date-fns'
 import { toZonedTime, fromZonedTime } from 'date-fns-tz'
 import { logger } from '@/lib/logger'
+import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limiter'
 
 const TIMEZONE = 'America/New_York' // EST
 
 // GET /api/booking/available-slots?date=YYYY-MM-DD&sessionType=vod-review
 export async function GET(req: NextRequest) {
   try {
+    // Rate limiting: 20 requests per minute per IP
+    const rateLimitOptions = {
+      maxRequests: 20,
+      windowMs: 60 * 1000, // 1 minute
+      message: 'Too many availability checks. Please try again later.',
+    }
+
+    const rateLimitResult = await rateLimit(req, rateLimitOptions)
+
+    if (!rateLimitResult.success) {
+      return rateLimitResult.response!
+    }
+
     const { searchParams } = new URL(req.url)
     const dateParam = searchParams.get('date')
     const sessionType = searchParams.get('sessionType')
@@ -127,6 +141,8 @@ export async function GET(req: NextRequest) {
         exceptionsCount: exceptions.length,
         availableSlotsCount: formattedSlots.length,
       }
+    }, {
+      headers: getRateLimitHeaders(req, rateLimitOptions)
     })
   } catch (error) {
     logger.error('Error fetching available slots:', error instanceof Error ? error : new Error(String(error)))

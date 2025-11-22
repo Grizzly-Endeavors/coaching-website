@@ -3,9 +3,23 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe, getCoachingPackage, isValidCoachingType, formatAmountForStripe } from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
+import { rateLimit } from '@/lib/rate-limiter';
 
 export async function POST(req: NextRequest) {
   try {
+    // Rate limiting: 10 requests per hour per IP
+    const rateLimitOptions = {
+      maxRequests: 10,
+      windowMs: 60 * 60 * 1000, // 1 hour
+      message: 'Too many checkout attempts. Please try again later.',
+    };
+
+    const rateLimitResult = await rateLimit(req, rateLimitOptions);
+
+    if (!rateLimitResult.success) {
+      return rateLimitResult.response!;
+    }
+
     const body = await req.json();
     const { submissionId, coachingType: directCoachingType, email: directEmail } = body;
 

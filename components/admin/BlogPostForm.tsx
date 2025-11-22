@@ -2,6 +2,12 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
+import rehypeHighlight from 'rehype-highlight';
+import 'highlight.js/styles/github-dark.css';
 import { Button } from '@/components/ui';
 import type { BlogPost } from '@/lib/types';
 
@@ -128,20 +134,6 @@ export default function BlogPostForm({
     await onSave(formData, publish);
   }
 
-  function renderMarkdownPreview(text: string) {
-    return text
-      .split('\n')
-      .map((line) => {
-        if (line.startsWith('# ')) return `<h1>${line.slice(2)}</h1>`;
-        if (line.startsWith('## ')) return `<h2>${line.slice(3)}</h2>`;
-        if (line.startsWith('### ')) return `<h3>${line.slice(4)}</h3>`;
-        if (line.startsWith('- ')) return `<li>${line.slice(2)}</li>`;
-        if (line.trim() === '') return '<br/>';
-        return `<p>${line}</p>`;
-      })
-      .join('');
-  }
-
   return (
     <div>
       {/* Header */}
@@ -251,11 +243,12 @@ export default function BlogPostForm({
             </div>
             {showPreview ? (
               <div className="w-full px-4 py-3 bg-background-primary border border-border rounded-lg text-text-primary min-h-[400px] prose prose-invert prose-cyan max-w-none">
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: renderMarkdownPreview(content),
-                  }}
-                />
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw, rehypeSanitize, rehypeHighlight]}
+                >
+                  {content}
+                </ReactMarkdown>
               </div>
             ) : (
               <textarea
