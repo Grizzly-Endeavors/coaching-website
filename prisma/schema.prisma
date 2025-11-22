@@ -43,6 +43,10 @@ model ReplaySubmission {
   friendCode   FriendCode? @relation(fields: [friendCodeId], references: [id])
 
   @@map("replay_submissions")
+  @@index([status])
+  @@index([email])
+  @@index([discordId])
+  @@index([submittedAt])
 }
 
 // Individual replay codes
@@ -56,6 +60,7 @@ model ReplayCode {
   submission   ReplaySubmission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 
   @@map("replay_codes")
+  @@index([submissionId])
 }
 
 // Payment records for Stripe transactions
@@ -76,6 +81,8 @@ model Payment {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("payments")
+  @@index([status])
+  @@index([customerEmail])
 }
 
 enum PaymentStatus {
@@ -119,6 +126,9 @@ model Booking {
   exception AvailabilityException? // Link to availability exception that blocks this slot
 
   @@map("bookings")
+  @@index([status])
+  @@index([scheduledAt])
+  @@index([email])
 }
 
 enum BookingStatus {
@@ -144,6 +154,7 @@ model AvailabilitySlot {
   exceptions AvailabilityException[] // Specific dates when this slot is blocked or booked
 
   @@map("availability_slots")
+  @@index([dayOfWeek])
 }
 
 // Exceptions to availability (bookings, blocked dates, holidays)
@@ -162,6 +173,8 @@ model AvailabilityException {
   booking   Booking? @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   @@map("availability_exceptions")
+  @@index([date])
+  @@index([slotId])
 }
 
 // Blog posts
@@ -178,6 +191,8 @@ model BlogPost {
   publishedAt DateTime? @map("published_at")
 
   @@map("blog_posts")
+  @@index([published])
+  @@index([publishedAt])
 }
 
 // Admin users

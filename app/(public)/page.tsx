@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
@@ -86,11 +87,14 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
               {/* Profile Image */}
               <div className="order-2 lg:order-1">
-                <div className="aspect-square rounded-2xl border border-brand-primary/30 overflow-hidden">
-                  <img 
+                <div className="aspect-square rounded-2xl border border-brand-primary/30 overflow-hidden relative">
+                  <Image 
                     src="/Website-headshot.webp" 
                     alt="Coach Profile" 
-                    className="w-full h-full object-cover"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority
                   />
                 </div>
               </div>

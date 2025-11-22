@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://yoursite.com',
+    url: process.env.DOMAIN_NAME || 'http://localhost:3000',
     title: 'Overwatch Coaching | Sustainable Improvement',
     description: 'GM1 across all roles. Teaching you how to think, not just what to do. Sustainable improvement with a playful approach.',
     siteName: 'Overwatch Coaching',

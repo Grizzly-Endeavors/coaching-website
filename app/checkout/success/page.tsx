@@ -1,7 +1,6 @@
-'use client';
-
 import { Suspense } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 
@@ -39,10 +38,13 @@ function SuccessContent() {
               </p>
 
               <div className="flex justify-center mb-8">
-                <img
+                <Image
                   src="https://media1.tenor.com/m/9o57HqlEMb4AAAAd/venture-overwatch.gif"
                   alt="Venture Overwatch GIF"
+                  width={400}
+                  height={300}
                   className="rounded-lg max-w-full h-auto"
+                  unoptimized
                 />
               </div>
 
