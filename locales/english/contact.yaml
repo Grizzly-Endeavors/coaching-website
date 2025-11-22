@@ -57,12 +57,12 @@ contact_info:
 
   email:
     title: "Email"
-    address: "coaching@example.com"
+    address: "bearflinn@gmail.com"
     note: "I typically respond within 24 hours"
 
   discord:
     title: "Discord"
-    tag: "CoachName#1234"
+    tag: "bearflinn"
     note: "Preferred for quick questions"
 
   response_time:
