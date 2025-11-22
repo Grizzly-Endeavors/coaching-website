@@ -86,6 +86,10 @@
   /* Hover state borders */
   --color-border-focus: #8b5cf6;
   /* Focus state borders */
+  --color-input: var(--color-border);
+  /* Input borders (shadcn) */
+  --color-ring: var(--color-cyan-primary);
+  /* Focus rings (shadcn) */
 
   /* ============================================
      COLORS - Status/Feedback

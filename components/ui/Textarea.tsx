@@ -40,7 +40,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       placeholder:text-text-muted
       focus:outline-none
       focus:ring-2
-      ${error ? 'focus:ring-status-error' : 'focus:ring-purple-primary'}
+      ${error ? 'focus:ring-status-error' : 'focus:ring-cyan-primary'}
       focus:border-transparent
       transition-all
       resize-vertical

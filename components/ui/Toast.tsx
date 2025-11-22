@@ -152,7 +152,7 @@ const ToastItem: React.FC<ToastItemProps> = ({ toast, onRemove }) => {
 
         <button
           onClick={() => onRemove(id)}
-          className="flex-shrink-0 text-gray-400 hover:text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500 rounded"
+          className="flex-shrink-0 text-gray-400 hover:text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-primary rounded"
           aria-label={closeLabel}
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -51,7 +51,7 @@ export const Card: React.FC<CardProps> = ({
     : 'border border-border';
 
   const hoverClasses = hover
-    ? 'hover:shadow-[0_0_20px_rgba(139,92,246,0.15)] hover:border-purple-600/50 transition-all duration-300 cursor-pointer hover:-translate-y-1'
+    ? 'hover:shadow-cyan-glow hover:border-cyan-primary/50 transition-all duration-300 cursor-pointer hover:-translate-y-1'
     : '';
 
   return (
