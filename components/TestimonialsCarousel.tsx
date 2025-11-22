@@ -3,12 +3,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/Card';
-import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface Testimonial {
   name: string;
   role: string;
   rank: string;
+  tagline?: string;
   quote: string;
 }
 
@@ -142,7 +143,7 @@ export default function TestimonialsCarousel({ items }: TestimonialsCarouselProp
 
       {/* Carousel Container */}
       {/* We use a grid layout to overlap the items easily without absolute positioning hacks for height */}
-      <div className="relative overflow-hidden min-h-[350px] md:min-h-[300px]">
+      <div className="relative overflow-hidden min-h-[450px] md:min-h-[300px]">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentIndex}
@@ -152,31 +153,34 @@ export default function TestimonialsCarousel({ items }: TestimonialsCarouselProp
             animate="center"
             exit="exit"
             transition={{
-              x: { type: "spring", stiffness: 300, damping: 30 },
+              x: { type: "tween", ease: "easeInOut", duration: 0.5 },
               opacity: { duration: 0.2 }
             }}
             className="absolute top-0 left-0 w-full h-full flex justify-center items-center px-4"
           >
              <Card variant="surface" className="w-full max-w-3xl bg-background-elevated/50 backdrop-blur-sm border-brand-primary/20 h-full">
-              <CardContent className="p-8 md:p-12 flex flex-col items-center text-center h-full justify-center">
-                <Quote className="text-brand-primary w-12 h-12 mb-6 opacity-50" />
-
-                <blockquote className="text-xl md:text-2xl text-text-primary font-medium mb-8 leading-relaxed relative z-10">
-                  "{currentTestimonial.quote}"
-                </blockquote>
-
-                <div className="mt-auto">
+              <CardContent className="p-6 md:p-12 flex flex-col items-start text-left h-full justify-center">
+                <div className="mb-6">
                   <div className="font-bold text-lg text-brand-300">
                     {currentTestimonial.name}
                   </div>
-                  <div className="text-text-muted text-sm mt-1 flex items-center justify-center gap-2">
+                  <div className="text-text-muted text-sm mt-1 flex flex-wrap items-center justify-start gap-2">
                     <span className="px-2 py-0.5 rounded-full bg-brand-primary/20 text-brand-200 text-xs border border-brand-primary/30">
                       {currentTestimonial.role}
                     </span>
                     <span className="w-1 h-1 bg-text-muted rounded-full"></span>
                     <span>{currentTestimonial.rank}</span>
+                    {currentTestimonial.tagline && (
+                      <span className="text-text-muted opacity-80">
+                        - {currentTestimonial.tagline}
+                      </span>
+                    )}
                   </div>
                 </div>
+
+                <blockquote className="text-xl md:text-2xl text-text-primary font-medium mb-8 leading-relaxed relative z-10 border-none pl-0">
+                  "{currentTestimonial.quote}"
+                </blockquote>
               </CardContent>
             </Card>
           </motion.div>
