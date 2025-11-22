@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { Card, CardContent } from '@/components/ui/Card';
+import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import type { Metadata } from 'next';
 import { loadLocale } from '@/lib/locales';
 
@@ -40,20 +41,12 @@ const achievements = (homeLocale.background.achievements as Array<{ title: strin
   icon: Object.values(iconComponents)[index],
 }));
 
-const expertise = [
-  {
-    category: (homeLocale.expertise.roles.tank.name as string),
-    heroes: homeLocale.expertise.roles.tank.heroes as string[],
-  },
-  {
-    category: (homeLocale.expertise.roles.dps.name as string),
-    heroes: homeLocale.expertise.roles.dps.heroes as string[],
-  },
-  {
-    category: (homeLocale.expertise.roles.support.name as string),
-    heroes: homeLocale.expertise.roles.support.heroes as string[],
-  },
-];
+const testimonials = homeLocale.testimonials.items as Array<{
+  name: string;
+  role: string;
+  rank: string;
+  quote: string;
+}>;
 
 const philosophyPoints = homeLocale.philosophy.points as Array<{ title: string; description: string }>;
 
@@ -171,40 +164,20 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Hero Expertise */}
+      {/* Testimonials Section */}
       <section className="py-20 bg-background-primary">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold text-text-primary mb-4">
-                {homeLocale.expertise.section_title as string}
+                {homeLocale.testimonials.section_title as string}
               </h2>
               <p className="text-lg text-text-muted max-w-2xl mx-auto">
-                {homeLocale.expertise.section_subtitle as string}
+                {homeLocale.testimonials.section_subtitle as string}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {expertise.map((role) => (
-                <Card key={role.category} variant="surface">
-                  <CardHeader>
-                    <CardTitle className="text-2xl text-center mb-4">{role.category}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {role.heroes.map((hero) => (
-                        <span
-                          key={hero}
-                          className="px-3 py-1 bg-purple-primary/20 text-purple-primary rounded-full text-sm font-medium border border-purple-primary/30"
-                        >
-                          {hero}
-                        </span>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <TestimonialsCarousel items={testimonials} />
           </div>
         </div>
       </section>
