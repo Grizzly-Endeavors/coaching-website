@@ -40,17 +40,17 @@ type_selection:
   types:
     review_async:
       id: "review-async"
-      name: "Asynchronous VOD Review"
+      name: "Review on My Time"
       description: "Send replay codes and I'll send back structured notes with focused improvements"
 
     vod_review:
       id: "vod-review"
-      name: "Live VOD Review"
+      name: "VOD Review"
       description: "We go through your replay together - I pause and guide your thinking"
 
     live_coaching:
       id: "live-coaching"
-      name: "Live Coaching"
+      name: "Guy in The Chair"
       description: "I sit over your shoulder and help break stubborn habits in real-time"
 
 # -----------------------------------------------------------------------------
@@ -156,8 +156,8 @@ data:
 
   coaching_types:
     - value: "review-async"
-      label: "Asynchronous VOD Review"
+      label: "Review on My Time"
     - value: "vod-review"
-      label: "Live VOD Review"
+      label: "VOD Review"
     - value: "live-coaching"
-      label: "Live Coaching"
+      label: "Guy in The Chair"

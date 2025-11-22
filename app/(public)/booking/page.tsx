@@ -98,7 +98,7 @@ function BookingContent() {
   const coachingTypesList = [
     {
       id: 'review-async' as CoachingType,
-      name: 'Asynchronous VOD Review',
+      name: 'Review on My Time',
       description: 'Send replay codes and I\'ll send back structured notes with focused improvements',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +108,7 @@ function BookingContent() {
     },
     {
       id: 'vod-review' as CoachingType,
-      name: 'Live VOD Review',
+      name: 'VOD Review',
       description: 'We go through your replay together - I pause and guide your thinking',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,7 +118,7 @@ function BookingContent() {
     },
     {
       id: 'live-coaching' as CoachingType,
-      name: 'Live Coaching',
+      name: 'Guy in The Chair',
       description: 'I sit over your shoulder and help break stubborn habits in real-time',
       icon: (
         <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">

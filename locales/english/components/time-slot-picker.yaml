@@ -15,7 +15,7 @@ header:
   # Session type badge
   session_types:
     vod_review: "VOD Review"
-    live_coaching: "Live Coaching"
+    live_coaching: "Guy in The Chair"
 
 # -----------------------------------------------------------------------------
 # Navigation

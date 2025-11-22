@@ -20,7 +20,7 @@ hero:
 packages:
   review_async:
     id: "review-async"
-    name: "Asynchronous VOD Review"
+    name: "Review on My Time"
     price: "$25"
     description: "Send me your replay codes and I'll send back structured notes with focused improvements"
     badge: ""  # No badge
@@ -34,7 +34,7 @@ packages:
 
   vod_review:
     id: "vod-review"
-    name: "Live VOD Review"
+    name: "VOD Review"
     price: "$40"
     description: "We go through your replay together - I pause at key points and guide your thinking"
     badge: "Most Popular"
@@ -48,7 +48,7 @@ packages:
 
   live_coaching:
     id: "live-coaching"
-    name: "Live Coaching"
+    name: "Guy in The Chair"
     price: "$50"
     description: "I sit over your shoulder while you play and help break stubborn habits in real-time"
     badge: ""  # No badge
@@ -94,15 +94,15 @@ comparison:
 
   options:
     - number: 1
-      title: "Asynchronous VOD Review"
+      title: "Review on My Time"
       description: "The most accessible option. You send replay codes when it works for you, and I review them when I have the chance. You get structured notes with one or two focused things to work on - no information overload."
 
     - number: 2
-      title: "Live VOD Review"
+      title: "VOD Review"
       description: "My primary offering. By asking questions about your thinking and guiding you toward the answers, you learn how to analyze your own gameplay. This is about teaching you to think, not just telling you what to do."
 
     - number: 3
-      title: "Live Coaching"
+      title: "Guy in The Chair"
       description: "For specific situations where you know what you need to do but have a stubborn habit you can't break. I catch patterns as they're happening and redirect you before you fall into them. Most effective for high-level execution issues."
 
 # -----------------------------------------------------------------------------
