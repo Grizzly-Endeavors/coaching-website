@@ -57,7 +57,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
 
   return (
     <header className={`sticky top-0 z-40 w-full transition-all duration-300 ${scrolled
-      ? 'border-b border-border bg-background-primary/80 backdrop-blur-md shadow-lg shadow-purple-600/10'
+      ? 'border-b border-border bg-background-primary/80 backdrop-blur-md shadow-lg shadow-cyan-primary/10'
       : 'border-b border-border bg-background-primary/95 backdrop-blur-sm'
       } ${className}`}>
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8" aria-label={common.aria_labels?.main_navigation || 'Main navigation'}>
@@ -106,7 +106,7 @@ export const Header: React.FC<HeaderProps> = ({ className = '' }) => {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 text-gray-300 hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded-lg transition-colors"
+            className="md:hidden p-2 text-gray-300 hover:text-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-primary rounded-lg transition-colors"
             aria-label={isMobileMenuOpen ? (common.navigation?.mobile?.aria_labels?.close_menu || 'Close menu') : (common.navigation?.mobile?.aria_labels?.open_menu || 'Open menu')}
             aria-expanded={isMobileMenuOpen}
           >

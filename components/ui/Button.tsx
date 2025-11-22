@@ -34,12 +34,12 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   ...props
 }) => {
-  const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-background-primary disabled:opacity-50 disabled:cursor-not-allowed';
+  const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-primary focus:ring-offset-2 focus:ring-offset-background-primary disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantClasses = {
-    primary: 'bg-purple-600 text-white hover:bg-purple-500 shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] active:scale-95',
-    secondary: 'bg-background-elevated text-purple-400 hover:bg-[#363650] border border-purple-600/30 hover:border-purple-500/50 hover:shadow-[0_0_15px_rgba(139,92,246,0.2)]',
-    outline: 'bg-transparent border-2 border-purple-600 text-purple-400 hover:bg-purple-600 hover:text-white',
+    primary: 'bg-purple-600 text-white hover:bg-purple-500 shadow-purple-glow hover:shadow-cyan-glow active:scale-95',
+    secondary: 'bg-background-elevated text-purple-400 hover:bg-[#363650] border border-purple-600/30 hover:border-cyan-primary/50 hover:shadow-cyan-glow/50',
+    outline: 'bg-transparent border-2 border-purple-600 text-purple-400 hover:bg-purple-600 hover:text-white hover:shadow-cyan-glow',
     ghost: 'bg-transparent text-purple-400 hover:bg-purple-600/10 hover:text-purple-300',
   };
 
