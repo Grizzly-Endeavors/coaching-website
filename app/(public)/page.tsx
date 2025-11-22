@@ -84,15 +84,14 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-              {/* Profile Image Placeholder */}
+              {/* Profile Image */}
               <div className="order-2 lg:order-1">
-                <div className="aspect-square bg-gradient-to-br from-brand-primary/20 to-brand-800/20 rounded-2xl border border-brand-primary/30 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <svg className="w-32 h-32 text-brand-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                    <p className="text-text-muted text-lg">{homeLocale.background.image_placeholder.line1 as string}<br />{homeLocale.background.image_placeholder.line2 as string}</p>
-                  </div>
+                <div className="aspect-square rounded-2xl border border-brand-primary/30 overflow-hidden">
+                  <img 
+                    src="/Website-headshot.webp" 
+                    alt="Coach Profile" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
 
