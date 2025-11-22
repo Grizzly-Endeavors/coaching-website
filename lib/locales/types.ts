@@ -151,23 +151,15 @@ export interface HomeLocale {
       description: string;
     }>;
   };
-  expertise: {
+  testimonials: {
     section_title: string;
     section_subtitle: string;
-    roles: {
-      tank: {
-        name: string;
-        heroes: string[];
-      };
-      dps: {
-        name: string;
-        heroes: string[];
-      };
-      support: {
-        name: string;
-        heroes: string[];
-      };
-    };
+    items: Array<{
+      name: string;
+      role: string;
+      rank: string;
+      quote: string;
+    }>;
   };
   differentiators: {
     section_title: string;

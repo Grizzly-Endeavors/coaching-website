@@ -70,49 +70,31 @@ philosophy:
       description: "Real improvement requires commitment. You have to show up and do the work day after day - but I'll make sure that work actually matters."
 
 # -----------------------------------------------------------------------------
-# Hero Expertise Section
+# Testimonials Section
 # -----------------------------------------------------------------------------
-# Location: Lines 202-238
-expertise:
-  section_title: "Hero Expertise"
-  section_subtitle: "Heroes I can coach at a high level"
+testimonials:
+  section_title: "What Students Are Saying"
+  section_subtitle: "Success stories from ranked climbers"
+  items:
+    - name: "DragonBlade"
+      role: "DPS"
+      rank: "Grandmaster 4"
+      quote: "The pattern recognition coaching completely changed how I view the game. I stopped focusing on my aim and started thinking about positioning, and I climbed 400 SR in two weeks."
 
-  roles:
-    tank:
-      name: "Tank"
-      heroes:
-        - "Reinhardt"
-        - "Winston"
-        - "Zarya"
-        - "D.Va"
-        - "Sigma"
-        - "Orisa"
-        - "Roadhog"
-        - "Wrecking Ball"
+    - name: "ShieldPro"
+      role: "Tank"
+      rank: "Masters 2"
+      quote: "I was hardstuck Diamond for 3 years. The 'how to think' approach helped me break my bad habits. It's not just about what to do, but understanding why."
 
-    dps:
-      name: "DPS"
-      heroes:
-        - "Tracer"
-        - "Genji"
-        - "Soldier: 76"
-        - "Widowmaker"
-        - "Cassidy"
-        - "Ashe"
-        - "Echo"
-        - "Sojourn"
+    - name: "HealBot9000"
+      role: "Support"
+      rank: "Grandmaster 1"
+      quote: "Even at GM, I was missing fundamental concepts. The coaching sessions are fun but incredibly educational. Best investment I've made for my improvement."
 
-    support:
-      name: "Support"
-      heroes:
-        - "Ana"
-        - "Mercy"
-        - "Lucio"
-        - "Zenyatta"
-        - "Moira"
-        - "Baptiste"
-        - "Brigitte"
-        - "Kiriko"
+    - name: "HitscanGod"
+      role: "DPS"
+      rank: "Masters 5"
+      quote: "The replay reviews are detailed and brutally honest in the best way possible. No fluff, just straight actionable advice that actually works."
 
 # -----------------------------------------------------------------------------
 # What Sets Me Apart Section
