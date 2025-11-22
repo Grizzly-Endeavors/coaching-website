@@ -61,30 +61,37 @@ export function loadAllLocales(): Record<string, LocaleData> {
   const locales: Record<string, LocaleData> = {};
 
   try {
-    // Read all files in the locales directory
-    const files = fs.readdirSync(LOCALES_PATH);
+    const readDir = (dirPath: string, prefix = '') => {
+      const entries = fs.readdirSync(dirPath, { withFileTypes: true });
 
-    // Filter for YAML files only
-    const yamlFiles = files.filter(
-      (file) => file.endsWith('.yaml') || file.endsWith('.yml')
-    );
+      for (const entry of entries) {
+        const fullPath = path.join(dirPath, entry.name);
 
-    // Load each file
-    for (const file of yamlFiles) {
-      const filename = file.replace(/\.(yaml|yml)$/, '');
+        if (entry.isDirectory()) {
+          readDir(fullPath, `${prefix}${entry.name}/`);
+          continue;
+        }
 
-      // Skip README files
-      if (filename.toLowerCase() === 'readme') {
-        continue;
+        if (!entry.isFile() || (!entry.name.endsWith('.yaml') && !entry.name.endsWith('.yml'))) {
+          continue;
+        }
+
+        const filename = entry.name.replace(/\.(yaml|yml)$/, '');
+        if (filename.toLowerCase() === 'readme') {
+          continue;
+        }
+
+        const key = `${prefix}${filename}`;
+
+        try {
+          locales[key] = loadLocale(key as LocaleKey);
+        } catch (error) {
+          console.warn(`Warning: Could not load locale file ${key}:`, error);
+        }
       }
+    };
 
-      try {
-        locales[filename] = loadLocale(filename as LocaleKey);
-      } catch (error) {
-        console.warn(`Warning: Could not load locale file ${file}:`, error);
-      }
-    }
-
+    readDir(LOCALES_PATH);
     return locales;
   } catch (error) {
     throw new Error(
