@@ -31,7 +31,7 @@ navigation:
 # Location: /components/layout/Footer.tsx (lines 25-36)
 footer:
   brand:
-    name: "Overwatch Coaching"
+    name: "Bear Flinn"
     tagline: "Overwatch coaching focused on sustainable improvement. Teaching you how to think, not just what to do. GM1 across all roles with a playful, results-driven approach."
 
   sections:
@@ -53,7 +53,7 @@ footer:
     aria_label: "Visit our {platform}"  # {platform} = Discord, Twitter, YouTube, Twitch
 
   bottom:
-    copyright: "© {year} Overwatch Coaching. All rights reserved."
+    copyright: "© {year} Bear Flinn. All rights reserved."
     privacy_policy: "Privacy Policy"
     terms_of_service: "Terms of Service"
 

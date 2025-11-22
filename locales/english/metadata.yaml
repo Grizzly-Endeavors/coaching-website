@@ -8,28 +8,28 @@
 # -----------------------------------------------------------------------------
 # Location: /app/(public)/page.tsx (lines 6-9)
 home:
-  title: "Home | Overwatch Coaching"
+  title: "Home | Bear Flinn"
   description: "Overwatch coaching focused on sustainable improvement. GM1 across all roles, 4.4k High GM on DPS. Teaching you how to think, not just what to do."
 
 # -----------------------------------------------------------------------------
 # Pricing Page
 # -----------------------------------------------------------------------------
 pricing:
-  title: "Pricing | Overwatch Coaching"
+  title: "Pricing | Bear Flinn"
   description: "Choose from three coaching formats designed for sustainable improvement. Asynchronous reviews, live VOD reviews, and live coaching sessions."
 
 # -----------------------------------------------------------------------------
 # Contact Page
 # -----------------------------------------------------------------------------
 contact:
-  title: "Contact | Overwatch Coaching"
+  title: "Contact | Bear Flinn"
   description: "Get in touch with questions about Overwatch coaching packages and how we can help you improve your gameplay."
 
 # -----------------------------------------------------------------------------
 # Booking Page
 # -----------------------------------------------------------------------------
 booking:
-  title: "Book Coaching | Overwatch Coaching"
+  title: "Book Coaching | Bear Flinn"
   description: "Book your Overwatch coaching session or submit replay codes for review. Choose from VOD reviews and live coaching options."
 
 # -----------------------------------------------------------------------------
@@ -38,44 +38,44 @@ booking:
 # Location: /app/(public)/blog/page.tsx (lines 22-29)
 blog:
   listing:
-    title: "Blog - Overwatch Coaching"
+    title: "Blog - Bear Flinn"
     description: "Tips, strategies, and guides to improve your Overwatch gameplay. Learn from expert coaching insights on heroes, positioning, and game sense."
-    og_title: "Blog - Overwatch Coaching"
+    og_title: "Blog - Bear Flinn"
     og_description: "Tips, strategies, and guides to improve your Overwatch gameplay."
     og_type: "website"
 
   post:
-    title: "{title} - Overwatch Coaching Blog"  # {title} = post title
+    title: "{title} - Bear Flinn Blog"  # {title} = post title
     description: "{excerpt}"  # {excerpt} = post excerpt or default
     default_description: "Read {title} on our Overwatch coaching blog."
     og_type: "article"
-    og_authors: "Overwatch Coach"
+    og_authors: "Bear Flinn"
     twitter_card: "summary_large_image"
 
   not_found:
-    title: "Post Not Found - Overwatch Coaching"
+    title: "Post Not Found - Bear Flinn"
 
 # -----------------------------------------------------------------------------
 # Checkout Pages
 # -----------------------------------------------------------------------------
 checkout:
   success:
-    title: "Booking Confirmed | Overwatch Coaching"
+    title: "Booking Confirmed | Bear Flinn"
     description: "Your coaching session has been booked successfully."
 
   cancel:
-    title: "Payment Cancelled | Overwatch Coaching"
+    title: "Payment Cancelled | Bear Flinn"
     description: "Your payment was cancelled."
 
 # -----------------------------------------------------------------------------
 # Terms & Privacy Pages
 # -----------------------------------------------------------------------------
 terms:
-  title: "Terms of Service | Overwatch Coaching"
+  title: "Terms of Service | Bear Flinn"
   description: "Terms of service for Overwatch coaching services."
 
 privacy:
-  title: "Privacy Policy | Overwatch Coaching"
+  title: "Privacy Policy | Bear Flinn"
   description: "Privacy policy and data protection information for Overwatch coaching services."
 
 # -----------------------------------------------------------------------------
@@ -95,12 +95,12 @@ admin:
     title: "Availability | Admin"
 
   login:
-    title: "Admin Login | Overwatch Coaching"
+    title: "Admin Login | Bear Flinn"
 
 # -----------------------------------------------------------------------------
 # Default/Fallback Metadata
 # -----------------------------------------------------------------------------
 default:
-  title: "Overwatch Coaching"
+  title: "Bear Flinn"
   description: "Professional Overwatch coaching focused on sustainable improvement. Teaching you how to think, not just what to do."
-  site_name: "Overwatch Coaching"
+  site_name: "Bear Flinn"
