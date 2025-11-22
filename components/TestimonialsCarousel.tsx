@@ -178,7 +178,7 @@ export default function TestimonialsCarousel({ items }: TestimonialsCarouselProp
                   </div>
                 </div>
 
-                <blockquote className="text-xl md:text-2xl text-text-primary font-medium mb-8 leading-relaxed relative z-10 border-none pl-0">
+                <blockquote className="text-lg md:text-xl text-text-primary font-medium mb-8 leading-relaxed relative z-10 border-none pl-0">
                   "{currentTestimonial.quote}"
                 </blockquote>
               </CardContent>
