@@ -79,21 +79,25 @@ testimonials:
     - name: "DragonBlade"
       role: "DPS"
       rank: "Grandmaster 4"
+      tagline: "Strategic Improvement"
       quote: "The pattern recognition coaching completely changed how I view the game. I stopped focusing on my aim and started thinking about positioning, and I climbed 400 SR in two weeks."
 
     - name: "ShieldPro"
       role: "Tank"
       rank: "Masters 2"
+      tagline: "Breaking Bad Habits"
       quote: "I was hardstuck Diamond for 3 years. The 'how to think' approach helped me break my bad habits. It's not just about what to do, but understanding why."
 
     - name: "HealBot9000"
       role: "Support"
       rank: "Grandmaster 1"
+      tagline: "Filling Knowledge Gaps"
       quote: "Even at GM, I was missing fundamental concepts. The coaching sessions are fun but incredibly educational. Best investment I've made for my improvement."
 
     - name: "HitscanGod"
       role: "DPS"
       rank: "Masters 5"
+      tagline: "Actionable Feedback"
       quote: "The replay reviews are detailed and brutally honest in the best way possible. No fluff, just straight actionable advice that actually works."
 
 # -----------------------------------------------------------------------------
