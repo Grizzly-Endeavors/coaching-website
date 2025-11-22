@@ -32,7 +32,7 @@ export default function BlogPostNotFound() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/blog"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#8b5cf6] text-white font-medium hover:bg-[#a78bfa] transition-all shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 group"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-brand-primary text-white font-medium hover:bg-brand-hover transition-all shadow-lg shadow-brand-primary/30 hover:shadow-brand-primary/50 group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>{blogLocale.not_found.button as string}</span>
@@ -40,7 +40,7 @@ export default function BlogPostNotFound() {
 
           <Link
             href="/"
-            className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#1a1a2e] text-[#e5e7eb] font-medium border border-[#2a2a40] hover:border-[#8b5cf6] transition-all"
+            className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#1a1a2e] text-[#e5e7eb] font-medium border border-[#2a2a40] hover:border-brand-primary transition-all"
           >
             Go Home
           </Link>

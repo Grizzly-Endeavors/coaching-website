@@ -23,11 +23,11 @@ export function BlogCard({ post }: BlogCardProps) {
       href={`/blog/${post.slug}`}
       className="group block h-full"
     >
-      <article className="h-full flex flex-col bg-background-surface border border-border rounded-lg overflow-hidden transition-all duration-300 hover:border-purple-primary hover:shadow-lg hover:shadow-purple-500/20">
+      <article className="h-full flex flex-col bg-background-surface border border-border rounded-lg overflow-hidden transition-all duration-300 hover:border-brand-primary hover:shadow-lg hover:shadow-brand-500/20">
         {/* Card Content */}
         <div className="flex-1 p-6">
           {/* Title */}
-          <h2 className="text-xl font-bold text-text-primary mb-3 line-clamp-2 group-hover:text-purple-hover transition-colors">
+          <h2 className="text-xl font-bold text-text-primary mb-3 line-clamp-2 group-hover:text-brand-hover transition-colors">
             {post.title}
           </h2>
 
@@ -44,7 +44,7 @@ export function BlogCard({ post }: BlogCardProps) {
               {post.tags.slice(0, 3).map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-background-elevated text-purple-hover border border-purple-primary/30"
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-background-elevated text-brand-hover border border-brand-primary/30"
                 >
                   {tag}
                 </span>
@@ -76,7 +76,7 @@ export function BlogCard({ post }: BlogCardProps) {
 
         {/* Hover Effect Border Glow */}
         <div className="absolute inset-0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-purple-primary/0 via-purple-primary/10 to-purple-primary/0" />
+          <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-brand-primary/0 via-brand-primary/10 to-brand-primary/0" />
         </div>
       </article>
     </Link>

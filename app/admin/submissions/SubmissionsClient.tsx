@@ -97,7 +97,7 @@ export default function SubmissionsClient({ locale }: SubmissionsClientProps) {
               placeholder={locale.filters?.search?.placeholder || 'Enter submission ID or email...'}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all"
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] placeholder-[#6b7280] focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
             />
           </div>
           <div className="flex-1 min-w-[200px]">
@@ -107,7 +107,7 @@ export default function SubmissionsClient({ locale }: SubmissionsClientProps) {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as SubmissionStatus)}
-              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all appearance-none"
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all appearance-none"
             >
               <option value="ALL">{locale.filters?.status?.options?.all || 'All Submissions'}</option>
               <option value="AWAITING_PAYMENT">{locale.filters?.status?.options?.awaiting_payment || 'Awaiting Payment'}</option>
@@ -125,7 +125,7 @@ export default function SubmissionsClient({ locale }: SubmissionsClientProps) {
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] focus:outline-none focus:ring-2 focus:ring-[#8b5cf6] focus:border-transparent transition-all appearance-none"
+              className="w-full px-4 py-2 bg-[#1a1a2e] border border-[#2a2a40] rounded-lg text-[#e5e7eb] focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all appearance-none"
             >
               <option value="desc">{locale.filters?.sort?.options?.newest || 'Newest First'}</option>
               <option value="asc">{locale.filters?.sort?.options?.oldest || 'Oldest First'}</option>
@@ -150,8 +150,8 @@ export default function SubmissionsClient({ locale }: SubmissionsClientProps) {
               {searchQuery
                 ? (locale.empty_states?.no_submissions?.search || 'No submissions match your search')
                 : statusFilter !== 'ALL'
-                ? (locale.empty_states?.no_submissions?.filter || 'Try changing the filter to see more submissions')
-                : (locale.empty_states?.no_submissions?.default || 'Submissions will appear here when users submit replay codes')}
+                  ? (locale.empty_states?.no_submissions?.filter || 'Try changing the filter to see more submissions')
+                  : (locale.empty_states?.no_submissions?.default || 'Submissions will appear here when users submit replay codes')}
             </p>
           </div>
         ) : (
@@ -169,7 +169,7 @@ export default function SubmissionsClient({ locale }: SubmissionsClientProps) {
             {filteredAndSortedSubmissions.map((submission) => (
               <AdminTableRow key={submission.id}>
                 <AdminTableCell>
-                  <code className="text-xs text-[#8b5cf6] font-mono">
+                  <code className="text-xs text-brand-primary font-mono">
                     {submission.id.substring(0, 8)}...
                   </code>
                 </AdminTableCell>
@@ -194,7 +194,7 @@ export default function SubmissionsClient({ locale }: SubmissionsClientProps) {
                 <AdminTableCell>{submission.role}</AdminTableCell>
                 <AdminTableCell>
                   <div className="flex items-center gap-1">
-                    <span className="px-2 py-1 bg-[#8b5cf6]/20 text-[#8b5cf6] rounded text-xs font-medium">
+                    <span className="px-2 py-1 bg-brand-primary/20 text-brand-primary rounded text-xs font-medium">
                       {getReplayCountText(submission.replays.length)}
                     </span>
                   </div>
@@ -207,7 +207,7 @@ export default function SubmissionsClient({ locale }: SubmissionsClientProps) {
                 <AdminTableCell>
                   <Link
                     href={`/admin/submissions/${submission.id}`}
-                    className="text-[#8b5cf6] hover:text-[#a78bfa] font-medium text-sm transition-colors"
+                    className="text-brand-primary hover:text-brand-hover font-medium text-sm transition-colors"
                   >
                     {locale.table?.actions?.view_details || 'View Details →'}
                   </Link>

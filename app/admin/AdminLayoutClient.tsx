@@ -25,7 +25,7 @@ export function AdminLayoutClient({ children, userEmail }: AdminLayoutClientProp
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-[#1a1a2e] border-b border-[#2a2a40] px-4 py-3">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-[#8b5cf6]">Admin Panel</h1>
+          <h1 className="text-xl font-bold text-brand-primary">Admin Panel</h1>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-2 rounded-lg text-[#e5e7eb] hover:bg-[#2a2a40] transition-colors"
@@ -52,13 +52,12 @@ export function AdminLayoutClient({ children, userEmail }: AdminLayoutClientProp
 
       {/* Sidebar */}
       <aside
-        className={`fixed left-0 top-0 h-full w-64 bg-[#1a1a2e] border-r border-[#2a2a40] flex flex-col z-50 transition-transform duration-300 ease-in-out ${
-          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-        } lg:translate-x-0`}
+        className={`fixed left-0 top-0 h-full w-64 bg-[#1a1a2e] border-r border-[#2a2a40] flex flex-col z-50 transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          } lg:translate-x-0`}
       >
         {/* Logo/Header */}
         <div className="p-6 border-b border-[#2a2a40]">
-          <h1 className="text-2xl font-bold text-[#8b5cf6]">Admin Panel</h1>
+          <h1 className="text-2xl font-bold text-brand-primary">Admin Panel</h1>
           <p className="text-sm text-[#6b7280] mt-1">Overwatch Coaching</p>
         </div>
 
@@ -158,11 +157,10 @@ function NavLink({
     <Link
       href={href}
       onClick={onClick}
-      className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group ${
-        active
-          ? 'bg-[#8b5cf6] text-white'
+      className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all group ${active
+          ? 'bg-brand-primary text-white'
           : 'text-[#9ca3af] hover:bg-[#2a2a40] hover:text-[#e5e7eb]'
-      }`}
+        }`}
     >
       <span className="text-lg group-hover:scale-110 transition-transform">{icon}</span>
       <span className="font-medium">{children}</span>

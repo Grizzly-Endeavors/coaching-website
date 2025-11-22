@@ -131,7 +131,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           {/* Back to Blog Link */}
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-[#8b5cf6] hover:text-[#a78bfa] transition-colors mb-8 group"
+            className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-hover transition-colors mb-8 group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>{blogLocale.post.back_to_blog as string}</span>
@@ -165,7 +165,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 <Link
                   key={tag}
                   href={`/blog?tag=${encodeURIComponent(tag)}`}
-                  className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-[#2a2a40] text-[#a78bfa] border border-[#8b5cf6]/30 hover:border-[#8b5cf6] hover:shadow-lg hover:shadow-purple-500/20 transition-all"
+                  className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-[#2a2a40] text-brand-hover border border-brand-primary/30 hover:border-brand-primary hover:shadow-lg hover:shadow-brand-primary/20 transition-all"
                 >
                   {tag}
                 </Link>
@@ -184,7 +184,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       {/* Footer CTA */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-gradient-to-r from-[#1a1a2e] to-[#2a2a40] rounded-lg p-8 border border-[#8b5cf6]/30 text-center">
+        <div className="bg-gradient-to-r from-[#1a1a2e] to-[#2a2a40] rounded-lg p-8 border border-brand-primary/30 text-center">
           <h2 className="text-2xl font-bold text-[#e5e7eb] mb-3">
             {blogLocale.post.cta.title as string}
           </h2>
@@ -194,13 +194,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/booking"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#8b5cf6] text-white font-medium hover:bg-[#a78bfa] transition-all shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-brand-primary text-white font-medium hover:bg-brand-hover transition-all shadow-lg shadow-brand-primary/30 hover:shadow-brand-primary/50"
             >
               {blogLocale.post.cta.buttons.book_session as string}
             </Link>
             <Link
               href="/booking#replay-submission"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#1a1a2e] text-[#e5e7eb] font-medium border border-[#2a2a40] hover:border-[#8b5cf6] transition-all"
+              className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-[#1a1a2e] text-[#e5e7eb] font-medium border border-[#2a2a40] hover:border-brand-primary transition-all"
             >
               {blogLocale.post.cta.buttons.submit_replay as string}
             </Link>
@@ -221,7 +221,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <div className="mt-12 text-center">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-[#8b5cf6] hover:text-[#a78bfa] transition-colors group"
+            className="inline-flex items-center gap-2 text-brand-primary hover:text-brand-hover transition-colors group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span>{blogLocale.post.back_to_all_posts as string}</span>

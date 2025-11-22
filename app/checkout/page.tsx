@@ -104,7 +104,7 @@ function CheckoutContent() {
             </CardHeader>
             <CardContent className="text-center">
               <div className="flex justify-center mb-6">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-500"></div>
+                <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-brand-500"></div>
               </div>
               <p className="text-gray-300 mb-4">
                 Redirecting you to secure checkout...
@@ -122,7 +122,7 @@ function CheckoutContent() {
 
 export default function CheckoutPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0f0f23] flex items-center justify-center"><div className="animate-spin h-8 w-8 border-2 border-purple-500 border-t-transparent rounded-full"></div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#0f0f23] flex items-center justify-center"><div className="animate-spin h-8 w-8 border-2 border-brand-500 border-t-transparent rounded-full"></div></div>}>
       <CheckoutContent />
     </Suspense>
   );

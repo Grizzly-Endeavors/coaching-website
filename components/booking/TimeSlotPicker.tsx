@@ -121,7 +121,7 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="text-white text-xl">{locale.header?.title || 'Select Appointment Time'}</CardTitle>
-          <Badge className={sessionType === 'vod-review' ? 'bg-blue-600' : 'bg-purple-600'}>
+          <Badge className={sessionType === 'vod-review' ? 'bg-blue-600' : 'bg-brand-600'}>
             {getSessionTypeLabel()}
           </Badge>
         </div>
@@ -172,7 +172,7 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
         {/* Time Slots Grid */}
         {loading ? (
           <div className="text-center py-12">
-            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-purple-600 border-r-transparent"></div>
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-brand-600 border-r-transparent"></div>
             <p className="text-gray-400 mt-3">{locale.loading?.spinner || 'Loading available times...'}</p>
           </div>
         ) : hasAnySlots ? (
@@ -193,11 +193,10 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
                           key={slot.datetime}
                           type="button"
                           onClick={() => handleSlotClick(slot.datetime)}
-                          className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-all ${
-                            isSlotSelected(slot.datetime)
-                              ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/50'
-                              : 'bg-background-primary text-gray-300 border border-border hover:border-purple-500 hover:bg-background-surface'
-                          }`}
+                          className={`w-full px-3 py-2 rounded-lg text-sm font-medium transition-all ${isSlotSelected(slot.datetime)
+                              ? 'bg-brand-600 text-white shadow-lg shadow-brand-600/50'
+                              : 'bg-background-primary text-gray-300 border border-border hover:border-brand-500 hover:bg-background-surface'
+                            }`}
                         >
                           {slot.time}
                         </button>
@@ -227,8 +226,8 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
 
         {/* Selected Slot Display */}
         {selectedSlot && (
-          <Alert className="bg-purple-900/30 border-purple-700">
-            <AlertDescription className="text-purple-100 flex items-center">
+          <Alert className="bg-brand-900/30 border-brand-700">
+            <AlertDescription className="text-brand-100 flex items-center">
               <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>

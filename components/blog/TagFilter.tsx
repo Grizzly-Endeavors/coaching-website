@@ -55,7 +55,7 @@ export function TagFilter({ tags, currentTag }: TagFilterProps) {
         {currentTag && (
           <button
             onClick={handleClearFilter}
-            className="text-xs text-purple-primary hover:text-purple-hover transition-colors"
+            className="text-xs text-brand-primary hover:text-brand-hover transition-colors"
           >
             Clear filter
           </button>
@@ -73,10 +73,9 @@ export function TagFilter({ tags, currentTag }: TagFilterProps) {
               className={`
                 inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium
                 transition-all duration-200
-                ${
-                  isActive
-                    ? 'bg-purple-primary text-white shadow-lg shadow-purple-500/30 scale-105'
-                    : 'bg-background-surface text-text-secondary border border-border hover:border-purple-primary hover:text-purple-hover'
+                ${isActive
+                  ? 'bg-brand-primary text-white shadow-lg shadow-brand-500/30 scale-105'
+                  : 'bg-background-surface text-text-secondary border border-border hover:border-brand-primary hover:text-brand-hover'
                 }
               `}
               aria-pressed={isActive}

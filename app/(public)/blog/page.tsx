@@ -149,7 +149,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
             {currentTag && (
               <a
                 href="/blog"
-                className="inline-flex items-center px-6 py-3 rounded-lg bg-purple-primary text-white font-medium hover:bg-purple-hover transition-colors shadow-lg shadow-purple-glow"
+                className="inline-flex items-center px-6 py-3 rounded-lg bg-brand-primary text-white font-medium hover:bg-brand-hover transition-colors shadow-lg shadow-brand-glow"
               >
                 {blogLocale.listing.empty.no_filtered_posts.button as string}
               </a>
@@ -176,7 +176,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         {/* Call to Action */}
         {posts.length > 0 && (
           <div className="mt-16 text-center">
-            <div className="bg-gradient-to-r from-background-surface to-background-elevated rounded-lg p-8 border border-purple-primary/30">
+            <div className="bg-gradient-to-r from-background-surface to-background-elevated rounded-lg p-8 border border-brand-primary/30">
               <h2 className="text-2xl font-bold text-text-primary mb-3">
                 {blogLocale.listing.cta.title as string}
               </h2>
@@ -186,13 +186,13 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a
                   href="/booking"
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-purple-primary text-white font-medium hover:bg-purple-hover transition-all shadow-lg shadow-purple-glow hover:shadow-purple-glow-md"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-brand-primary text-white font-medium hover:bg-brand-hover transition-all shadow-lg shadow-brand-glow hover:shadow-brand-glow-md"
                 >
                   {blogLocale.listing.cta.buttons.book_session as string}
                 </a>
                 <a
                   href="/booking#replay-submission"
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-background-surface text-text-primary font-medium border border-border hover:border-purple-primary transition-all"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-background-surface text-text-primary font-medium border border-border hover:border-brand-primary transition-all"
                 >
                   {blogLocale.listing.cta.buttons.submit_replay as string}
                 </a>

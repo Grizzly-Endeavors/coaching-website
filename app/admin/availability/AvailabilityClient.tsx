@@ -310,7 +310,7 @@ export default function AvailabilityClient({ locale }: AvailabilityClientProps) 
       <div className="flex gap-4">
         <Dialog open={showAddSlotDialog} onOpenChange={setShowAddSlotDialog}>
           <DialogTrigger asChild>
-            <Button className="bg-purple-600 hover:bg-purple-700">
+            <Button className="bg-brand-600 hover:bg-brand-700">
               {locale.actions?.add_slot || 'Add Availability Slot'}
             </Button>
           </DialogTrigger>
@@ -391,7 +391,7 @@ export default function AvailabilityClient({ locale }: AvailabilityClientProps) 
                 </Select>
               </div>
 
-              <Button onClick={handleAddSlot} className="w-full bg-purple-600 hover:bg-purple-700">
+              <Button onClick={handleAddSlot} className="w-full bg-brand-600 hover:bg-brand-700">
                 {locale.add_slot_dialog?.button || 'Create Slot'}
               </Button>
             </div>
@@ -489,7 +489,7 @@ export default function AvailabilityClient({ locale }: AvailabilityClientProps) 
                 />
               </div>
 
-              <Button onClick={handleBlockTime} className="w-full bg-purple-600 hover:bg-purple-700">
+              <Button onClick={handleBlockTime} className="w-full bg-brand-600 hover:bg-brand-700">
                 {locale.block_time_dialog?.button || 'Block Time'}
               </Button>
             </div>
@@ -533,11 +533,10 @@ export default function AvailabilityClient({ locale }: AvailabilityClientProps) 
                   groupedSlots[dayIndex].map((slot) => (
                     <div
                       key={slot.id}
-                      className={`p-4 rounded-lg border ${
-                        slot.isActive
+                      className={`p-4 rounded-lg border ${slot.isActive
                           ? 'bg-[#0f0f23] border-[#2a2a40]'
                           : 'bg-gray-800 border-gray-700 opacity-50'
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-4">
@@ -548,7 +547,7 @@ export default function AvailabilityClient({ locale }: AvailabilityClientProps) 
                             className={
                               slot.sessionType === 'vod-review'
                                 ? 'bg-blue-600'
-                                : 'bg-purple-600'
+                                : 'bg-brand-600'
                             }
                           >
                             {slot.sessionType === 'vod-review'

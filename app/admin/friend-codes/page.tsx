@@ -197,7 +197,7 @@ export default function FriendCodesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500"></div>
       </div>
     );
   }
@@ -227,7 +227,7 @@ export default function FriendCodesPage() {
             {friendCodes.map((code) => (
               <AdminTableRow key={code.id}>
                 <AdminTableCell>
-                  <span className="font-mono font-semibold text-purple-400">{code.code}</span>
+                  <span className="font-mono font-semibold text-brand-400">{code.code}</span>
                 </AdminTableCell>
                 <AdminTableCell>
                   {code.description || <span className="text-gray-600">-</span>}
@@ -363,7 +363,7 @@ export default function FriendCodesPage() {
           <form onSubmit={handleEdit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">Code</label>
-              <div className="font-mono font-bold text-purple-400 bg-[#1a1a2e] px-4 py-2 rounded border border-[#2a2a40]">
+              <div className="font-mono font-bold text-brand-400 bg-[#1a1a2e] px-4 py-2 rounded border border-[#2a2a40]">
                 {formData.code}
               </div>
             </div>
@@ -404,7 +404,7 @@ export default function FriendCodesPage() {
                 id="isActive"
                 checked={formData.isActive}
                 onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
-                className="w-4 h-4 text-purple-600 bg-[#1a1a2e] border-[#2a2a40] rounded focus:ring-purple-500 focus:ring-2"
+                className="w-4 h-4 text-brand-600 bg-[#1a1a2e] border-[#2a2a40] rounded focus:ring-brand-500 focus:ring-2"
               />
               <label htmlFor="isActive" className="ml-2 text-sm text-gray-300">
                 Active (uncheck to disable this code)

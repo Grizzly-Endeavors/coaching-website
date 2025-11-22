@@ -94,26 +94,25 @@ export default function PricingPage() {
                   variant="surface"
                   padding="lg"
                   hover
-                  className={`relative flex flex-col h-full ${
-                    option.highlight
-                      ? 'border-2 border-purple-500 shadow-[0_0_30px_rgba(139,92,246,0.3)]'
+                  className={`relative flex flex-col h-full ${option.highlight
+                      ? 'border-2 border-brand-500 shadow-[0_0_30px_rgba(6,182,212,0.3)]'
                       : ''
-                  }`}
+                    }`}
                 >
                   {option.highlight && (
                     <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                      <span className="bg-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
+                      <span className="bg-brand-600 text-white px-4 py-1 rounded-full text-sm font-semibold">
                         {option.badge as string}
                       </span>
                     </div>
                   )}
 
                   <CardHeader className="text-center pb-6 border-b border-[#2a2a40]">
-                    <div className="flex items-center justify-center w-16 h-16 bg-purple-600/20 rounded-lg mx-auto mb-4">
-                      <div className="text-purple-400">{option.icon}</div>
+                    <div className="flex items-center justify-center w-16 h-16 bg-brand-600/20 rounded-lg mx-auto mb-4">
+                      <div className="text-brand-400">{option.icon}</div>
                     </div>
                     <CardTitle className="text-2xl mb-2">{option.name}</CardTitle>
-                    <p className="text-3xl font-bold text-purple-400 mb-3">
+                    <p className="text-3xl font-bold text-brand-400 mb-3">
                       {option.price}
                     </p>
                     <p className="text-gray-400 text-sm leading-relaxed">
@@ -126,7 +125,7 @@ export default function PricingPage() {
                       {option.features.map((feature, index) => (
                         <li key={index} className="flex items-start text-sm">
                           <svg
-                            className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0"
+                            className="w-5 h-5 text-brand-400 mr-3 mt-0.5 flex-shrink-0"
                             fill="currentColor"
                             viewBox="0 0 20 20"
                           >
@@ -174,7 +173,7 @@ export default function PricingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {coachingProcess.map((item) => (
                 <div key={item.number} className="text-center">
-                  <div className="flex items-center justify-center w-16 h-16 bg-purple-600 text-white rounded-full text-2xl font-bold mb-4 mx-auto shadow-[0_0_20px_rgba(139,92,246,0.4)]">
+                  <div className="flex items-center justify-center w-16 h-16 bg-brand-600 text-white rounded-full text-2xl font-bold mb-4 mx-auto shadow-[0_0_20px_rgba(6,182,212,0.4)]">
                     {item.number}
                   </div>
                   <h3 className="text-xl font-bold text-gray-100 mb-2">{item.title}</h3>
@@ -200,8 +199,8 @@ export default function PricingPage() {
               {comparisonOptions.map((item) => (
                 <Card key={item.number} variant="surface" padding="lg">
                   <div className="flex items-start">
-                    <div className="flex items-center justify-center w-10 h-10 bg-purple-600/20 rounded-lg mr-4 flex-shrink-0">
-                      <span className="text-purple-400 font-bold">{item.number}</span>
+                    <div className="flex items-center justify-center w-10 h-10 bg-brand-600/20 rounded-lg mr-4 flex-shrink-0">
+                      <span className="text-brand-400 font-bold">{item.number}</span>
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-gray-100 mb-2">

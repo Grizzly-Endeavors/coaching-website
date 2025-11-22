@@ -53,7 +53,7 @@ export default function CancelPage() {
                   {(checkoutLocale.cancel.what_next.options as string[]).map((option, index) => (
                     <li key={index} className="flex items-start">
                       <svg
-                        className="w-5 h-5 text-purple-400 mr-3 mt-0.5 flex-shrink-0"
+                        className="w-5 h-5 text-brand-400 mr-3 mt-0.5 flex-shrink-0"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                       >

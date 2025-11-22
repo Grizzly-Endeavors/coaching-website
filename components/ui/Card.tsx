@@ -47,7 +47,7 @@ export const Card: React.FC<CardProps> = ({
   };
 
   const borderClasses = purpleBorder
-    ? 'border-2 border-purple-600'
+    ? 'border-2 border-brand-600'
     : 'border border-border';
 
   const hoverClasses = hover

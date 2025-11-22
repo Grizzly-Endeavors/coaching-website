@@ -121,31 +121,28 @@ export default function BlogPostsClient({ locale }: BlogPostsClientProps) {
       <div className="flex space-x-2 mb-6">
         <button
           onClick={() => setFilter('all')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === 'all'
-              ? 'bg-[#8b5cf6] text-white'
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'all'
+              ? 'bg-brand-primary text-white'
               : 'bg-[#2a2a40] text-[#9ca3af] hover:text-[#e5e7eb]'
-          }`}
+            }`}
         >
           {getFilterText('all', posts.length)}
         </button>
         <button
           onClick={() => setFilter('published')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === 'published'
-              ? 'bg-[#8b5cf6] text-white'
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'published'
+              ? 'bg-brand-primary text-white'
               : 'bg-[#2a2a40] text-[#9ca3af] hover:text-[#e5e7eb]'
-          }`}
+            }`}
         >
           {getFilterText('published', posts.filter((p) => p.published).length)}
         </button>
         <button
           onClick={() => setFilter('draft')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-            filter === 'draft'
-              ? 'bg-[#8b5cf6] text-white'
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'draft'
+              ? 'bg-brand-primary text-white'
               : 'bg-[#2a2a40] text-[#9ca3af] hover:text-[#e5e7eb]'
-          }`}
+            }`}
         >
           {getFilterText('drafts', posts.filter((p) => !p.published).length)}
         </button>
@@ -218,10 +215,10 @@ export default function BlogPostsClient({ locale }: BlogPostsClientProps) {
                 <AdminTableCell>
                   {post.publishedAt
                     ? new Date(post.publishedAt).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })
                     : '-'}
                 </AdminTableCell>
                 <AdminTableCell>
@@ -235,7 +232,7 @@ export default function BlogPostsClient({ locale }: BlogPostsClientProps) {
                   <div className="flex items-center space-x-3">
                     <Link
                       href={`/admin/blog/edit/${post.id}`}
-                      className="text-[#8b5cf6] hover:text-[#a78bfa] font-medium text-sm transition-colors"
+                      className="text-brand-primary hover:text-brand-hover font-medium text-sm transition-colors"
                     >
                       {locale.table?.actions?.edit || 'Edit'}
                     </Link>

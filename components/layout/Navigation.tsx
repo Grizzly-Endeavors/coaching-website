@@ -61,11 +61,10 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className={`text-sm font-medium transition-colors duration-200 ${
-                  isActivePath(link.href)
-                    ? 'text-purple-400'
-                    : 'text-gray-300 hover:text-purple-400'
-                }`}
+                className={`text-sm font-medium transition-colors duration-200 ${isActivePath(link.href)
+                    ? 'text-brand-400'
+                    : 'text-gray-300 hover:text-brand-400'
+                  }`}
                 aria-current={isActivePath(link.href) ? 'page' : undefined}
               >
                 {link.label}
@@ -78,7 +77,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
       {/* Mobile Navigation Trigger */}
       <button
         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-        className="md:hidden p-2 text-gray-300 hover:text-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-lg transition-colors"
+        className="md:hidden p-2 text-gray-300 hover:text-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-500 rounded-lg transition-colors"
         aria-label={isMobileMenuOpen ? (common.navigation?.mobile?.aria_labels?.close_menu || 'Close menu') : (common.navigation?.mobile?.aria_labels?.open_menu || 'Open menu')}
         aria-expanded={isMobileMenuOpen}
       >
@@ -105,7 +104,7 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
 
           {/* Menu Panel */}
           <div
-            className="fixed top-16 right-0 z-50 h-[calc(100vh-4rem)] w-full max-w-sm bg-background-surface border-l border-border shadow-[0_0_50px_rgba(139,92,246,0.2)] md:hidden overflow-y-auto"
+            className="fixed top-16 right-0 z-50 h-[calc(100vh-4rem)] w-full max-w-sm bg-background-surface border-l border-border shadow-[0_0_50px_rgba(6,182,212,0.2)] md:hidden overflow-y-auto"
             role="dialog"
             aria-label={common.navigation?.mobile?.aria_labels?.mobile_navigation || 'Mobile navigation'}
           >
@@ -115,11 +114,10 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                   <li key={link.href}>
                     <Link
                       href={link.href}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
-                        isActivePath(link.href)
-                          ? 'bg-purple-600/20 text-purple-400 border border-purple-600/30'
-                          : 'text-gray-300 hover:text-purple-400 hover:bg-background-elevated'
-                      }`}
+                      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${isActivePath(link.href)
+                          ? 'bg-brand-600/20 text-brand-400 border border-brand-600/30'
+                          : 'text-gray-300 hover:text-brand-400 hover:bg-background-elevated'
+                        }`}
                       aria-current={isActivePath(link.href) ? 'page' : undefined}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -135,14 +133,14 @@ export const Navigation: React.FC<NavigationProps> = ({ className = '' }) => {
                 <div className="space-y-3">
                   <Link
                     href="/pricing"
-                    className="block w-full px-4 py-3 text-center text-sm font-medium text-purple-400 bg-transparent border border-purple-600/30 rounded-lg hover:bg-purple-600/10 transition-all duration-200"
+                    className="block w-full px-4 py-3 text-center text-sm font-medium text-brand-400 bg-transparent border border-brand-600/30 rounded-lg hover:bg-brand-600/10 transition-all duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {common.navigation?.mobile?.buttons?.pricing || 'Pricing'}
                   </Link>
                   <Link
                     href="/booking"
-                    className="block w-full px-4 py-3 text-center text-sm font-medium text-white bg-purple-600 rounded-lg shadow-[0_0_20px_rgba(139,92,246,0.3)] hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] hover:bg-purple-500 transition-all duration-200"
+                    className="block w-full px-4 py-3 text-center text-sm font-medium text-white bg-brand-600 rounded-lg shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] hover:bg-brand-500 transition-all duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {common.navigation?.mobile?.buttons?.get_coaching || 'Get Coaching'}

@@ -18,7 +18,7 @@ interface BlogContentProps {
 
 export function BlogContent({ content }: BlogContentProps) {
   return (
-    <div className="prose prose-invert prose-purple max-w-none">
+    <div className="prose prose-invert prose-cyan max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw, rehypeHighlight]}
@@ -72,7 +72,7 @@ export function BlogContent({ content }: BlogContentProps) {
           // Links
           a: ({ node, ...props }) => (
             <a
-              className="text-purple-primary hover:text-purple-hover underline decoration-purple-primary/50 hover:decoration-purple-hover transition-colors"
+              className="text-brand-primary hover:text-brand-hover underline decoration-brand-primary/50 hover:decoration-brand-hover transition-colors"
               target={props.href?.startsWith('http') ? '_blank' : undefined}
               rel={props.href?.startsWith('http') ? 'noopener noreferrer' : undefined}
               {...props}
@@ -99,7 +99,7 @@ export function BlogContent({ content }: BlogContentProps) {
           // Blockquotes
           blockquote: ({ node, ...props }) => (
             <blockquote
-              className="border-l-4 border-purple-primary pl-4 py-2 my-4 bg-background-surface italic text-text-secondary"
+              className="border-l-4 border-brand-primary pl-4 py-2 my-4 bg-background-surface italic text-text-secondary"
               {...props}
             />
           ),
@@ -117,7 +117,7 @@ export function BlogContent({ content }: BlogContentProps) {
             if (isInline) {
               return (
                 <code
-                  className="bg-background-surface text-purple-hover px-1.5 py-0.5 rounded text-sm font-mono border border-border"
+                  className="bg-background-surface text-brand-hover px-1.5 py-0.5 rounded text-sm font-mono border border-border"
                   {...props}
                 >
                   {children}

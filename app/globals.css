@@ -15,30 +15,29 @@
   /* Hover states for elevated surfaces */
 
   /* ============================================
-     COLORS - Brand Purple Scale
+     COLORS - Brand Scale (Cyan)
      ============================================ */
 
-  --color-purple-50: #faf5ff;
-  --color-purple-100: #f3e8ff;
-  --color-purple-200: #e9d5ff;
-  --color-purple-300: #d8b4fe;
-  --color-purple-400: #c084fc;
-  --color-purple-500: #a855f7;
-  --color-purple-600: #8b5cf6;
-  /* Primary brand color */
-  --color-purple-700: #7c3aed;
-  --color-purple-800: #6d28d9;
-  --color-purple-900: #5b21b6;
-  --color-purple-950: #4c1d95;
+  --color-brand-50: #ecfeff;
+  --color-brand-100: #cffafe;
+  --color-brand-200: #a5f3fc;
+  --color-brand-300: #67e8f9;
+  --color-brand-400: #22d3ee;
+  --color-brand-500: #06b6d4;
+  --color-brand-600: #0891b2;
+  --color-brand-700: #0e7490;
+  --color-brand-800: #155e75;
+  --color-brand-900: #164e63;
+  --color-brand-950: #083344;
 
   /* Brand semantic colors */
-  --color-purple-primary: #8b5cf6;
+  --color-brand-primary: #06b6d4;
   /* Primary brand color */
-  --color-purple-hover: #a78bfa;
+  --color-brand-hover: #22d3ee;
   /* Hover state */
-  --color-purple-active: #7c3aed;
+  --color-brand-active: #0891b2;
   /* Active/pressed state */
-  --color-purple-glow: rgba(139, 92, 246, 0.3);
+  --color-brand-glow: rgba(6, 182, 212, 0.3);
   /* Glow effects */
 
   /* ============================================
@@ -84,11 +83,11 @@
   /* Default borders */
   --color-border-hover: #363650;
   /* Hover state borders */
-  --color-border-focus: #8b5cf6;
+  --color-border-focus: #06b6d4;
   /* Focus state borders */
   --color-input: var(--color-border);
   /* Input borders (shadcn) */
-  --color-ring: var(--color-cyan-primary);
+  --color-ring: var(--color-brand-primary);
   /* Focus rings (shadcn) */
 
   /* ============================================
@@ -194,12 +193,12 @@
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
-  /* Purple glow shadows */
-  --shadow-purple-glow: 0 0 20px rgba(139, 92, 246, 0.3);
-  --shadow-purple-glow-sm: 0 0 15px rgba(139, 92, 246, 0.2);
-  --shadow-purple-glow-md: 0 0 25px rgba(139, 92, 246, 0.3);
-  --shadow-purple-glow-lg: 0 0 30px rgba(139, 92, 246, 0.4);
-  --shadow-purple-glow-xl: 0 0 40px rgba(139, 92, 246, 0.5);
+  /* Brand glow shadows */
+  --shadow-brand-glow: 0 0 20px rgba(6, 182, 212, 0.3);
+  --shadow-brand-glow-sm: 0 0 15px rgba(6, 182, 212, 0.2);
+  --shadow-brand-glow-md: 0 0 25px rgba(6, 182, 212, 0.3);
+  --shadow-brand-glow-lg: 0 0 30px rgba(6, 182, 212, 0.4);
+  --shadow-brand-glow-xl: 0 0 40px rgba(6, 182, 212, 0.5);
 
   /* Cyan glow shadows */
   --shadow-cyan-glow: 0 0 20px rgba(6, 182, 212, 0.3);
@@ -318,6 +317,8 @@
     100% {
       transform: translateX(0);
       opacity: 1;
+      transform: translateX(0);
+      opacity: 1;
     }
   }
 
@@ -400,14 +401,14 @@
     @apply leading-relaxed text-text-secondary;
   }
 
-  /* Links with purple accent and smooth transitions */
+  /* Links with brand accent and smooth transitions */
   a {
-    @apply text-purple-primary transition-all duration-200 hover:text-cyan-primary;
+    @apply text-brand-primary transition-all duration-200 hover:text-brand-hover;
   }
 
   /* Inline code styling with monospace font */
   code {
-    @apply font-mono bg-background-elevated px-1.5 py-0.5 rounded text-sm text-cyan-300;
+    @apply font-mono bg-background-elevated px-1.5 py-0.5 rounded text-sm text-brand-300;
   }
 
   /* Pre-formatted code blocks */
@@ -421,7 +422,7 @@
 
   /* Blockquotes */
   blockquote {
-    @apply border-l-4 border-cyan-primary pl-4 italic text-text-secondary my-4;
+    @apply border-l-4 border-brand-primary pl-4 italic text-text-secondary my-4;
   }
 
   /* Lists */
@@ -466,60 +467,60 @@
   input:focus-visible,
   textarea:focus-visible,
   select:focus-visible {
-    @apply outline-none ring-2 ring-cyan-primary ring-offset-2 ring-offset-background-primary;
+    @apply outline-none ring-2 ring-brand-primary ring-offset-2 ring-offset-background-primary;
   }
 
   /* Selection styling */
   ::selection {
-    @apply bg-cyan-primary/30 text-text-primary;
+    @apply bg-brand-primary/30 text-text-primary;
   }
 }
 
 @layer components {
 
-  /* Primary button with purple glow effect */
+  /* Primary button with brand glow effect */
   .btn-primary {
-    @apply bg-purple-primary hover:bg-purple-hover text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-purple-glow active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-brand-primary hover:bg-brand-hover text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-brand-glow active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-primary:hover:not(:disabled) {
-    box-shadow: 0 0 25px var(--color-cyan-glow);
+    box-shadow: 0 0 25px var(--color-brand-glow);
   }
 
   /* Secondary button with border */
   .btn-secondary {
-    @apply bg-background-elevated hover:bg-background-elevated/80 text-text-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 border border-border hover:border-purple-primary/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-background-elevated hover:bg-background-elevated/80 text-text-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 border border-border hover:border-brand-primary/50 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Outline button */
   .btn-outline {
-    @apply bg-transparent hover:bg-purple-primary/10 text-purple-primary border-2 border-purple-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-transparent hover:bg-brand-primary/10 text-brand-primary border-2 border-brand-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Card component with hover effect */
   .card {
-    @apply bg-background-surface border border-border rounded-lg p-6 transition-all duration-200 hover:border-cyan-primary/50 hover:shadow-cyan-glow/20;
+    @apply bg-background-surface border border-border rounded-lg p-6 transition-all duration-200 hover:border-brand-primary/50 hover:shadow-brand-glow/20;
   }
 
   /* Card with elevated effect */
   .card-elevated {
     @apply bg-background-elevated shadow-lg;
-    @apply bg-background-surface border border-border rounded-lg p-6 transition-all duration-200 hover:border-cyan-primary/50 hover:shadow-cyan-glow/20;
+    @apply bg-background-surface border border-border rounded-lg p-6 transition-all duration-200 hover:border-brand-primary/50 hover:shadow-brand-glow/20;
   }
 
   /* Form input field */
   .input {
-    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Textarea field */
   .textarea {
-    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-cyan-primary focus:border-transparent transition-all resize-y min-h-[120px] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary placeholder:text-text-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all resize-y min-h-[120px] disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Select dropdown */
   .select {
-    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-cyan-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply w-full bg-background-elevated border border-border rounded-lg px-4 py-3 text-text-primary focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   /* Form label */
@@ -534,11 +535,11 @@
 
   /* Glow effect utility */
   .glow-effect {
-    box-shadow: 0 0 20px var(--color-cyan-glow);
+    box-shadow: 0 0 20px var(--color-brand-glow);
   }
 
   .glow-effect-lg {
-    box-shadow: 0 0 30px var(--color-cyan-glow);
+    box-shadow: 0 0 30px var(--color-brand-glow);
   }
 
   .glow-effect-xl {
@@ -555,7 +556,7 @@
   }
 
   .status-in-progress {
-    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-primary/10 text-purple-primary border border-purple-primary/20;
+    @apply inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-brand-primary/10 text-brand-primary border border-brand-primary/20;
   }
 
   .status-completed {
@@ -577,12 +578,12 @@
 
   /* Replay code display */
   .replay-code {
-    @apply font-mono text-lg tracking-wider bg-background-elevated px-4 py-2 rounded border border-cyan-primary/30 text-cyan-300 inline-block;
+    @apply font-mono text-lg tracking-wider bg-background-elevated px-4 py-2 rounded border border-brand-primary/30 text-brand-300 inline-block;
   }
 
   /* Loading spinner */
   .spinner {
-    @apply animate-spin h-5 w-5 border-2 border-purple-primary border-t-transparent rounded-full;
+    @apply animate-spin h-5 w-5 border-2 border-brand-primary border-t-transparent rounded-full;
   }
 
   /* Hero gradient background */
@@ -631,7 +632,7 @@
 
   /* Gradient text */
   .gradient-text {
-    @apply bg-gradient-to-r from-cyan-400 to-cyan-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-brand-400 to-brand-600 bg-clip-text text-transparent;
   }
 
   /* Hide scrollbar but keep functionality */
@@ -647,7 +648,7 @@
   /* Custom scrollbar */
   .scrollbar-custom {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-purple-primary) var(--color-background-elevated);
+    scrollbar-color: var(--color-brand-primary) var(--color-background-elevated);
   }
 
   .scrollbar-custom::-webkit-scrollbar {
@@ -661,12 +662,12 @@
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb {
-    background: var(--color-cyan-primary);
+    background: var(--color-brand-primary);
     border-radius: 4px;
   }
 
   .scrollbar-custom::-webkit-scrollbar-thumb:hover {
-    background: var(--color-cyan-hover);
+    background: var(--color-brand-hover);
   }
 }
 
@@ -674,7 +675,7 @@
 .hljs {
   @apply bg-background-elevated rounded-lg p-4 overflow-x-auto;
   scrollbar-width: thin;
-  scrollbar-color: var(--color-purple-primary) var(--color-background-elevated);
+  scrollbar-color: var(--color-brand-primary) var(--color-background-elevated);
 }
 
 .hljs::-webkit-scrollbar {
@@ -688,12 +689,12 @@
 }
 
 .hljs::-webkit-scrollbar-thumb {
-  background: var(--color-purple-primary);
+  background: var(--color-brand-primary);
   border-radius: 4px;
 }
 
 .hljs::-webkit-scrollbar-thumb:hover {
-  background: var(--color-purple-hover);
+  background: var(--color-brand-hover);
 }
 
 .hljs-comment,
@@ -704,7 +705,7 @@
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-addition {
-  @apply text-purple-400;
+  @apply text-brand-400;
 }
 
 .hljs-number,
@@ -721,7 +722,7 @@
 .hljs-name,
 .hljs-selector-id,
 .hljs-selector-class {
-  @apply text-purple-300;
+  @apply text-brand-300;
 }
 
 .hljs-attribute,
@@ -741,7 +742,7 @@
 .hljs-selector-attr,
 .hljs-selector-pseudo,
 .hljs-link {
-  @apply text-purple-200;
+  @apply text-brand-200;
 }
 
 .hljs-built_in,

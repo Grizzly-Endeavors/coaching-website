@@ -175,15 +175,15 @@ export default function ContactFormClient({ locale }: ContactFormClientProps) {
                 <div className="space-y-6">
                   <Card variant="surface" padding="lg">
                     <div className="flex items-start">
-                      <div className="flex items-center justify-center w-12 h-12 bg-purple-primary/20 rounded-lg mr-4 flex-shrink-0">
-                        <svg className="w-6 h-6 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex items-center justify-center w-12 h-12 bg-brand-primary/20 rounded-lg mr-4 flex-shrink-0">
+                        <svg className="w-6 h-6 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                       </div>
                       <div>
                         <h3 className="font-bold text-text-primary text-lg mb-2">{locale.contact_info?.email?.title}</h3>
                         <p className="text-text-muted">
-                          <a href={`mailto:${locale.contact_info?.email?.address}`} className="hover:text-purple-primary transition-colors">
+                          <a href={`mailto:${locale.contact_info?.email?.address}`} className="hover:text-brand-primary transition-colors">
                             {locale.contact_info?.email?.address}
                           </a>
                         </p>
@@ -196,8 +196,8 @@ export default function ContactFormClient({ locale }: ContactFormClientProps) {
 
                   <Card variant="surface" padding="lg">
                     <div className="flex items-start">
-                      <div className="flex items-center justify-center w-12 h-12 bg-purple-primary/20 rounded-lg mr-4 flex-shrink-0">
-                        <svg className="w-6 h-6 text-purple-primary" fill="currentColor" viewBox="0 0 24 24">
+                      <div className="flex items-center justify-center w-12 h-12 bg-brand-primary/20 rounded-lg mr-4 flex-shrink-0">
+                        <svg className="w-6 h-6 text-brand-primary" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515a.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0a12.64 12.64 0 00-.617-1.25a.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057a19.9 19.9 0 005.993 3.03a.078.078 0 00.084-.028a14.09 14.09 0 001.226-1.994a.076.076 0 00-.041-.106a13.107 13.107 0 01-1.872-.892a.077.077 0 01-.008-.128a10.2 10.2 0 00.372-.292a.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127a12.299 12.299 0 01-1.873.892a.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028a19.839 19.839 0 006.002-3.03a.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z" />
                         </svg>
                       </div>
@@ -215,8 +215,8 @@ export default function ContactFormClient({ locale }: ContactFormClientProps) {
 
                   <Card variant="surface" padding="lg">
                     <div className="flex items-start">
-                      <div className="flex items-center justify-center w-12 h-12 bg-purple-primary/20 rounded-lg mr-4 flex-shrink-0">
-                        <svg className="w-6 h-6 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <div className="flex items-center justify-center w-12 h-12 bg-brand-primary/20 rounded-lg mr-4 flex-shrink-0">
+                        <svg className="w-6 h-6 text-brand-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                       </div>
@@ -232,7 +232,7 @@ export default function ContactFormClient({ locale }: ContactFormClientProps) {
                     </div>
                   </Card>
 
-                  <Card variant="surface" padding="lg" className="bg-purple-primary/10 border-purple-primary/30">
+                  <Card variant="surface" padding="lg" className="bg-brand-primary/10 border-brand-primary/30">
                     <h3 className="font-bold text-text-primary text-lg mb-3">{locale.contact_info?.booking_card?.title}</h3>
                     <p className="text-text-secondary mb-4">
                       {locale.contact_info?.booking_card?.description}

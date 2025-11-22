@@ -93,9 +93,9 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
               {/* Profile Image Placeholder */}
               <div className="order-2 lg:order-1">
-                <div className="aspect-square bg-gradient-to-br from-purple-primary/20 to-purple-800/20 rounded-2xl border border-purple-primary/30 flex items-center justify-center">
+                <div className="aspect-square bg-gradient-to-br from-brand-primary/20 to-brand-800/20 rounded-2xl border border-brand-primary/30 flex items-center justify-center">
                   <div className="text-center p-8">
-                    <svg className="w-32 h-32 text-purple-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-32 h-32 text-brand-primary mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                     </svg>
                     <p className="text-text-muted text-lg">{homeLocale.background.image_placeholder.line1 as string}<br />{homeLocale.background.image_placeholder.line2 as string}</p>
@@ -125,8 +125,8 @@ export default function HomePage() {
               {achievements.map((achievement) => (
                 <Card key={achievement.title} variant="surface" hover className="text-center">
                   <CardContent className="pt-6">
-                    <div className="flex items-center justify-center w-16 h-16 bg-purple-primary/20 rounded-lg mx-auto mb-4">
-                      <div className="text-purple-primary">{achievement.icon}</div>
+                    <div className="flex items-center justify-center w-16 h-16 bg-brand-primary/20 rounded-lg mx-auto mb-4">
+                      <div className="text-brand-primary">{achievement.icon}</div>
                     </div>
                     <h3 className="text-sm font-semibold text-text-muted mb-2">{achievement.title}</h3>
                     <p className="text-3xl font-bold text-text-primary mb-1">{achievement.value}</p>
@@ -156,7 +156,7 @@ export default function HomePage() {
               {philosophyPoints.map((point, index) => (
                 <Card key={index} variant="surface" padding="lg">
                   <div className="flex items-start">
-                    <div className="flex items-center justify-center w-8 h-8 bg-purple-primary text-white rounded-full text-sm font-bold mr-4 mt-1 flex-shrink-0">
+                    <div className="flex items-center justify-center w-8 h-8 bg-brand-primary text-white rounded-full text-sm font-bold mr-4 mt-1 flex-shrink-0">
                       {index + 1}
                     </div>
                     <div>
@@ -195,7 +195,7 @@ export default function HomePage() {
                       {role.heroes.map((hero) => (
                         <span
                           key={hero}
-                          className="px-3 py-1 bg-purple-primary/20 text-purple-primary rounded-full text-sm font-medium border border-purple-primary/30"
+                          className="px-3 py-1 bg-brand-primary/20 text-brand-primary rounded-full text-sm font-medium border border-brand-primary/30"
                         >
                           {hero}
                         </span>
@@ -223,7 +223,7 @@ export default function HomePage() {
               <div className="space-y-6">
                 {(homeLocale.differentiators.points as Array<{ title: string; description: string }>).map((point, index) => (
                   <div key={index} className="flex items-start">
-                    <svg className="w-6 h-6 text-purple-primary mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-6 h-6 text-brand-primary mr-4 mt-1 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <div>

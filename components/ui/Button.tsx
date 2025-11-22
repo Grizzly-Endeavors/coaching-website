@@ -37,10 +37,10 @@ export const Button: React.FC<ButtonProps> = ({
   const baseClasses = 'inline-flex items-center justify-center font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-cyan-primary focus:ring-offset-2 focus:ring-offset-background-primary disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variantClasses = {
-    primary: 'bg-purple-600 text-white hover:bg-purple-500 shadow-purple-glow hover:shadow-cyan-glow active:scale-95',
-    secondary: 'bg-background-elevated text-purple-400 hover:bg-[#363650] border border-purple-600/30 hover:border-cyan-primary/50 hover:shadow-cyan-glow/50',
-    outline: 'bg-transparent border-2 border-purple-600 text-purple-400 hover:bg-purple-600 hover:text-white hover:shadow-cyan-glow',
-    ghost: 'bg-transparent text-purple-400 hover:bg-purple-600/10 hover:text-purple-300',
+    primary: 'bg-brand-600 text-white hover:bg-brand-500 shadow-brand-glow hover:shadow-cyan-glow active:scale-95',
+    secondary: 'bg-background-elevated text-brand-400 hover:bg-[#363650] border border-brand-600/30 hover:border-cyan-primary/50 hover:shadow-cyan-glow/50',
+    outline: 'bg-transparent border-2 border-brand-600 text-brand-400 hover:bg-brand-600 hover:text-white hover:shadow-cyan-glow',
+    ghost: 'bg-transparent text-brand-400 hover:bg-brand-600/10 hover:text-brand-300',
   };
 
   const sizeClasses = {

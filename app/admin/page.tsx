@@ -49,7 +49,7 @@ async function DashboardContent() {
     <div className="space-y-8">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 hover:border-[#8b5cf6] transition-colors">
+        <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 hover:border-brand-primary transition-colors">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <p className="text-[#9ca3af] text-sm font-medium mb-1">Pending Submissions</p>
@@ -63,7 +63,7 @@ async function DashboardContent() {
             </div>
           </div>
         </div>
-        <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 hover:border-[#8b5cf6] transition-colors">
+        <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 hover:border-brand-primary transition-colors">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <p className="text-[#9ca3af] text-sm font-medium mb-1">Total Submissions</p>
@@ -77,7 +77,7 @@ async function DashboardContent() {
             </div>
           </div>
         </div>
-        <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 hover:border-[#8b5cf6] transition-colors">
+        <div className="bg-[#1a1a2e] border border-[#2a2a40] rounded-lg p-6 hover:border-brand-primary transition-colors">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <p className="text-[#9ca3af] text-sm font-medium mb-1">Completed Reviews</p>

@@ -85,10 +85,9 @@ export function Pagination({
         className={`
           inline-flex items-center justify-center w-10 h-10 rounded-lg
           transition-all duration-200
-          ${
-            currentPage === 1
-              ? 'bg-background-surface text-text-muted cursor-not-allowed'
-              : 'bg-background-surface text-text-secondary border border-border hover:border-purple-primary hover:text-purple-hover hover:shadow-lg hover:shadow-purple-500/20'
+          ${currentPage === 1
+            ? 'bg-background-surface text-text-muted cursor-not-allowed'
+            : 'bg-background-surface text-text-secondary border border-border hover:border-brand-primary hover:text-brand-hover hover:shadow-lg hover:shadow-brand-500/20'
           }
         `}
         aria-label="Previous page"
@@ -120,10 +119,9 @@ export function Pagination({
               className={`
                 inline-flex items-center justify-center w-10 h-10 rounded-lg
                 text-sm font-medium transition-all duration-200
-                ${
-                  isActive
-                    ? 'bg-purple-primary text-white shadow-lg shadow-purple-500/30 scale-105'
-                    : 'bg-background-surface text-text-secondary border border-border hover:border-purple-primary hover:text-purple-hover hover:shadow-lg hover:shadow-purple-500/20'
+                ${isActive
+                  ? 'bg-brand-primary text-white shadow-lg shadow-brand-500/30 scale-105'
+                  : 'bg-background-surface text-text-secondary border border-border hover:border-brand-primary hover:text-brand-hover hover:shadow-lg hover:shadow-brand-500/20'
                 }
               `}
               aria-label={`Page ${pageNum}`}
@@ -142,10 +140,9 @@ export function Pagination({
         className={`
           inline-flex items-center justify-center w-10 h-10 rounded-lg
           transition-all duration-200
-          ${
-            currentPage === totalPages
-              ? 'bg-background-surface text-text-muted cursor-not-allowed'
-              : 'bg-background-surface text-text-secondary border border-border hover:border-purple-primary hover:text-purple-hover hover:shadow-lg hover:shadow-purple-500/20'
+          ${currentPage === totalPages
+            ? 'bg-background-surface text-text-muted cursor-not-allowed'
+            : 'bg-background-surface text-text-secondary border border-border hover:border-brand-primary hover:text-brand-hover hover:shadow-lg hover:shadow-brand-500/20'
           }
         `}
         aria-label="Next page"

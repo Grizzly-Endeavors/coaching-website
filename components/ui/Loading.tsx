@@ -33,7 +33,7 @@ export default function Loading({
   const spinner = (
     <div className="flex flex-col items-center justify-center gap-4">
       <svg
-        className={`animate-spin ${sizeStyles[size]} text-purple-primary`}
+        className={`animate-spin ${sizeStyles[size]} text-brand-primary`}
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
         viewBox="0 0 24 24"

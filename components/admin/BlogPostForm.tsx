@@ -146,7 +146,7 @@ export default function BlogPostForm({
     <div>
       {/* Header */}
       <div className="mb-8">
-        <Link href="/admin/blog" className="text-purple-primary hover:text-purple-hover text-sm mb-2 inline-block">
+        <Link href="/admin/blog" className="text-brand-primary hover:text-brand-hover text-sm mb-2 inline-block">
           ← Back to Blog Posts
         </Link>
         <h1 className="text-3xl font-bold text-text-primary mb-2">
@@ -173,9 +173,9 @@ export default function BlogPostForm({
                 file:mr-4 file:py-2 file:px-4
                 file:rounded-lg file:border-0
                 file:text-sm file:font-medium
-                file:bg-purple-primary file:text-white
+                file:bg-brand-primary file:text-white
                 file:cursor-pointer file:transition-all
-                hover:file:bg-purple-hover
+                hover:file:bg-brand-hover
                 disabled:opacity-50 disabled:cursor-not-allowed"
             />
             {uploading && <span className="text-text-secondary text-sm">Uploading...</span>}
@@ -199,7 +199,7 @@ export default function BlogPostForm({
               value={title}
               onChange={(e) => handleTitleChange(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all"
+              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
             />
           </div>
 
@@ -213,7 +213,7 @@ export default function BlogPostForm({
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all"
+              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
             />
           </div>
 
@@ -224,7 +224,7 @@ export default function BlogPostForm({
               value={excerpt}
               onChange={(e) => setExcerpt(e.target.value)}
               rows={3}
-              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all resize-vertical min-h-[100px]"
+              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all resize-vertical min-h-[100px]"
             />
           </div>
 
@@ -235,7 +235,7 @@ export default function BlogPostForm({
               placeholder="support, guides, tips (comma-separated)"
               value={tags}
               onChange={(e) => setTags(e.target.value)}
-              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all"
+              className="w-full px-4 py-2 bg-background-surface border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all"
             />
           </div>
 
@@ -244,13 +244,13 @@ export default function BlogPostForm({
               <label className="block text-sm font-medium text-text-primary">Content (Markdown)</label>
               <button
                 onClick={() => setShowPreview(!showPreview)}
-                className="text-purple-primary hover:text-purple-hover text-sm font-medium transition-colors"
+                className="text-brand-primary hover:text-brand-hover text-sm font-medium transition-colors"
               >
                 {showPreview ? 'Edit' : 'Preview'}
               </button>
             </div>
             {showPreview ? (
-              <div className="w-full px-4 py-3 bg-background-primary border border-border rounded-lg text-text-primary min-h-[400px] prose prose-invert prose-purple max-w-none">
+              <div className="w-full px-4 py-3 bg-background-primary border border-border rounded-lg text-text-primary min-h-[400px] prose prose-invert prose-cyan max-w-none">
                 <div
                   dangerouslySetInnerHTML={{
                     __html: renderMarkdownPreview(content),
@@ -263,7 +263,7 @@ export default function BlogPostForm({
                 onChange={(e) => setContent(e.target.value)}
                 placeholder="# Your post title&#10;&#10;Your content goes here in markdown format..."
                 rows={20}
-                className="w-full px-4 py-3 bg-background-primary border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent transition-all resize-vertical font-mono text-sm"
+                className="w-full px-4 py-3 bg-background-primary border border-border rounded-lg text-text-primary placeholder-text-muted focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all resize-vertical font-mono text-sm"
               />
             )}
           </div>
@@ -276,7 +276,7 @@ export default function BlogPostForm({
                 id="published"
                 checked={published}
                 onChange={(e) => setPublished(e.target.checked)}
-                className="w-4 h-4 bg-background-primary border-border rounded text-purple-primary focus:ring-2 focus:ring-purple-primary focus:ring-offset-0"
+                className="w-4 h-4 bg-background-primary border-border rounded text-brand-primary focus:ring-2 focus:ring-brand-primary focus:ring-offset-0"
               />
               <label htmlFor="published" className="text-sm text-text-primary cursor-pointer">
                 Published
@@ -340,8 +340,8 @@ export default function BlogPostForm({
                 ? 'Publishing...'
                 : 'Saving...'
               : mode === 'edit' && published
-              ? 'Update Post'
-              : 'Publish Post'}
+                ? 'Update Post'
+                : 'Publish Post'}
           </Button>
         </div>
       </div>

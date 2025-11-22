@@ -327,7 +327,7 @@ function BookingContent() {
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold text-text-primary mb-4">Step 2: Select Your Coaching Style</h2>
                 <p className="text-text-muted leading-relaxed">
-                  Not sure which one to choose? <a href="/pricing" className="text-purple-primary hover:text-purple-hover underline">View detailed pricing and comparisons</a>
+                  Not sure which one to choose? <a href="/pricing" className="text-brand-primary hover:text-brand-hover underline">View detailed pricing and comparisons</a>
                 </p>
               </div>
 
@@ -337,12 +337,12 @@ function BookingContent() {
                     key={type.id}
                     variant="surface"
                     hover
-                    className="cursor-pointer transition-all duration-200 hover:border-purple-primary"
+                    className="cursor-pointer transition-all duration-200 hover:border-brand-primary"
                     onClick={() => handleTypeSelection(type.id)}
                   >
                     <CardContent className="text-center py-8">
-                      <div className="flex items-center justify-center w-16 h-16 bg-purple-primary/20 rounded-lg mx-auto mb-4">
-                        <div className="text-purple-primary">{type.icon}</div>
+                      <div className="flex items-center justify-center w-16 h-16 bg-brand-primary/20 rounded-lg mx-auto mb-4">
+                        <div className="text-brand-primary">{type.icon}</div>
                       </div>
                       <h3 className="text-xl font-bold text-text-primary mb-3">{type.name}</h3>
                       <p className="text-text-muted text-sm leading-relaxed mb-4">
@@ -374,8 +374,8 @@ function BookingContent() {
                 <p className="text-text-muted leading-relaxed mb-4">
                   {getCoachingTypeDescription()}
                 </p>
-                <div className="bg-purple-primary/10 border border-purple-primary/30 rounded-lg p-4">
-                  <p className="text-purple-primary font-medium">
+                <div className="bg-brand-primary/10 border border-brand-primary/30 rounded-lg p-4">
+                  <p className="text-brand-primary font-medium">
                     {getTurnaroundMessage()}
                   </p>
                 </div>
@@ -430,7 +430,7 @@ function BookingContent() {
                                 onChange={handleChange}
                                 required
                                 disabled={isSubmitting}
-                                className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-status-error' : 'border-border hover:border-purple-primary/50'}`}
+                                className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-status-error' : 'border-border hover:border-brand-primary/50'}`}
                               >
                                 <option value="" disabled>Select your rank</option>
                                 {rankOptions.map((rank) => (
@@ -452,7 +452,7 @@ function BookingContent() {
                                 onChange={handleChange}
                                 required
                                 disabled={isSubmitting}
-                                className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-status-error' : 'border-border hover:border-purple-primary/50'}`}
+                                className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-status-error' : 'border-border hover:border-brand-primary/50'}`}
                               >
                                 <option value="" disabled>Select your role</option>
                                 {roleOptions.map((role) => (
@@ -660,7 +660,7 @@ function BookingContent() {
                           onChange={handleChange}
                           required
                           disabled={isSubmitting}
-                          className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-status-error' : 'border-border hover:border-purple-primary/50'}`}
+                          className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent disabled:opacity-50 ${errors.rank ? 'border-status-error' : 'border-border hover:border-brand-primary/50'}`}
                         >
                           <option value="" disabled>Select your rank</option>
                           {rankOptions.map((rank) => (
@@ -682,7 +682,7 @@ function BookingContent() {
                           onChange={handleChange}
                           required
                           disabled={isSubmitting}
-                          className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-primary focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-status-error' : 'border-border hover:border-purple-primary/50'}`}
+                          className={`w-full px-4 py-2.5 bg-background-surface border rounded-lg text-text-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent disabled:opacity-50 ${errors.role ? 'border-status-error' : 'border-border hover:border-brand-primary/50'}`}
                         >
                           <option value="" disabled>Select your role</option>
                           {roleOptions.map((role) => (
@@ -847,7 +847,7 @@ function BookingContent() {
 
 export default function GetCoachingPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0f0f23] flex items-center justify-center"><div className="animate-spin h-8 w-8 border-2 border-purple-500 border-t-transparent rounded-full"></div></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-[#0f0f23] flex items-center justify-center"><div className="animate-spin h-8 w-8 border-2 border-brand-500 border-t-transparent rounded-full"></div></div>}>
       <BookingContent />
     </Suspense>
   );

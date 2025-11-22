@@ -104,7 +104,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 <a
                   key={social.name}
                   href={social.href}
-                  className="text-gray-400 hover:text-purple-400 transition-colors duration-200"
+                  className="text-gray-400 hover:text-brand-400 transition-colors duration-200"
                   aria-label={(common.footer?.social?.aria_label || 'Visit our {platform}').replace('{platform}', social.name)}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -125,7 +125,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200"
+                    className="text-sm text-gray-400 hover:text-brand-400 transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -144,7 +144,7 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200"
+                    className="text-sm text-gray-400 hover:text-brand-400 transition-colors duration-200"
                   >
                     {link.label}
                   </Link>
@@ -163,13 +163,13 @@ export const Footer: React.FC<FooterProps> = ({ className = '' }) => {
             <div className="flex items-center gap-6">
               <Link
                 href="/privacy"
-                className="text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200"
+                className="text-sm text-gray-400 hover:text-brand-400 transition-colors duration-200"
               >
                 {common.footer?.bottom?.privacy_policy || 'Privacy Policy'}
               </Link>
               <Link
                 href="/terms"
-                className="text-sm text-gray-400 hover:text-purple-400 transition-colors duration-200"
+                className="text-sm text-gray-400 hover:text-brand-400 transition-colors duration-200"
               >
                 {common.footer?.bottom?.terms_of_service || 'Terms of Service'}
               </Link>

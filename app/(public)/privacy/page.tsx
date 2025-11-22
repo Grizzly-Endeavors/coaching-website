@@ -153,9 +153,9 @@ export default function PrivacyPage() {
               </Card>
             </div>
 
-            <Card variant="surface" padding="lg" className="mt-8 bg-purple-600/10 border-purple-600/30">
+            <Card variant="surface" padding="lg" className="mt-8 bg-brand-600/10 border-brand-600/30">
               <p className="text-gray-300 leading-relaxed">
-                <strong className="text-purple-400">{privacyLocale.legal_notice.title as string}</strong> {privacyLocale.legal_notice.message as string}
+                <strong className="text-brand-400">{privacyLocale.legal_notice.title as string}</strong> {privacyLocale.legal_notice.message as string}
               </p>
             </Card>
           </div>
