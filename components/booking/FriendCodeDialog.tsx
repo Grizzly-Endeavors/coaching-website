@@ -95,7 +95,7 @@ export function FriendCodeDialog({
             name="friendCode"
             type="text"
             value={friendCode}
-            onChange={(e) => setFriendCode(e.target.value)}
+            onChange={(e) => setFriendCode(e.target.value.toUpperCase())}
             error={error || undefined}
             placeholder="Enter your code"
             disabled={isSubmitting}

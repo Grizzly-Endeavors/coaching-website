@@ -62,8 +62,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if code already exists
-    const existing = await prisma.friendCode.findUnique({
-      where: { code: code.trim().toUpperCase() },
+    const existing = await prisma.friendCode.findFirst({
+      where: {
+        code: {
+          equals: code.trim(),
+          mode: 'insensitive',
+        },
+      },
     });
 
     if (existing) {
