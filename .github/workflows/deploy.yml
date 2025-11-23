@@ -30,6 +30,7 @@ jobs:
           DISCORD_REDIRECT_URI=$DISCORD_REDIRECT_URI
           DISCORD_GUILD_ID=$DISCORD_GUILD_ID
           ADMIN_EMAIL=$ADMIN_EMAIL
+          ADMIN_PASSWORD=$ADMIN_PASSWORD
           STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY
           NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
           STRIPE_WEBHOOK_SECRET=$STRIPE_WEBHOOK_SECRET
@@ -53,6 +54,7 @@ jobs:
           DISCORD_REDIRECT_URI: ${{ secrets.DISCORD_REDIRECT_URI }}
           DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
           ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
           STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
@@ -79,3 +81,7 @@ jobs:
       - name: Run Database Migrations
         run: |
           docker-compose exec -T app npm run prisma:migrate
+
+      - name: Setup Admin Account
+        run: |
+          docker-compose exec -T app npx tsx scripts/create-admin.ts "${{ secrets.ADMIN_EMAIL }}" "${{ secrets.ADMIN_PASSWORD }}" || echo "Admin account may already exist"
