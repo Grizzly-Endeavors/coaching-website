@@ -45,6 +45,12 @@ COPY --from=builder /app/package.json ./package.json
 # Copy Prisma files
 COPY --from=builder /app/prisma ./prisma
 
+# Copy scripts directory for admin setup and other utilities
+COPY --from=builder /app/scripts ./scripts
+
+# Copy lib directory for shared utilities
+COPY --from=builder /app/lib ./lib
+
 # Copy locales
 COPY --from=builder /app/locales ./locales
 
