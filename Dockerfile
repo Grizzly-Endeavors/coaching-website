@@ -48,6 +48,9 @@ COPY --from=builder /app/prisma ./prisma
 # Copy locales
 COPY --from=builder /app/locales ./locales
 
+# Copy public directory for static assets
+COPY --from=builder /app/public ./public
+
 USER nextjs
 
 EXPOSE 3000
