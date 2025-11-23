@@ -9,15 +9,14 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 import { BlogContent, BlogContentSkeleton } from '@/components/blog/BlogContent';
 import { estimateReadingTime } from '@/lib/markdown';
-import { logger } from '@/lib/logger';
 import type { BlogPostSummary } from '@/lib/types/blog.types';
 import { loadLocale, interpolate } from '@/lib/locales';
+import { getBlogPostBySlug, getBlogPosts } from '@/lib/blog';
 
 const blogLocale = loadLocale('blog');
 const metadataLocale = loadLocale('metadata');
 
-// Force dynamic rendering since this page needs database access
-export const dynamic = 'force-dynamic';
+// Removed force-dynamic since we're now using direct database access for static generation
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -30,21 +29,9 @@ interface BlogPostPageProps {
  */
 async function getBlogPost(slug: string) {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/blog/${slug}`, {
-      next: { revalidate: 60 }, // Revalidate every minute
-    });
-
-    if (!response.ok) {
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error('Failed to fetch blog post');
-    }
-
-    return await response.json();
+    return await getBlogPostBySlug(slug);
   } catch (error) {
-    logger.error('Error fetching blog post:', error instanceof Error ? error : new Error(String(error)));
+    console.error('Error fetching blog post:', error instanceof Error ? error : new Error(String(error)));
     return null;
   }
 }
@@ -88,21 +75,12 @@ export async function generateMetadata({
  */
 export async function generateStaticParams() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/blog/posts?limit=100`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
-    });
-
-    if (!response.ok) {
-      return [];
-    }
-
-    const data = await response.json();
-    return data.posts.map((post: BlogPostSummary) => ({
+    const posts = await getBlogPosts(1, 100); // Get first 100 posts
+    return posts.posts.map((post) => ({
       slug: post.slug,
     }));
   } catch (error) {
-    logger.error('Error generating static params:', error instanceof Error ? error : new Error(String(error)));
+    console.error('Error generating static params:', error instanceof Error ? error : new Error(String(error)));
     return [];
   }
 }

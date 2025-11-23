@@ -9,8 +9,8 @@ import { BlogCard, BlogCardSkeleton } from '@/components/blog/BlogCard';
 import { TagFilter, TagFilterSkeleton } from '@/components/blog/TagFilter';
 import { Pagination, PaginationSkeleton } from '@/components/blog/Pagination';
 import type { BlogPostSummary } from '@/lib/types/blog.types';
-import { logger } from '@/lib/logger';
 import { loadLocale } from '@/lib/locales';
+import { getBlogPosts, getBlogTags } from '@/lib/blog';
 
 const blogLocale = loadLocale('blog');
 const metadataLocale = loadLocale('metadata');
@@ -34,28 +34,13 @@ export const metadata: Metadata = {
 };
 
 /**
- * Fetches blog posts from API with pagination and filtering
+ * Fetches blog posts from database with pagination and filtering
  */
-async function getBlogPosts(page: number = 1, tag?: string) {
+async function getBlogPostsData(page: number = 1, tag?: string) {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const params = new URLSearchParams({
-      page: page.toString(),
-      limit: '12',
-      ...(tag && { tag }),
-    });
-
-    const response = await fetch(`${baseUrl}/api/blog/posts?${params}`, {
-      next: { revalidate: 60 }, // Revalidate every minute
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch blog posts');
-    }
-
-    return await response.json();
+    return await getBlogPosts(page, 12, tag);
   } catch (error) {
-    logger.error('Error fetching blog posts:', error instanceof Error ? error : new Error(String(error)));
+    console.error('Error fetching blog posts:', error instanceof Error ? error : new Error(String(error)));
     return {
       posts: [],
       pagination: {
@@ -73,19 +58,9 @@ async function getBlogPosts(page: number = 1, tag?: string) {
  */
 async function getAllTags() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/api/blog/tags`, {
-      next: { revalidate: 300 }, // Revalidate every 5 minutes
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to fetch tags');
-    }
-
-    const data = await response.json();
-    return data.tags || [];
+    return await getBlogTags();
   } catch (error) {
-    logger.error('Error fetching tags:', error instanceof Error ? error : new Error(String(error)));
+    console.error('Error fetching tags:', error instanceof Error ? error : new Error(String(error)));
     return [];
   }
 }
@@ -96,7 +71,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const currentTag = tag;
   // Fetch blog posts and tags in parallel
   const [{ posts, pagination }, allTags] = await Promise.all([
-    getBlogPosts(currentPage, currentTag),
+    getBlogPostsData(currentPage, currentTag),
     getAllTags(),
   ]);
 
