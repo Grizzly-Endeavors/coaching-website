@@ -25,6 +25,9 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY}
+        NEXT_PUBLIC_API_URL: ${DOMAIN_NAME}
     container_name: overwatch-coaching-app
     restart: unless-stopped
     environment:
