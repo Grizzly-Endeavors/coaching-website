@@ -126,7 +126,7 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
           </Badge>
         </div>
         <p className="text-sm text-gray-400 mt-2">
-          {locale.header?.timezone_note || 'All times shown in EST timezone'}
+          {locale.header?.timezone_note || 'All times shown in your local timezone'}
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -198,7 +198,7 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
                               : 'bg-background-primary text-gray-300 border border-border hover:border-brand-500 hover:bg-background-surface'
                             }`}
                         >
-                          {slot.time}
+                          {new Date(slot.datetime).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
                         </button>
                       ))
                   ) : (
@@ -232,7 +232,7 @@ export function TimeSlotPicker({ sessionType, onSelectSlot, selectedSlot }: Time
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
               <span>
-                <strong>{locale.selected?.title || 'Selected:'}</strong> {(locale.selected?.format || '{day}, {date} at {time} EST')
+                <strong>{locale.selected?.title || 'Selected:'}</strong> {(locale.selected?.format || '{day}, {date} at {time}')
                   .replace('{day}', format(new Date(selectedSlot), 'EEEE'))
                   .replace('{date}', format(new Date(selectedSlot), 'MMMM d'))
                   .replace('{time}', format(new Date(selectedSlot), 'h:mm a'))}

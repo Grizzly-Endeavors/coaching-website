@@ -76,3 +76,6 @@ export {
 // Accordion
 export { Accordion } from './Accordion';
 export type { AccordionProps } from './Accordion';
+
+// ClientDate
+export { ClientDate } from './ClientDate';

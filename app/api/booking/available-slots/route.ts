@@ -40,8 +40,8 @@ export async function GET(req: NextRequest) {
 
     // Parse the date string as YYYY-MM-DD in EST timezone
     // This ensures we're working with the correct day in EST
-    const dateParts = dateParam.split('-').map(Number)
-    const dateInEST = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 0, 0, 0)
+    // fromZonedTime returns a UTC Date object representing 00:00 EST
+    const dateInEST = fromZonedTime(`${dateParam}T00:00:00`, TIMEZONE)
     const dayOfWeek = dateInEST.getDay() // 0 = Sunday, 6 = Saturday
 
     // Get all active availability slots for this day of week (both session types)
@@ -67,12 +67,13 @@ export async function GET(req: NextRequest) {
     const possibleSlots: Date[] = []
 
     for (const slot of availabilitySlots) {
-      const [startHour, startMin] = slot.startTime.split(':').map(Number)
-      const [endHour, endMin] = slot.endTime.split(':').map(Number)
+      // Create datetime objects for this specific date in EST using fromZonedTime
+      // This converts "09:00 EST" to the correct UTC timestamp (e.g., 14:00 UTC)
+      const currentSlotStr = `${dateParam}T${slot.startTime}:00`
+      const endTimeStr = `${dateParam}T${slot.endTime}:00`
 
-      // Create datetime objects for this specific date in EST
-      let currentSlot = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], startHour, startMin, 0)
-      const endTime = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], endHour, endMin, 0)
+      let currentSlot = fromZonedTime(currentSlotStr, TIMEZONE)
+      const endTime = fromZonedTime(endTimeStr, TIMEZONE)
 
       // Generate slots until we reach the end time
       while (currentSlot < endTime) {
@@ -83,8 +84,8 @@ export async function GET(req: NextRequest) {
 
     // Get all exceptions (blocked times and bookings) for this date
     // Create date range that covers the full day in EST
-    const dayStart = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 0, 0, 0)
-    const dayEnd = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], 23, 59, 59)
+    const dayStart = fromZonedTime(`${dateParam}T00:00:00`, TIMEZONE)
+    const dayEnd = fromZonedTime(`${dateParam}T23:59:59`, TIMEZONE)
 
     const exceptions = await prisma.availabilityException.findMany({
       where: {
