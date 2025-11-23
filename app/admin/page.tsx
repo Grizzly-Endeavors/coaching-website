@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import { AdminTable, AdminTableRow, AdminTableCell } from '@/components/admin';
-import { Button, Badge, Loading, getStatusBadgeVariant } from '@/components/ui';
+import { Button, Badge, Loading, getStatusBadgeVariant, ClientDate } from '@/components/ui';
 
 // Force dynamic rendering since this page needs database access
 export const dynamic = 'force-dynamic';
@@ -135,14 +135,16 @@ async function DashboardContent() {
             {data.recentBookings.map((booking) => (
               <AdminTableRow key={booking.id}>
                 <AdminTableCell>
-                  {new Date(booking.scheduledAt).toLocaleString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    timeZone: 'America/New_York',
-                  })}
+                  <ClientDate
+                    date={booking.scheduledAt}
+                    options={{
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    }}
+                  />
                 </AdminTableCell>
                 <AdminTableCell>{booking.email}</AdminTableCell>
                 <AdminTableCell>{booking.sessionType}</AdminTableCell>
@@ -172,10 +174,13 @@ async function DashboardContent() {
             <Link key={submission.id} href={`/admin/submissions/${submission.id}`}>
               <AdminTableRow className="cursor-pointer hover:bg-[#1a1a2e]">
                 <AdminTableCell>
-                  {new Date(submission.submittedAt).toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  })}
+                  <ClientDate
+                    date={submission.submittedAt}
+                    options={{
+                      month: 'short',
+                      day: 'numeric',
+                    }}
+                  />
                 </AdminTableCell>
                 <AdminTableCell>{submission.email}</AdminTableCell>
                 <AdminTableCell>{submission.rank}</AdminTableCell>

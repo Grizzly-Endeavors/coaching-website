@@ -138,14 +138,12 @@ export default function SchedulePage() {
                             month: 'short',
                             day: 'numeric',
                             year: 'numeric',
-                            timeZone: 'America/New_York',
                           })}
                         </div>
                         <div className="text-sm text-[#9ca3af]">
                           {new Date(booking.scheduledAt).toLocaleTimeString('en-US', {
                             hour: 'numeric',
                             minute: '2-digit',
-                            timeZone: 'America/New_York',
                           })}
                         </div>
                       </div>
@@ -211,14 +209,12 @@ export default function SchedulePage() {
                             month: 'short',
                             day: 'numeric',
                             year: 'numeric',
-                            timeZone: 'America/New_York',
                           })}
                         </div>
                         <div className="text-sm text-[#9ca3af]">
                           {new Date(booking.scheduledAt).toLocaleTimeString('en-US', {
                             hour: 'numeric',
                             minute: '2-digit',
-                            timeZone: 'America/New_York',
                           })}
                         </div>
                       </div>

@@ -10,7 +10,7 @@
 # Location: Lines 118-126
 header:
   title: "Select Appointment Time"
-  timezone_note: "All times shown in EST timezone"
+  timezone_note: "All times shown in your local timezone"
 
   # Session type badge
   session_types:
@@ -61,7 +61,7 @@ empty_states:
 # Location: Lines 225-236
 selected:
   title: "Selected:"
-  format: "{day}, {date} at {time} EST"
+  format: "{day}, {date} at {time}"
   # {day} = Monday, {date} = January 1, {time} = 9:00 AM
 
 # -----------------------------------------------------------------------------
