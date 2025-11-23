@@ -64,9 +64,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate friend code against database
-    const friendCodeRecord = await prisma.friendCode.findUnique({
+    const friendCodeRecord = await prisma.friendCode.findFirst({
       where: {
-        code: friendCode.trim().toUpperCase(),
+        code: {
+          equals: friendCode.trim(),
+          mode: 'insensitive',
+        },
       },
     });
 
