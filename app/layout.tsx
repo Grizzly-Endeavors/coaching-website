@@ -11,6 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.DOMAIN_NAME || 'http://localhost:3000'),
   title: 'Overwatch Coaching | Sustainable Improvement',
   description: 'GM1 across all roles. Teaching you how to think, not just what to do. Overwatch coaching focused on sustainable improvement with a playful, results-driven approach.',
   keywords: ['overwatch coaching', 'overwatch 2', 'vod review', 'rank improvement', 'esports coaching', 'sustainable improvement'],
@@ -31,6 +32,9 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
+  },
+  verification: {
+    google: 'google-site-verification=AmTtJa9Aut4BoOP-L9IqObG-b49LLTEiDxJ-Qp0ywcM',
   },
 };
 
