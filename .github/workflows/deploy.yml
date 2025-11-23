@@ -42,6 +42,7 @@ jobs:
       - name: Build and Start Containers
         run: |
           docker-compose down
+          docker-compose up -d postgres
           docker-compose up -d --build
 
       - name: Run Database Migrations
