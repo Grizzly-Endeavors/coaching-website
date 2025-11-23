@@ -56,6 +56,11 @@ async function main() {
     // Get email from command line args or prompt
     let email = process.argv[2];
     if (!email) {
+      if (!process.stdin.isTTY) {
+        logger.error('\n❌ Error: Email must be provided as command line argument in non-interactive mode');
+        logger.error('Usage: npx tsx scripts/create-admin.ts <email> <password> [name]');
+        process.exit(1);
+      }
       email = await prompt('Email address: ');
     }
     email = email.trim().toLowerCase();
@@ -79,6 +84,11 @@ async function main() {
     // Get password from command line args or prompt
     let password = process.argv[3];
     if (!password) {
+      if (!process.stdin.isTTY) {
+        logger.error('\n❌ Error: Password must be provided as command line argument in non-interactive mode');
+        logger.error('Usage: npx tsx scripts/create-admin.ts <email> <password> [name]');
+        process.exit(1);
+      }
       password = await prompt('Password (min 8 characters): ');
     }
 
@@ -90,10 +100,11 @@ async function main() {
 
     // Get name from command line args or prompt (optional)
     let name: string | null = process.argv[4];
-    if (!name) {
+    if (!name && process.stdin.isTTY) {
+      // Only prompt if running in interactive mode
       name = await prompt('Name (optional, press Enter to skip): ');
     }
-    name = name.trim() || null;
+    name = name?.trim() || null;
 
     logger.info('\n🔐 Hashing password...');
     const hashedPassword = await hashPassword(password);
