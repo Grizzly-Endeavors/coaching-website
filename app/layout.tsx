@@ -12,21 +12,21 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.DOMAIN_NAME || 'http://localhost:3000'),
-  title: 'Overwatch Coaching | Sustainable Improvement',
+  title: 'Bear Flinn | OW Coaching',
   description: 'GM1 across all roles. Teaching you how to think, not just what to do. Overwatch coaching focused on sustainable improvement with a playful, results-driven approach.',
   keywords: ['overwatch coaching', 'overwatch 2', 'vod review', 'rank improvement', 'esports coaching', 'sustainable improvement'],
-  authors: [{ name: 'Overwatch Coaching' }],
+  authors: [{ name: 'Bear Flinn' }],
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: process.env.DOMAIN_NAME || 'http://localhost:3000',
-    title: 'Overwatch Coaching | Sustainable Improvement',
+    title: 'Bear Flinn | OW Coaching',
     description: 'GM1 across all roles. Teaching you how to think, not just what to do. Sustainable improvement with a playful approach.',
-    siteName: 'Overwatch Coaching',
+    siteName: ' Bear Flinn Overwatch Coaching',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Overwatch Coaching | Sustainable Improvement',
+    title: 'Bear Flinn | OW Coaching',
     description: 'GM1 across all roles. Teaching you how to think, not just what to do. Sustainable improvement with a playful approach.',
   },
   robots: {

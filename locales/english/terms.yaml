@@ -12,107 +12,131 @@ hero:
   last_updated: "Last updated: {date}"  # {date} = current date
 
 # -----------------------------------------------------------------------------
-# Placeholder Notice
+# Important Notice (Not displayed on page - for internal reference only)
 # -----------------------------------------------------------------------------
+# NOTE: These terms of service were generated based on the website's features and business
+# model. While they provide reasonable coverage, you should have a legal professional review
+# and customize them for your specific situation before relying on them for legal protection.
 notice:
-  title: "Placeholder Notice"
-  message: "This is a placeholder Terms of Service page. The site owner must replace this content with proper terms and conditions that accurately reflect their business practices, service offerings, and legal requirements."
+  title: ""
+  message: ""
 
 # -----------------------------------------------------------------------------
-# Section Titles and Placeholders
+# Terms Sections
 # -----------------------------------------------------------------------------
 sections:
   acceptance:
     number: 1
     title: "Acceptance of Terms"
-    content: "[Placeholder] By accessing and using this coaching service, you accept and agree to be bound by the terms and provisions of this agreement. If you do not agree to these terms, please do not use this service."
+    content: "By accessing or using this Overwatch coaching service (the 'Service'), you agree to be bound by these Terms of Service ('Terms'). If you do not agree to these Terms, you may not access or use the Service. Your use of the Service constitutes your acceptance of these Terms, and you represent that you have the legal capacity to enter into this agreement. If you are under 18 years of age, you must have permission from a parent or guardian to use this Service."
 
   service_description:
     number: 2
     title: "Service Description"
-    intro: "[Placeholder] Describe the coaching services provided:"
+    intro: "We provide Overwatch coaching services designed to help players improve their gameplay skills and understanding. Our services include:"
     services:
-      - "Review on My Time (asynchronous replay review)"
-      - "VOD Review (live replay review sessions)"
-      - "Live Coaching (real-time gameplay coaching)"
-    outro: "All services are provided for Overwatch gameplay improvement and are subject to availability and scheduling."
+      - "Review on My Time ($25): Asynchronous replay review where you submit replay codes and receive structured written notes focusing on 1-2 key improvement areas, delivered via Discord or email"
+      - "VOD Review ($40): Live 60-minute session over Discord where we review your replay together, with the coach pausing at key moments to guide your thinking and teach decision-making processes"
+      - "Live Coaching ($60): Real-time coaching during live gameplay where the coach observes and provides immediate feedback to help you apply concepts in the moment"
+    outro: "All services are provided for Overwatch gameplay improvement only. Service availability is subject to the coach's schedule. Session times are approximate and may vary based on the content being reviewed. We reserve the right to modify service offerings, pricing, or availability at any time."
 
   booking:
     number: 3
     title: "Booking and Scheduling"
-    intro: "[Placeholder] Define the booking process and policies:"
+    intro: "When booking coaching services, the following policies apply:"
     items:
-      - "How to book sessions and submit replay codes"
-      - "Session duration and scheduling procedures"
-      - "Cancellation and rescheduling policies"
-      - "No-show policy and refund conditions"
-      - "Required notice periods for changes"
+      - "Booking Process: For 'Review on My Time' services, you submit replay codes after payment. For VOD Review and Live Coaching, you select an available time slot during the booking process and receive automated reminders 24 hours and 30 minutes before your scheduled session"
+      - "Session Duration: Sessions typically last 60 minutes but may vary based on the amount of content and coaching needs. The coach reserves the right to extend or shorten sessions based on educational value"
+      - "Cancellation by You: You may cancel or reschedule a scheduled session with at least 24 hours notice by contacting bearflinn@gmail.com. Cancellations with less than 24 hours notice are not eligible for refunds"
+      - "Cancellation by Us: We reserve the right to cancel or reschedule sessions due to unforeseen circumstances. You will be notified as soon as possible and offered a full refund or alternative time slot"
+      - "No-Show Policy: If you miss a scheduled session without prior notice, the session is considered completed and no refund will be provided. Please notify us if you cannot attend"
+      - "Rescheduling: Rescheduling requests must be made at least 24 hours before the scheduled session. We will make reasonable efforts to accommodate your preferred alternative time"
 
   payment:
     number: 4
     title: "Payment Terms"
-    intro: "[Placeholder] Detail payment terms and conditions:"
+    intro: "Payment for all services is processed through Stripe, a secure third-party payment processor:"
     items:
-      - "Payment is processed through Stripe"
-      - "Pricing structure for different coaching packages"
-      - "Payment must be completed before service delivery"
-      - "Refund policy and conditions"
-      - "Dispute resolution procedures"
+      - "Pricing: Review on My Time costs $25, VOD Review costs $40, and Live Coaching costs $60. All prices are in USD and subject to change with notice"
+      - "Payment Required: Full payment must be completed before service delivery. For 'Review on My Time', payment must be completed before submitting replay codes. For scheduled sessions, payment is required at the time of booking"
+      - "Payment Processing: We do not store your payment card information. All payment data is handled securely by Stripe in compliance with PCI-DSS standards"
+      - "Friend Codes: Special promotional codes may be offered that allow you to skip payment. These codes have usage limits and expiration dates as determined at our discretion"
+      - "Refund Policy: Refunds are provided in the following circumstances: (a) if we cancel your session, you receive a full refund; (b) if you cancel with at least 24 hours notice, you receive a full refund; (c) if you are dissatisfied with the service quality, contact us within 7 days and we will review your request on a case-by-case basis. Refunds for 'Review on My Time' services must be requested before coaching notes are delivered. No refunds will be provided for no-shows or late cancellations (less than 24 hours notice)"
+      - "Chargebacks: If you file a chargeback or payment dispute, your access to the Service may be suspended pending resolution. Fraudulent chargebacks may result in permanent termination of service"
 
   user_responsibilities:
     number: 5
     title: "User Responsibilities"
-    intro: "[Placeholder] Specify user obligations and expected behavior:"
+    intro: "As a user of this Service, you agree to:"
     items:
-      - "Provide accurate information when booking"
-      - "Be available for scheduled sessions"
-      - "Maintain respectful communication"
-      - "Provide valid replay codes or gameplay access"
-      - "Follow coaching instructions and guidelines"
+      - "Accuracy: Provide accurate and complete information when booking sessions, including your email, Discord username, rank, role, and any relevant details about your coaching needs"
+      - "Availability: Be available and ready to participate in scheduled sessions at the agreed-upon time. Ensure you have a stable internet connection and necessary software (Discord, Overwatch) installed and working"
+      - "Valid Replay Codes: Provide valid, recent Overwatch replay codes that accurately represent your current gameplay. Replay codes must be from your own games, not from other players"
+      - "Respectful Conduct: Maintain respectful and professional communication with the coach at all times. Harassment, abuse, discrimination, or inappropriate behavior of any kind will not be tolerated"
+      - "Follow Instructions: Make a good-faith effort to understand and apply the coaching feedback provided. While results are not guaranteed, you should actively engage with the learning process"
+      - "Discord Connection: If you use Discord OAuth to connect your account, you are responsible for maintaining the security of your Discord account and for any activity that occurs through your connection"
+      - "Prohibited Uses: You may not use the Service for any illegal purpose, to violate any laws, to infringe on intellectual property rights, or to transmit malicious code or harmful materials"
 
   intellectual_property:
     number: 6
     title: "Intellectual Property"
-    content: "[Placeholder] Address ownership of coaching materials, session recordings, written analyses, and any other intellectual property created during or for the coaching sessions."
+    content: "All coaching materials, including written notes, analyses, session recordings (if any), teaching methodologies, and strategies provided during coaching sessions, remain the intellectual property of the coach. You are granted a personal, non-exclusive, non-transferable license to use these materials solely for your own personal gameplay improvement. You may not reproduce, distribute, publicly display, sell, or create derivative works from coaching materials without explicit written permission. This restriction does not apply to your own gameplay footage or replay codes, which remain your property. The Service itself, including all text, graphics, logos, and software, is protected by copyright and other intellectual property laws."
 
   limitations:
     number: 7
     title: "Service Limitations and Disclaimers"
-    intro: "[Placeholder] Include important disclaimers:"
+    intro: "You acknowledge and agree to the following limitations and disclaimers:"
     items:
-      - "No guarantee of specific rank improvements"
-      - "Results depend on individual effort and practice"
-      - "Service availability and technical requirements"
-      - "Limitation of liability for service interruptions"
+      - "No Guaranteed Results: Coaching services are educational in nature. We do not guarantee specific rank improvements, win rates, or gameplay outcomes. Your success depends on your individual effort, practice, natural ability, and factors beyond our control"
+      - "Educational Service: This is a coaching and educational service only. Improvement requires sustained practice and application of concepts learned. The coach provides guidance, but cannot play the game for you or guarantee specific outcomes"
+      - "Technical Requirements: You are responsible for having appropriate hardware, software, and internet connectivity. We are not liable for session interruptions due to your technical issues"
+      - "Service Availability: The Service is provided 'as is' and 'as available' without warranties of any kind. We do not guarantee uninterrupted or error-free service"
+      - "Limitation of Liability: To the maximum extent permitted by law, we shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses resulting from your use of the Service"
+      - "Maximum Liability: Our total liability to you for any claims arising out of or related to these Terms or the Service shall not exceed the amount you paid for the specific service that gave rise to the claim"
 
   privacy:
     number: 8
     title: "Privacy and Data Usage"
-    content: "[Placeholder] Reference your Privacy Policy and explain how user data, session recordings, and gameplay information will be used, stored, and protected."
+    content: "Your privacy is important to us. Our collection, use, and protection of your personal information is governed by our Privacy Policy, which is incorporated into these Terms by reference. By using the Service, you consent to the collection and use of your information as described in the Privacy Policy. We collect your email, Discord information, replay codes, and gameplay data solely to provide coaching services. Session content and coaching notes are confidential and will not be shared publicly without your permission. Please review our Privacy Policy at /privacy for complete details on how we handle your data."
+
+  code_of_conduct:
+    number: 9
+    title: "Code of Conduct"
+    content: "You agree to maintain professional and respectful behavior when using the Service. Prohibited conduct includes but is not limited to: harassment, threats, or abusive language toward the coach or other users; discrimination based on race, gender, religion, nationality, disability, sexual orientation, or age; sharing offensive, explicit, or inappropriate content; attempting to manipulate, deceive, or defraud the coach or payment system; using the Service to cheat, exploit, or gain unfair advantages in Overwatch; disrupting or interfering with the Service or other users' experience. Violation of this Code of Conduct may result in immediate termination of service without refund."
 
   termination:
-    number: 9
+    number: 10
     title: "Termination"
-    content: "[Placeholder] Describe conditions under which services may be terminated, including violation of terms, inappropriate behavior, or other valid reasons."
+    content: "We reserve the right to terminate or suspend your access to the Service immediately, without prior notice or liability, for any reason, including but not limited to: violation of these Terms or our Code of Conduct; fraudulent payment activity or chargebacks; providing false or misleading information; harassment or abusive behavior; any conduct that we reasonably believe is harmful to other users, the coach, or the Service. Upon termination, your right to use the Service will immediately cease. If your account is terminated for cause, you will not be entitled to a refund of any prepaid fees. You may also terminate your use of the Service at any time by ceasing to use it and contacting us to request data deletion."
 
   changes:
-    number: 10
+    number: 11
     title: "Changes to Terms"
-    content: "[Placeholder] Reserve the right to modify these terms and explain how users will be notified of changes."
+    content: "We reserve the right to modify or replace these Terms at any time at our sole discretion. If we make material changes, we will make reasonable efforts to notify you by updating the 'Last Updated' date at the top of these Terms and, where appropriate, by sending an email notification to the address associated with your account or posting a notice on our website. Material changes will take effect 30 days after they are posted, unless otherwise stated. Your continued use of the Service after any changes become effective constitutes your acceptance of the revised Terms. If you do not agree to the new Terms, you must stop using the Service."
+
+  dispute_resolution:
+    number: 12
+    title: "Dispute Resolution"
+    content: "If you have any concerns or disputes regarding the Service, please first contact us at bearflinn@gmail.com and we will make a good-faith effort to resolve the issue informally. Most concerns can be resolved quickly through direct communication. If we cannot resolve a dispute informally, you agree that any legal action or proceeding arising out of or related to these Terms or the Service shall be resolved through binding arbitration or small claims court, rather than through court litigation. This arbitration agreement does not preclude you from bringing issues to the attention of federal, state, or local agencies, which can, if the law allows, seek relief on your behalf."
+
+  general:
+    number: 13
+    title: "General Provisions"
+    content: "These Terms constitute the entire agreement between you and us regarding the Service and supersede any prior agreements. If any provision of these Terms is found to be unenforceable or invalid, that provision will be limited or eliminated to the minimum extent necessary so that these Terms will otherwise remain in full force and effect. Our failure to enforce any right or provision of these Terms will not be deemed a waiver of such right or provision. You may not assign or transfer these Terms or your rights under them without our prior written consent. We may assign these Terms without restriction. These Terms are personal to you and do not create any third-party beneficiary rights."
 
   contact:
-    number: 11
+    number: 14
     title: "Contact Information"
-    content: "[Placeholder] Provide contact information for questions about these terms and conditions."
+    content: "If you have any questions, concerns, or feedback regarding these Terms of Service, please contact us at bearflinn@gmail.com. We will respond to inquiries within a reasonable timeframe, typically within 3-5 business days."
 
   governing_law:
-    number: 12
+    number: 15
     title: "Governing Law"
-    content: "[Placeholder] Specify the jurisdiction and governing law for these terms and any disputes that may arise."
+    content: "These Terms shall be governed by and construed in accordance with the laws of the State of Georgia, without regard to its conflict of law provisions."
 
 # -----------------------------------------------------------------------------
 # Legal Notice to Site Owner
 # -----------------------------------------------------------------------------
 legal_notice:
-  title: "Note to Site Owner:"
-  message: "You should consult with a legal professional to ensure your terms of service properly protect your business and comply with all applicable laws. Consider including specific details about your refund policy, liability limitations, dispute resolution procedures, and any other terms relevant to your coaching services."
+  title: "Legal Disclaimer:"
+  message: "These terms of service should be reviewed by a qualified attorney before being relied upon for legal protection. You must customize Section 15 (Governing Law) to specify your actual jurisdiction. Depending on your location and business structure, additional provisions may be required. Consider consulting with a lawyer to ensure adequate protection for your business."

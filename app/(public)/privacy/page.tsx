@@ -14,9 +14,13 @@ export const metadata: Metadata = {
 /**
  * Privacy Policy page
  *
- * IMPORTANT: This is a placeholder page. The site owner must customize this
- * with proper legal content that complies with applicable privacy laws and
- * regulations (GDPR, CCPA, etc.).
+ * NOTE: This privacy policy was generated based on the website's features and integrations.
+ * While it provides reasonable coverage, it should be reviewed by a legal professional and
+ * customized for your specific jurisdiction before relying on it for legal compliance.
+ *
+ * TODO: Have a lawyer review this policy
+ * TODO: Customize data retention periods if needed
+ * TODO: Verify compliance with local privacy laws (GDPR, CCPA, etc.)
  */
 export default function PrivacyPage() {
   const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -41,24 +45,6 @@ export default function PrivacyPage() {
       <section className="py-20 bg-[#0f0f23] flex-grow">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <Card variant="surface" padding="lg" className="mb-8 bg-yellow-500/10 border-yellow-500/30">
-              <div className="flex items-start gap-4">
-                <div className="flex-shrink-0">
-                  <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-yellow-400 mb-2">
-                    {privacyLocale.notice.title as string}
-                  </h2>
-                  <p className="text-gray-300 leading-relaxed">
-                    {privacyLocale.notice.message as string}
-                  </p>
-                </div>
-              </div>
-            </Card>
-
             <div className="space-y-8">
               <Card variant="surface" padding="lg">
                 <CardHeader>
@@ -116,6 +102,17 @@ export default function PrivacyPage() {
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
+                  <CardTitle className="text-2xl">{privacyLocale.sections.data_retention.number}. {privacyLocale.sections.data_retention.title as string}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 leading-relaxed">
+                    {privacyLocale.sections.data_retention.content as string}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card variant="surface" padding="lg">
+                <CardHeader>
                   <CardTitle className="text-2xl">{privacyLocale.sections.user_rights.number}. {privacyLocale.sections.user_rights.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -143,6 +140,50 @@ export default function PrivacyPage() {
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
+                  <CardTitle className="text-2xl">{privacyLocale.sections.third_party_services.number}. {privacyLocale.sections.third_party_services.title as string}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 leading-relaxed">
+                    {privacyLocale.sections.third_party_services.content as string}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card variant="surface" padding="lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl">{privacyLocale.sections.childrens_privacy.number}. {privacyLocale.sections.childrens_privacy.title as string}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 leading-relaxed">
+                    {privacyLocale.sections.childrens_privacy.content as string}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card variant="surface" padding="lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl">{privacyLocale.sections.international_users.number}. {privacyLocale.sections.international_users.title as string}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 leading-relaxed">
+                    {privacyLocale.sections.international_users.content as string}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card variant="surface" padding="lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl">{privacyLocale.sections.changes_to_policy.number}. {privacyLocale.sections.changes_to_policy.title as string}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 leading-relaxed">
+                    {privacyLocale.sections.changes_to_policy.content as string}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card variant="surface" padding="lg">
+                <CardHeader>
                   <CardTitle className="text-2xl">{privacyLocale.sections.contact.number}. {privacyLocale.sections.contact.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -152,12 +193,6 @@ export default function PrivacyPage() {
                 </CardContent>
               </Card>
             </div>
-
-            <Card variant="surface" padding="lg" className="mt-8 bg-brand-600/10 border-brand-600/30">
-              <p className="text-gray-300 leading-relaxed">
-                <strong className="text-brand-400">{privacyLocale.legal_notice.title as string}</strong> {privacyLocale.legal_notice.message as string}
-              </p>
-            </Card>
           </div>
         </div>
       </section>

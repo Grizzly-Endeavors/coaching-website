@@ -12,72 +12,107 @@ hero:
   last_updated: "Last updated: {date}"  # {date} = current date
 
 # -----------------------------------------------------------------------------
-# Placeholder Notice
+# Important Notice (Not displayed on page - for internal reference only)
 # -----------------------------------------------------------------------------
+# NOTE: This privacy policy was generated based on the website's features and integrations.
+# While it provides reasonable coverage, you should have a legal professional review and
+# customize it for your specific jurisdiction and business practices before relying on it
+# for legal compliance.
 notice:
-  title: "Placeholder Notice"
-  message: "This is a placeholder Privacy Policy page. The site owner must replace this content with a proper privacy policy that complies with applicable laws and regulations, including GDPR, CCPA, and other relevant privacy legislation."
+  title: ""
+  message: ""
 
 # -----------------------------------------------------------------------------
-# Section Titles and Placeholders
+# Policy Sections
 # -----------------------------------------------------------------------------
 sections:
   information_collected:
     number: 1
     title: "Information We Collect"
-    intro: "[Placeholder] Describe what personal information you collect from users, including but not limited to:"
+    intro: "We collect information that you provide directly to us when using our Overwatch coaching services:"
     items:
-      - "Contact information (name, email, Discord username)"
-      - "Payment information processed through Stripe"
-      - "Game replay codes and related gameplay data"
-      - "Session recordings and coaching notes"
-      - "Website usage data and analytics"
+      - "Contact Information: Email address, Discord username, Discord user ID (if you connect via Discord OAuth), and in-game name"
+      - "Booking Information: Coaching session preferences, selected time slots, and any notes you provide about your coaching needs"
+      - "Gameplay Data: Overwatch replay codes, rank, role (Tank/DPS/Support), heroes played, map names, and your notes about specific replays"
+      - "Payment Information: Billing information is processed and stored by Stripe, our payment processor. We only store transaction IDs, payment status, and amounts for record-keeping"
+      - "Communications: Messages you send through our contact form or Discord notifications"
+      - "Technical Data: Session cookies for authentication, IP address, browser type, and pages visited (stored temporarily for site functionality)"
+      - "Discord OAuth Data: If you connect your Discord account, we store your Discord access tokens (encrypted), refresh tokens, username, and user ID to facilitate notifications and server access"
 
   how_we_use:
     number: 2
     title: "How We Use Your Information"
-    intro: "[Placeholder] Explain how you use the collected information:"
+    intro: "We use the information we collect for the following purposes:"
     items:
-      - "To provide coaching services and schedule sessions"
-      - "To process payments and maintain transaction records"
-      - "To communicate about bookings, updates, and support"
-      - "To improve our services and user experience"
-      - "To comply with legal obligations"
+      - "Service Delivery: To provide coaching services, including reviewing your submitted replays, scheduling live sessions, and delivering coaching notes and feedback"
+      - "Payment Processing: To process payments through Stripe and maintain transaction records for accounting and dispute resolution"
+      - "Communication: To send you Discord notifications about your submissions, session reminders (24 hours and 30 minutes before scheduled sessions), and respond to your inquiries through email"
+      - "Scheduling: To manage coaching session bookings, availability slots, and calendar exceptions"
+      - "Account Management: To authenticate admin access and maintain your submission history"
+      - "Service Improvement: To understand usage patterns and improve our coaching offerings and website functionality"
+      - "Legal Compliance: To comply with applicable laws, regulations, and legal processes"
 
   information_sharing:
     number: 3
     title: "Information Sharing and Disclosure"
-    content: "[Placeholder] Describe how you share information with third parties, including payment processors (Stripe), calendar services (Google Calendar), and any other service providers."
+    content: "We do not sell your personal information. We share your information only in the following limited circumstances: (1) With Stripe for payment processing - they handle all credit card information according to PCI-DSS standards; (2) With Discord via their API to send you notifications and add you to the coaching Discord server if you authorize OAuth access; (3) With Cloudflare, which provides hosting infrastructure and may process technical data as part of delivering the website; (4) When required by law, such as to comply with a subpoena or similar legal process; (5) To protect our rights, your safety, or the safety of others; (6) In connection with a business transfer, such as a merger or acquisition (you would be notified beforehand). We do not share your replay codes, coaching notes, or gameplay data with any third parties except as necessary to provide you the service you requested."
 
   data_security:
     number: 4
     title: "Data Security"
-    content: "[Placeholder] Explain the security measures you take to protect user data, including encryption, secure storage, and access controls."
+    content: "We implement appropriate technical and organizational security measures to protect your personal information. These include: encrypted HTTPS connections for all data transmission; secure PostgreSQL database with access controls and password hashing using bcrypt for admin accounts; Discord OAuth tokens are encrypted before storage; Stripe handles all payment card data and we never store full card numbers; regular security updates to our software dependencies; restricted access to personal data on a need-to-know basis. However, no method of transmission over the internet or electronic storage is 100% secure. While we strive to protect your information, we cannot guarantee absolute security."
+
+  data_retention:
+    number: 5
+    title: "Data Retention"
+    content: "We retain your personal information for as long as necessary to provide our services and comply with legal obligations. Specifically: Replay submissions and coaching notes are retained indefinitely to maintain your coaching history unless you request deletion; Payment records are retained for 7 years to comply with tax and accounting requirements; Booking records are retained for 2 years for scheduling reference and quality assurance; Session cookies expire when you close your browser or after 30 days of inactivity; Discord OAuth tokens are retained until you disconnect your Discord account or revoke access. You may request deletion of your personal data at any time by contacting us at bearflinn@gmail.com."
 
   user_rights:
-    number: 5
-    title: "Your Rights"
-    intro: "[Placeholder] Detail user rights regarding their personal data:"
+    number: 6
+    title: "Your Rights and Choices"
+    intro: "Depending on your location, you may have certain rights regarding your personal information:"
     items:
-      - "Right to access your personal information"
-      - "Right to correct or update your data"
-      - "Right to delete your personal information"
-      - "Right to opt-out of certain data processing"
-      - "Right to data portability"
+      - "Access: You can request a copy of the personal information we hold about you"
+      - "Correction: You can request that we correct inaccurate or incomplete information"
+      - "Deletion: You can request deletion of your personal information, subject to legal retention requirements"
+      - "Portability: You can request a copy of your data in a structured, machine-readable format"
+      - "Objection: You can object to certain processing of your information"
+      - "Withdraw Consent: If you connected Discord via OAuth, you can disconnect it at any time through your account or by contacting us"
+      - "Opt-out: You can opt out of non-essential Discord notifications by disconnecting your Discord account, though this may limit service functionality"
 
   cookies:
-    number: 6
+    number: 7
     title: "Cookies and Tracking"
-    content: "[Placeholder] Explain your use of cookies, analytics tools, and other tracking technologies."
+    content: "We use essential cookies to provide basic site functionality. Specifically, we use session cookies powered by NextAuth.js for admin authentication and to maintain your logged-in state. These cookies are strictly necessary for the website to function and cannot be disabled. We do not currently use analytics tools, advertising cookies, or third-party tracking cookies. If we add analytics in the future, we will update this policy and provide opt-out options where legally required."
+
+  third_party_services:
+    number: 8
+    title: "Third-Party Services"
+    content: "Our website integrates with the following third-party services, each with their own privacy policies: Stripe (payment processing) - see https://stripe.com/privacy; Discord (notifications and OAuth authentication) - see https://discord.com/privacy; Cloudflare (hosting and CDN) - see https://www.cloudflare.com/privacypolicy/. When you use these services through our website, you are also subject to their respective privacy policies. We encourage you to review them."
+
+  childrens_privacy:
+    number: 9
+    title: "Children's Privacy"
+    content: "Our services are not directed to children under the age of 13 (or 16 in the European Economic Area). We do not knowingly collect personal information from children. If you are a parent or guardian and believe your child has provided us with personal information, please contact us at bearflinn@gmail.com and we will delete such information from our systems."
+
+  international_users:
+    number: 10
+    title: "International Data Transfers"
+    content: "Your information may be transferred to and processed in countries other than your country of residence. These countries may have data protection laws that are different from the laws of your country. By using our services, you consent to the transfer of your information to our facilities and to the third parties with whom we share it as described in this policy."
+
+  changes_to_policy:
+    number: 11
+    title: "Changes to This Privacy Policy"
+    content: "We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of any material changes by updating the 'Last Updated' date at the top of this policy. For significant changes, we may also send a notification via email or Discord. Your continued use of our services after such changes constitutes your acceptance of the updated policy."
 
   contact:
-    number: 7
+    number: 12
     title: "Contact Information"
-    content: "If you have any questions about this Privacy Policy, please contact us at bearflinn@gmail.com."
+    content: "If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at bearflinn@gmail.com. We will respond to your inquiry within 30 days."
 
 # -----------------------------------------------------------------------------
 # Legal Notice to Site Owner
 # -----------------------------------------------------------------------------
 legal_notice:
-  title: "Note to Site Owner:"
-  message: "You should consult with a legal professional to ensure your privacy policy complies with all applicable laws and accurately reflects your data practices. Consider including specific details about your jurisdiction, retention periods, third-party services, and user rights under GDPR, CCPA, and other relevant regulations."
+  title: "Legal Disclaimer:"
+  message: "This privacy policy should be reviewed by a qualified attorney before being relied upon for legal compliance. Depending on your location and your users' locations, additional disclosures may be required under GDPR (EU), CCPA (California), or other privacy laws. Consider consulting with a lawyer to ensure full compliance with all applicable regulations."

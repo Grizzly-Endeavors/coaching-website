@@ -14,9 +14,14 @@ export const metadata: Metadata = {
 /**
  * Terms of Service page
  *
- * IMPORTANT: This is a placeholder page. The site owner must customize this
- * with proper legal content that accurately reflects the terms and conditions
- * of using their coaching services.
+ * NOTE: These terms were generated based on the website's features and business model.
+ * While they provide reasonable coverage, they should be reviewed by a legal professional
+ * and customized for your specific situation before relying on them for legal protection.
+ *
+ * TODO: Have a lawyer review these terms
+ * TODO: Customize Section 15 (Governing Law) with your actual jurisdiction
+ * TODO: Verify refund policy matches your business preferences
+ * TODO: Adjust cancellation/no-show policies if needed
  */
 export default function TermsPage() {
   const currentDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
@@ -41,24 +46,6 @@ export default function TermsPage() {
       <section className="py-20 bg-[#0f0f23] flex-grow">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
-            <Card variant="surface" padding="lg" className="mb-8 bg-yellow-500/10 border-yellow-500/30">
-              <div className="flex items-start gap-4">
-                <div className="flex items-center justify-center w-10 h-10 bg-brand-600/20 rounded-lg mr-4 flex-shrink-0">
-                  <svg className="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-yellow-400 mb-2">
-                    {termsLocale.notice.title as string}
-                  </h2>
-                  <p className="text-gray-300 leading-relaxed">
-                    {termsLocale.notice.message as string}
-                  </p>
-                </div>
-              </div>
-            </Card>
-
             <div className="space-y-8">
               <Card variant="surface" padding="lg">
                 <CardHeader>
@@ -211,6 +198,39 @@ export default function TermsPage() {
 
               <Card variant="surface" padding="lg">
                 <CardHeader>
+                  <CardTitle className="text-2xl">{termsLocale.sections.code_of_conduct.number}. {termsLocale.sections.code_of_conduct.title as string}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 leading-relaxed">
+                    {termsLocale.sections.code_of_conduct.content as string}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card variant="surface" padding="lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl">{termsLocale.sections.dispute_resolution.number}. {termsLocale.sections.dispute_resolution.title as string}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 leading-relaxed">
+                    {termsLocale.sections.dispute_resolution.content as string}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card variant="surface" padding="lg">
+                <CardHeader>
+                  <CardTitle className="text-2xl">{termsLocale.sections.general.number}. {termsLocale.sections.general.title as string}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-300 leading-relaxed">
+                    {termsLocale.sections.general.content as string}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card variant="surface" padding="lg">
+                <CardHeader>
                   <CardTitle className="text-2xl">{termsLocale.sections.governing_law.number}. {termsLocale.sections.governing_law.title as string}</CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -220,12 +240,6 @@ export default function TermsPage() {
                 </CardContent>
               </Card>
             </div>
-
-            <Card variant="surface" padding="lg" className="mt-8 bg-brand-600/10 border-brand-600/30">
-              <p className="text-gray-300 leading-relaxed">
-                <strong className="text-brand-400">{termsLocale.legal_notice.title as string}</strong> {termsLocale.legal_notice.message as string}
-              </p>
-            </Card>
           </div>
         </div>
       </section>
