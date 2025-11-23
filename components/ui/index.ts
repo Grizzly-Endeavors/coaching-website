@@ -72,3 +72,7 @@ export {
   DialogTitle,
   DialogDescription,
 } from './Dialog';
+
+// Accordion
+export { Accordion } from './Accordion';
+export type { AccordionProps } from './Accordion';

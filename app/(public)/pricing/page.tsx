@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
+import { Accordion } from '@/components/ui/Accordion';
 import { loadLocale } from '@/lib/locales';
 import type { Metadata } from 'next';
 
@@ -162,10 +163,10 @@ export default function PricingPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4">
-              {pricingLocale.how_it_works.title as string}
+              {pricingLocale.how_it_works.section_title as string}
             </h2>
             <p className="text-lg text-gray-400 max-w-2xl mx-auto">
-              {pricingLocale.how_it_works.subtitle as string}
+              {pricingLocale.how_it_works.section_subtitle as string}
             </p>
           </div>
 
@@ -191,7 +192,7 @@ export default function PricingPage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4">
-                {pricingLocale.comparison.title as string}
+                {pricingLocale.comparison.section_title as string}
               </h2>
             </div>
 
@@ -224,21 +225,17 @@ export default function PricingPage() {
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-100 mb-4">
-                {pricingLocale.faq.title as string}
+                {pricingLocale.faq.section_title as string}
               </h2>
             </div>
 
-            <div className="space-y-6">
-              {faqItems.map((item, index) => (
-                <Card key={index} variant="surface" padding="lg">
-                  <h3 className="text-xl font-bold text-gray-100 mb-3">
-                    {item.question}
-                  </h3>
-                  <p className="text-gray-400 leading-relaxed">
-                    {item.answer}
-                  </p>
-                </Card>
-              ))}
+            <div className="max-w-3xl mx-auto">
+              <Accordion
+                items={faqItems.map((item) => ({
+                  title: item.question,
+                  content: item.answer,
+                }))}
+              />
             </div>
           </div>
         </div>
