@@ -141,6 +141,7 @@ async function DashboardContent() {
                     year: 'numeric',
                     hour: 'numeric',
                     minute: '2-digit',
+                    timeZone: 'America/New_York',
                   })}
                 </AdminTableCell>
                 <AdminTableCell>{booking.email}</AdminTableCell>
