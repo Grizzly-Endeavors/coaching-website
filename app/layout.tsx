@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import './globals.css';
 import { LocaleProvider } from '@/lib/locales/client';
 import { loadAllLocales } from '@/lib/locales/loader';
@@ -50,6 +51,9 @@ export default function RootLayout({
         <LocaleProvider locales={locales}>
           {children}
         </LocaleProvider>
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
       </body>
     </html>
   );
