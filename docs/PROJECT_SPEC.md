@@ -36,7 +36,7 @@ A custom website for Overwatch coaching services that handles:
 
 ### DevOps
 - **Containerization**: Docker + Docker Compose
-- **Reverse Proxy**: Cloudflare Tunnel (cloudflared)
+- **Reverse Proxy**: System-level tunnel and reverse proxy
 - **Database**: PostgreSQL container with persistent volume
 - **Environment**: Node 20 LTS
 
@@ -601,17 +601,6 @@ services:
     volumes:
       - ./uploads:/app/uploads # For temporary file uploads
 
-  # Cloudflare Tunnel
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: overwatch-coaching-tunnel
-    restart: unless-stopped
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
-    networks:
-      - coaching-network
-    depends_on:
-      - app
-
 volumes:
   postgres_data:
     driver: local
@@ -719,9 +708,6 @@ ADMIN_DISCORD_USER_ID=your_discord_user_id_here
 
 # Admin
 ADMIN_EMAIL=your-email@example.com
-
-# Cloudflare Tunnel
-CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token
 ```
 
 ---
@@ -742,12 +728,6 @@ CLOUDFLARE_TUNNEL_TOKEN=your_cloudflare_tunnel_token
    - Secret generation
    - Admin user creation process
    - Any additional auth setup needed
-
-4. **Cloudflare Tunnel Setup**
-   - Installation instructions
-   - Tunnel creation and authentication
-   - Route configuration
-   - Token generation
 
 ### Required Deployment Guides:
 1. **Initial Setup**
@@ -1015,7 +995,6 @@ npx prisma format
 
 ### API References
 - Discord Developer Portal: https://discord.com/developers/docs
-- Cloudflare Tunnel: https://developers.cloudflare.com/cloudflare-one/connections/connect-networks
 
 ---
 

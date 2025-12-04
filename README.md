@@ -136,7 +136,7 @@ This application provides a complete coaching business platform with replay code
 ### Deployment & DevOps
 - **Docker** with multi-stage builds (3 stages: deps, builder, runner)
 - **Docker Compose** for service orchestration
-- **Cloudflare Tunnel** for secure remote access
+- **System-level tunnel and reverse proxy** for secure remote access
 - **GitHub Actions** for CI/CD automation
 - Self-hosted runner deployment
 - Automated database migrations and admin setup
@@ -419,9 +419,6 @@ The application uses a dark theme with purple accents:
   - Depends on database health
   - Environment variable injection
   - Port mapping (3000:3000)
-- **Cloudflare Tunnel**:
-  - Secure remote access without exposing ports
-  - Token-based authentication
 
 ### CI/CD Pipeline
 
@@ -455,7 +452,6 @@ Comprehensive `.env.example` with 20+ required variables:
 - **Discord**: Bot token, OAuth client ID/secret, guild ID, admin user ID
 - **Stripe**: Secret key, publishable key, webhook secret, 3 price IDs
 - **Admin**: Initial admin email and password (bcrypt hashed)
-- **Cloudflare**: Tunnel token
 - **Analytics**: Google Analytics ID
 
 ### Deployment Process
@@ -465,7 +461,7 @@ Comprehensive `.env.example` with 20+ required variables:
 3. Docker Compose builds and starts services
 4. Database migrations run automatically
 5. Admin account created if needed
-6. Application accessible via Cloudflare Tunnel
+6. Application accessible via system-level tunnel and reverse proxy
 7. Background services (reminder job) start automatically
 
 See [PROJECT_SPEC.md](PROJECT_SPEC.md) for detailed deployment instructions.

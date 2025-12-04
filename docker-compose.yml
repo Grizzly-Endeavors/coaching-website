@@ -55,17 +55,6 @@ services:
     volumes:
       - ./uploads:/app/uploads # For temporary file uploads
 
-  # Cloudflare Tunnel
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    container_name: overwatch-coaching-tunnel
-    restart: unless-stopped
-    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
-    networks:
-      - coaching-network
-    depends_on:
-      - app
-
 volumes:
   postgres_data:
     driver: local
