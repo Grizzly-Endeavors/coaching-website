@@ -1,87 +1,71 @@
-name: Deploy to Production
+name: Build and Deploy
 
 on:
   push:
     branches:
       - production
 
+env:
+  REGISTRY: 10.0.0.226:32346
+  IMAGE_NAME: coaching-website
+
 jobs:
-  deploy:
-    runs-on: self-hosted
-    
+  build-and-deploy:
+    runs-on: [self-hosted, kubernetes, lab]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create .env file
+      - name: Build Docker image
         run: |
-          cat <<EOF > .env
-          DB_USER=$DB_USER
-          DB_PASSWORD=$DB_PASSWORD
-          DB_NAME=$DB_NAME
-          DATABASE_URL=$DATABASE_URL
-          NEXTAUTH_URL=$NEXTAUTH_URL
-          DOMAIN_NAME=$DOMAIN_NAME
-          NEXTAUTH_SECRET=$NEXTAUTH_SECRET
-          DISCORD_BOT_TOKEN=$DISCORD_BOT_TOKEN
-          ADMIN_DISCORD_USER_ID=$ADMIN_DISCORD_USER_ID
-          DISCORD_CLIENT_ID=$DISCORD_CLIENT_ID
-          DISCORD_CLIENT_SECRET=$DISCORD_CLIENT_SECRET
-          DISCORD_REDIRECT_URI=$DISCORD_REDIRECT_URI
-          DISCORD_GUILD_ID=$DISCORD_GUILD_ID
-          ADMIN_EMAIL=$ADMIN_EMAIL
-          ADMIN_PASSWORD=$ADMIN_PASSWORD
-          STRIPE_SECRET_KEY=$STRIPE_SECRET_KEY
-          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-          STRIPE_WEBHOOK_SECRET=$STRIPE_WEBHOOK_SECRET
-          STRIPE_PRICE_ID_REVIEW_ASYNC=$STRIPE_PRICE_ID_REVIEW_ASYNC
-          STRIPE_PRICE_ID_VOD_REVIEW=$STRIPE_PRICE_ID_VOD_REVIEW
-          STRIPE_PRICE_ID_LIVE_COACHING=$STRIPE_PRICE_ID_LIVE_COACHING
-          NEXT_PUBLIC_GA_ID=$NEXT_PUBLIC_GA_ID
-          EOF
-        env:
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
-          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
-          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
-          ADMIN_DISCORD_USER_ID: ${{ secrets.ADMIN_DISCORD_USER_ID }}
-          DISCORD_CLIENT_ID: ${{ secrets.DISCORD_CLIENT_ID }}
-          DISCORD_CLIENT_SECRET: ${{ secrets.DISCORD_CLIENT_SECRET }}
-          DISCORD_REDIRECT_URI: ${{ secrets.DISCORD_REDIRECT_URI }}
-          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
-          ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
-          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
-          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
-          STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
-          STRIPE_PRICE_ID_REVIEW_ASYNC: ${{ secrets.STRIPE_PRICE_ID_REVIEW_ASYNC }}
-          STRIPE_PRICE_ID_VOD_REVIEW: ${{ secrets.STRIPE_PRICE_ID_VOD_REVIEW }}
-          STRIPE_PRICE_ID_LIVE_COACHING: ${{ secrets.STRIPE_PRICE_ID_LIVE_COACHING }}
-          NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+          docker build -t $REGISTRY/$IMAGE_NAME:${{ github.sha }} \
+            --build-arg NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY="${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}" \
+            --build-arg NEXT_PUBLIC_API_URL="${{ secrets.DOMAIN_NAME }}" \
+            .
+          docker tag $REGISTRY/$IMAGE_NAME:${{ github.sha }} $REGISTRY/$IMAGE_NAME:latest
 
-      - name: Build and Start Containers
+      - name: Push to registry
         run: |
-          docker-compose down
-          docker-compose up -d postgres
-          docker-compose up -d --build
+          docker push $REGISTRY/$IMAGE_NAME:${{ github.sha }}
+          docker push $REGISTRY/$IMAGE_NAME:latest
 
-      - name: Wait for Database
+      - name: Deploy to Kubernetes with Helm
         run: |
-          echo "Waiting for PostgreSQL to be ready..."
-          until docker-compose exec -T postgres pg_isready -U ${{ secrets.DB_USER }}; do
-            echo "PostgreSQL is unavailable - sleeping"
-            sleep 2
-          done
-          echo "PostgreSQL is ready!"
+          helm upgrade --install coaching-website ./helm \
+            --create-namespace \
+            --namespace coaching-website \
+            --set image.tag=latest \
+            --set database.password="${{ secrets.DB_PASSWORD }}" \
+            --set secrets.nextauthUrl="${{ secrets.NEXTAUTH_URL }}" \
+            --set secrets.nextauthSecret="${{ secrets.NEXTAUTH_SECRET }}" \
+            --set secrets.discordBotToken="${{ secrets.DISCORD_BOT_TOKEN }}" \
+            --set secrets.adminDiscordUserId="${{ secrets.ADMIN_DISCORD_USER_ID }}" \
+            --set secrets.adminEmail="${{ secrets.ADMIN_EMAIL }}" \
+            --set secrets.discordClientId="${{ secrets.DISCORD_CLIENT_ID }}" \
+            --set secrets.discordClientSecret="${{ secrets.DISCORD_CLIENT_SECRET }}" \
+            --set secrets.discordRedirectUri="${{ secrets.DISCORD_REDIRECT_URI }}" \
+            --set secrets.discordGuildId="${{ secrets.DISCORD_GUILD_ID }}" \
+            --set secrets.stripeSecretKey="${{ secrets.STRIPE_SECRET_KEY }}" \
+            --set secrets.domainName="${{ secrets.DOMAIN_NAME }}" \
+            --set secrets.nextPublicStripePublishableKey="${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}" \
+            --set secrets.nextPublicApiUrl="${{ secrets.DOMAIN_NAME }}" \
+            --wait \
+            --timeout 5m
 
-      - name: Run Database Migrations
+      - name: Clean up old images
         run: |
-          docker-compose exec -T app npm run prisma:migrate
+          docker image prune -f
 
-      - name: Setup Admin Account
+      - name: Build summary
         run: |
-          docker-compose exec -T app npx tsx scripts/create-admin.ts "${{ secrets.ADMIN_EMAIL }}" "${{ secrets.ADMIN_PASSWORD }}" || echo "Admin account may already exist"
+          echo "✅ Deployed successfully to Kubernetes" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Deployment Details:**" >> $GITHUB_STEP_SUMMARY
+          echo "- Service: coaching-website" >> $GITHUB_STEP_SUMMARY
+          echo "- Image: \`$REGISTRY/$IMAGE_NAME:latest\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Branch: \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Commit: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- Ingress: \`coaching.grizzly-endeavors.com\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⚠️ **Note**: Database migrations must be run manually if schema changed" >> $GITHUB_STEP_SUMMARY

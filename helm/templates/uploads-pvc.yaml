@@ -1,0 +1,16 @@
+{{- if .Values.uploads.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ .Chart.Name }}-uploads
+  labels:
+    app: {{ .Chart.Name }}
+    component: uploads
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.uploads.storage.className }}
+  resources:
+    requests:
+      storage: {{ .Values.uploads.storage.size }}
+{{- end }}
