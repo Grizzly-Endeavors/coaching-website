@@ -1,0 +1,72 @@
+# Default values for coaching-website
+# Secrets are passed via --set flags in CI/CD
+
+replicaCount: 1
+
+image:
+  registry: 10.0.0.226:32346
+  repository: coaching-website
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations: {}
+  host: coaching.bearflinn.com
+  tls:
+    enabled: false
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+# Database configuration
+database:
+  enabled: true
+  image: postgres:16-alpine
+  port: 5432
+  name: overwatch_coaching
+  user: coaching
+  password: ""
+  storage:
+    size: 20Gi
+    className: local-path
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+# Persistent uploads directory
+uploads:
+  enabled: true
+  storage:
+    size: 5Gi
+    className: local-path
+
+# Application secrets (set via CI/CD)
+secrets:
+  nextauthUrl: ""
+  nextauthSecret: ""
+  discordBotToken: ""
+  adminDiscordUserId: ""
+  adminEmail: ""
+  discordClientId: ""
+  discordClientSecret: ""
+  discordRedirectUri: ""
+  discordGuildId: ""
+  stripeSecretKey: ""
+  domainName: ""
+  nextPublicStripePublishableKey: ""
+  nextPublicApiUrl: ""
