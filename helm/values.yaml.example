@@ -1,0 +1,72 @@
+# Example values file for coaching-website
+# Copy this to values.yaml and fill in your actual secrets
+
+replicaCount: 1
+
+image:
+  registry: 10.0.0.226:32346
+  repository: coaching-website
+  pullPolicy: Always
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 3000
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations: {}
+  host: coaching.bearflinn.com
+  tls:
+    enabled: false
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+# Database configuration
+database:
+  enabled: true
+  image: postgres:16-alpine
+  port: 5432
+  name: overwatch_coaching
+  user: coaching
+  password: "CHANGE_ME_STRONG_PASSWORD"
+  storage:
+    size: 20Gi
+    className: local-path
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+# Persistent uploads directory
+uploads:
+  enabled: true
+  storage:
+    size: 5Gi
+    className: local-path
+
+# Application secrets
+secrets:
+  nextauthUrl: "https://coaching.bearflinn.com"
+  nextauthSecret: "CHANGE_ME_RANDOM_STRING"
+  discordBotToken: "YOUR_DISCORD_BOT_TOKEN"
+  adminDiscordUserId: "YOUR_DISCORD_USER_ID"
+  adminEmail: "admin@example.com"
+  discordClientId: "YOUR_DISCORD_CLIENT_ID"
+  discordClientSecret: "YOUR_DISCORD_CLIENT_SECRET"
+  discordRedirectUri: "https://coaching.bearflinn.com/api/auth/callback/discord"
+  discordGuildId: "YOUR_DISCORD_GUILD_ID"
+  stripeSecretKey: "YOUR_STRIPE_SECRET_KEY"
+  domainName: "https://coaching.bearflinn.com"
+  nextPublicStripePublishableKey: "YOUR_STRIPE_PUBLISHABLE_KEY"
+  nextPublicApiUrl: "https://coaching.bearflinn.com"
