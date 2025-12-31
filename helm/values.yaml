@@ -39,7 +39,7 @@ database:
   password: ""
   storage:
     size: 20Gi
-    className: local-path
+    className: nfs-client
   resources:
     limits:
       cpu: 500m
@@ -53,7 +53,7 @@ uploads:
   enabled: true
   storage:
     size: 5Gi
-    className: local-path
+    className: nfs-client
 
 # Application secrets (set via CI/CD)
 secrets:
