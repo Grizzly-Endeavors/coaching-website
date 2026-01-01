@@ -16,12 +16,10 @@ spec:
         app: {{ .Chart.Name }}
         component: app
     spec:
-      {{- if .Values.database.enabled }}
       initContainers:
       - name: wait-for-db
         image: busybox:1.35
-        command: ['sh', '-c', 'until nc -z {{ .Chart.Name }}-db {{ .Values.database.port }}; do echo waiting for database; sleep 2; done;']
-      {{- end }}
+        command: ['sh', '-c', 'until nc -z {{ .Values.postgresql.host }} {{ .Values.postgresql.port }}; do echo waiting for database; sleep 2; done;']
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -33,14 +31,14 @@ spec:
         env:
         - name: NODE_ENV
           value: "production"
-        {{- if .Values.database.enabled }}
         - name: DATABASE_URL
-          value: "postgresql://{{ .Values.database.user }}:$(DB_PASSWORD)@{{ .Chart.Name }}-db:{{ .Values.database.port }}/{{ .Values.database.name }}"
-        - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: {{ .Chart.Name }}-secrets
-              key: database-password
+              key: database-url
+        {{- if .Values.postgresql.tls.enabled }}
+        - name: PGSSLROOTCERT
+          value: {{ .Values.postgresql.tls.mountPath }}/ca.crt
         {{- end }}
         - name: NEXTAUTH_URL
           valueFrom:
@@ -107,10 +105,15 @@ spec:
             secretKeyRef:
               name: {{ .Chart.Name }}-secrets
               key: next-public-api-url
-        {{- if .Values.uploads.enabled }}
         volumeMounts:
+        {{- if .Values.uploads.enabled }}
         - name: uploads
           mountPath: /app/uploads
+        {{- end }}
+        {{- if .Values.postgresql.tls.enabled }}
+        - name: postgres-ca
+          mountPath: {{ .Values.postgresql.tls.mountPath }}
+          readOnly: true
         {{- end }}
         livenessProbe:
           httpGet:
@@ -126,9 +129,17 @@ spec:
           periodSeconds: 5
         resources:
           {{- toYaml .Values.resources | nindent 10 }}
-      {{- if .Values.uploads.enabled }}
       volumes:
+      {{- if .Values.uploads.enabled }}
       - name: uploads
         persistentVolumeClaim:
           claimName: {{ .Chart.Name }}-uploads
+      {{- end }}
+      {{- if .Values.postgresql.tls.enabled }}
+      - name: postgres-ca
+        secret:
+          secretName: {{ .Values.postgresql.tls.caSecretName }}
+          items:
+          - key: ca.crt
+            path: ca.crt
       {{- end }}
