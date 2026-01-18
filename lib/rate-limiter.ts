@@ -94,13 +94,28 @@ export async function rateLimit(
   if (entry.count >= options.maxRequests) {
     // Rate limit exceeded
     const retryAfter = Math.ceil((entry.resetTime - now) / 1000);
+
+    // Format retry time as human-readable
+    const formatRetryTime = (seconds: number): string => {
+      if (seconds < 60) {
+        return `${seconds} second${seconds !== 1 ? 's' : ''}`;
+      }
+      const minutes = Math.ceil(seconds / 60);
+      return `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+    };
+
+    const retryTimeFormatted = formatRetryTime(retryAfter);
+    const fullMessage = options.message
+      ? `${options.message} Please try again in ${retryTimeFormatted}.`
+      : `Too many requests. Please try again in ${retryTimeFormatted}.`;
+
     return {
       success: false,
       response: NextResponse.json(
         {
           success: false,
           error: 'Too many requests',
-          message: options.message || 'Please try again later',
+          message: fullMessage,
           retryAfter,
         },
         {
