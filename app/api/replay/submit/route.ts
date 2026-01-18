@@ -48,6 +48,14 @@ export async function POST(request: NextRequest) {
     // Parse request body
     const body = await request.json();
 
+    // Normalize replay codes to uppercase BEFORE validation
+    if (body.replays && Array.isArray(body.replays)) {
+      body.replays = body.replays.map((replay: any) => ({
+        ...replay,
+        code: replay.code ? replay.code.toUpperCase() : replay.code,
+      }));
+    }
+
     // Validate request body with Zod
     const validatedData = replaySubmissionSchema.parse(body);
 
@@ -100,7 +108,7 @@ export async function POST(request: NextRequest) {
         status: 'AWAITING_PAYMENT', // Changed from PENDING to AWAITING_PAYMENT
         replays: {
           create: validatedData.replays.map((replay) => ({
-            code: replay.code.toUpperCase(), // Normalize to uppercase
+            code: replay.code, // Already normalized to uppercase before validation
             mapName: replay.mapName,
             notes: replay.notes || null,
           })),
