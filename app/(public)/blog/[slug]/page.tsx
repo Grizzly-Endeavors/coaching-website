@@ -12,6 +12,7 @@ import { estimateReadingTime } from '@/lib/markdown';
 import type { BlogPostSummary } from '@/lib/types/blog.types';
 import { loadLocale, interpolate } from '@/lib/locales';
 import { getBlogPostBySlug, getBlogPosts } from '@/lib/blog';
+import { logger } from '@/lib/logger';
 
 const blogLocale = loadLocale('blog');
 const metadataLocale = loadLocale('metadata');
@@ -31,7 +32,7 @@ async function getBlogPost(slug: string) {
   try {
     return await getBlogPostBySlug(slug);
   } catch (error) {
-    console.error('Error fetching blog post:', error instanceof Error ? error : new Error(String(error)));
+    logger.error('Error fetching blog post:', error instanceof Error ? error : new Error(String(error)));
     return null;
   }
 }
@@ -80,7 +81,7 @@ export async function generateStaticParams() {
       slug: post.slug,
     }));
   } catch (error) {
-    console.error('Error generating static params:', error instanceof Error ? error : new Error(String(error)));
+    logger.error('Error generating static params:', error instanceof Error ? error : new Error(String(error)));
     return [];
   }
 }

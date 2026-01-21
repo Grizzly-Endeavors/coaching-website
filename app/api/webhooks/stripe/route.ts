@@ -88,7 +88,7 @@ async function handleCheckoutSessionCompleted(session: Stripe.Checkout.Session) 
     paymentStatus: session.payment_status,
   });
 
-  // Update payment status
+  // Update payment status (single operation, no transaction needed)
   await prisma.payment.update({
     where: { stripeSessionId: session.id },
     data: {
@@ -105,81 +105,97 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
     currency: paymentIntent.currency,
   });
 
-  // Update payment status to succeeded and fetch related data
-  const payment = await prisma.payment.update({
-    where: { stripePaymentId: paymentIntent.id },
-    data: { status: 'SUCCEEDED' },
-    include: {
-      submission: {
-        include: {
-          booking: true,
-          replays: {
-            select: {
-              code: true,
-              mapName: true,
-              notes: true,
+  // Use transaction to ensure all DB updates succeed or fail together
+  const payment = await prisma.$transaction(async (tx) => {
+    // Update payment status to succeeded and fetch related data
+    const updatedPayment = await tx.payment.update({
+      where: { stripePaymentId: paymentIntent.id },
+      data: { status: 'SUCCEEDED' },
+      include: {
+        submission: {
+          include: {
+            booking: true,
+            replays: {
+              select: {
+                code: true,
+                mapName: true,
+                notes: true,
+              },
             },
           },
         },
       },
-    },
-  });
-
-  logger.info('Payment updated successfully', {
-    paymentId: payment.id,
-    hasSubmission: !!payment.submission,
-  });
-
-  // If payment is linked to a submission, update submission and booking status
-  if (payment.submission) {
-    await prisma.replaySubmission.update({
-      where: { id: payment.submission.id },
-      data: { status: 'PAYMENT_RECEIVED' },
     });
 
-    logger.info('Submission status updated to PAYMENT_RECEIVED', {
-      submissionId: payment.submission.id,
+    logger.info('Payment updated successfully', {
+      paymentId: updatedPayment.id,
+      hasSubmission: !!updatedPayment.submission,
     });
 
-    // If submission has a booking, confirm it
-    if (payment.submission.booking) {
-      await prisma.booking.update({
-        where: { id: payment.submission.booking.id },
-        data: { status: 'CONFIRMED' },
+    // If payment is linked to a submission, update submission and booking status
+    if (updatedPayment.submission) {
+      await tx.replaySubmission.update({
+        where: { id: updatedPayment.submission.id },
+        data: { status: 'PAYMENT_RECEIVED' },
       });
 
-      logger.info('Booking status updated to CONFIRMED', {
-        bookingId: payment.submission.booking.id,
+      logger.info('Submission status updated to PAYMENT_RECEIVED', {
+        submissionId: updatedPayment.submission.id,
       });
+
+      // If submission has a booking, confirm it
+      if (updatedPayment.submission.booking) {
+        await tx.booking.update({
+          where: { id: updatedPayment.submission.booking.id },
+          data: { status: 'CONFIRMED' },
+        });
+
+        logger.info('Booking status updated to CONFIRMED', {
+          bookingId: updatedPayment.submission.booking.id,
+        });
+      }
     }
 
+    return updatedPayment;
+  });
+
+  // Discord notifications are sent outside the transaction
+  // They should not block DB commits and failures are logged but not re-thrown
+  if (payment.submission) {
     // Send Discord confirmation notification to user
     if (payment.submission.discordId) {
-      const notificationResult = await sendBookingConfirmationNotification({
-        id: payment.submission.id,
-        email: payment.submission.email,
-        discordId: payment.submission.discordId,
-        discordUsername: payment.submission.discordUsername,
-        coachingType: payment.submission.coachingType,
-        rank: payment.submission.rank,
-        role: payment.submission.role,
-        hero: payment.submission.hero,
-        scheduledAt: payment.submission.booking?.scheduledAt || null,
-        replays: payment.submission.replays.map(r => ({
-          code: r.code,
-          mapName: r.mapName,
-        })),
-      });
-
-      if (notificationResult.success) {
-        logger.info('Booking confirmation sent to user via Discord', {
-          submissionId: payment.submission.id,
+      try {
+        const notificationResult = await sendBookingConfirmationNotification({
+          id: payment.submission.id,
+          email: payment.submission.email,
+          discordId: payment.submission.discordId,
           discordUsername: payment.submission.discordUsername,
+          coachingType: payment.submission.coachingType,
+          rank: payment.submission.rank,
+          role: payment.submission.role,
+          hero: payment.submission.hero,
+          scheduledAt: payment.submission.booking?.scheduledAt || null,
+          replays: payment.submission.replays.map(r => ({
+            code: r.code,
+            mapName: r.mapName,
+          })),
         });
-      } else {
-        logger.error('Failed to send booking confirmation via Discord', {
+
+        if (notificationResult.success) {
+          logger.info('Booking confirmation sent to user via Discord', {
+            submissionId: payment.submission.id,
+            discordUsername: payment.submission.discordUsername,
+          });
+        } else {
+          logger.error('Failed to send booking confirmation via Discord', {
+            submissionId: payment.submission.id,
+            error: notificationResult.error,
+          });
+        }
+      } catch (error) {
+        logger.error('Exception sending booking confirmation via Discord', {
           submissionId: payment.submission.id,
-          error: notificationResult.error,
+          error: error instanceof Error ? error.message : String(error),
         });
       }
     } else {
@@ -189,26 +205,33 @@ async function handlePaymentIntentSucceeded(paymentIntent: Stripe.PaymentIntent)
     }
 
     // Send admin notification now that payment is confirmed
-    const adminNotificationResult = await sendVodRequestNotification({
-      id: payment.submission.id,
-      email: payment.submission.email,
-      discordTag: payment.submission.discordTag,
-      coachingType: payment.submission.coachingType,
-      rank: payment.submission.rank,
-      role: payment.submission.role,
-      hero: payment.submission.hero,
-      replays: payment.submission.replays,
-      submittedAt: payment.submission.submittedAt,
-    });
-
-    if (adminNotificationResult.success) {
-      logger.info('Admin notification sent for confirmed booking', {
-        submissionId: payment.submission.id,
+    try {
+      const adminNotificationResult = await sendVodRequestNotification({
+        id: payment.submission.id,
+        email: payment.submission.email,
+        discordTag: payment.submission.discordTag,
+        coachingType: payment.submission.coachingType,
+        rank: payment.submission.rank,
+        role: payment.submission.role,
+        hero: payment.submission.hero,
+        replays: payment.submission.replays,
+        submittedAt: payment.submission.submittedAt,
       });
-    } else {
-      logger.error('Failed to send admin notification for confirmed booking', {
+
+      if (adminNotificationResult.success) {
+        logger.info('Admin notification sent for confirmed booking', {
+          submissionId: payment.submission.id,
+        });
+      } else {
+        logger.error('Failed to send admin notification for confirmed booking', {
+          submissionId: payment.submission.id,
+          error: adminNotificationResult.error,
+        });
+      }
+    } catch (error) {
+      logger.error('Exception sending admin notification', {
         submissionId: payment.submission.id,
-        error: adminNotificationResult.error,
+        error: error instanceof Error ? error.message : String(error),
       });
     }
   }
@@ -220,60 +243,63 @@ async function handlePaymentIntentFailed(paymentIntent: Stripe.PaymentIntent) {
     failureReason: paymentIntent.last_payment_error?.message,
   });
 
-  // Update payment status to failed and fetch related data
-  const payment = await prisma.payment.update({
-    where: { stripePaymentId: paymentIntent.id },
-    data: { status: 'FAILED' },
-    include: {
-      submission: {
-        include: {
-          booking: true,
+  // Use transaction to ensure all DB updates succeed or fail together
+  await prisma.$transaction(async (tx) => {
+    // Update payment status to failed and fetch related data
+    const payment = await tx.payment.update({
+      where: { stripePaymentId: paymentIntent.id },
+      data: { status: 'FAILED' },
+      include: {
+        submission: {
+          include: {
+            booking: true,
+          },
         },
       },
-    },
-  });
-
-  logger.info('Payment marked as failed', {
-    paymentId: payment.id,
-    hasSubmission: !!payment.submission,
-  });
-
-  // If payment is linked to a submission, update submission and booking status
-  if (payment.submission) {
-    await prisma.replaySubmission.update({
-      where: { id: payment.submission.id },
-      data: { status: 'PAYMENT_FAILED' },
     });
 
-    logger.info('Submission status updated to PAYMENT_FAILED', {
-      submissionId: payment.submission.id,
+    logger.info('Payment marked as failed', {
+      paymentId: payment.id,
+      hasSubmission: !!payment.submission,
     });
 
-    // If submission has a booking, cancel it and free up the slot
-    if (payment.submission.booking) {
-      // Update booking status to cancelled
-      await prisma.booking.update({
-        where: { id: payment.submission.booking.id },
-        data: { status: 'CANCELLED' },
+    // If payment is linked to a submission, update submission and booking status
+    if (payment.submission) {
+      await tx.replaySubmission.update({
+        where: { id: payment.submission.id },
+        data: { status: 'PAYMENT_FAILED' },
       });
 
-      logger.info('Booking status updated to CANCELLED', {
-        bookingId: payment.submission.booking.id,
+      logger.info('Submission status updated to PAYMENT_FAILED', {
+        submissionId: payment.submission.id,
       });
 
-      // Delete the availability exception to free up the time slot
-      await prisma.availabilityException.deleteMany({
-        where: {
+      // If submission has a booking, cancel it and free up the slot
+      if (payment.submission.booking) {
+        // Update booking status to cancelled
+        await tx.booking.update({
+          where: { id: payment.submission.booking.id },
+          data: { status: 'CANCELLED' },
+        });
+
+        logger.info('Booking status updated to CANCELLED', {
           bookingId: payment.submission.booking.id,
-          reason: 'booked',
-        },
-      });
+        });
 
-      logger.info('Time slot freed for cancelled booking', {
-        bookingId: payment.submission.booking.id,
-      });
+        // Delete the availability exception to free up the time slot
+        await tx.availabilityException.deleteMany({
+          where: {
+            bookingId: payment.submission.booking.id,
+            reason: 'booked',
+          },
+        });
+
+        logger.info('Time slot freed for cancelled booking', {
+          bookingId: payment.submission.booking.id,
+        });
+      }
     }
-  }
+  });
 }
 
 async function handleChargeRefunded(charge: Stripe.Charge) {

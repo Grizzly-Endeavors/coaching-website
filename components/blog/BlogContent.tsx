@@ -9,6 +9,7 @@
 import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
 import 'highlight.js/styles/github-dark.css';
 
@@ -21,7 +22,7 @@ export function BlogContent({ content }: BlogContentProps) {
     <div className="prose prose-invert prose-cyan max-w-none">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeRaw, rehypeHighlight]}
+        rehypePlugins={[rehypeSanitize, rehypeRaw, rehypeHighlight]}
         components={{
           // Headings
           h1: ({ node, ...props }) => (

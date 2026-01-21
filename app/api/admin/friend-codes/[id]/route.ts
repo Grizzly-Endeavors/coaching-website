@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { handleApiError } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/auth';
 
 interface RouteParams {
   params: Promise<{
@@ -15,6 +16,7 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
+    await requireAuth();
     const { id } = await params;
 
     const friendCode = await prisma.friendCode.findUnique({
@@ -59,6 +61,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
  */
 export async function PATCH(request: NextRequest, { params }: RouteParams) {
   try {
+    await requireAuth();
     const { id } = await params;
     const body = await request.json();
     const { description, maxUses, expiresAt, isActive } = body;
@@ -110,6 +113,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
+    await requireAuth();
     const { id } = await params;
 
     // Check if code has been used

@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import { BookingStatus } from '@prisma/client';
-import { logger } from '@/lib/logger';
+import { handleApiError } from '@/lib/api-error-handler';
 import { adminBookingUpdateSchema } from '@/lib/validations';
 
 /**
@@ -76,33 +75,7 @@ export async function PATCH(
       booking: updatedBooking,
     });
   } catch (error) {
-    logger.error('Error updating booking', error instanceof Error ? error : new Error(String(error)));
-
-    // Handle authentication errors
-    if (error instanceof Error && error.message === 'Unauthorized') {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    // Handle validation errors
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: 'Invalid request data',
-          details: error.issues,
-        },
-        { status: 400 }
-      );
-    }
-
-    // Handle other errors
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return handleApiError(error, 'updating booking');
   }
 }
 
@@ -150,20 +123,6 @@ export async function GET(
       booking,
     });
   } catch (error) {
-    logger.error('Error fetching booking', error instanceof Error ? error : new Error(String(error)));
-
-    // Handle authentication errors
-    if (error instanceof Error && error.message === 'Unauthorized') {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    // Handle other errors
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
+    return handleApiError(error, 'fetching booking');
   }
 }

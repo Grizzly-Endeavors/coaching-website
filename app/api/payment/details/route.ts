@@ -28,6 +28,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const email = searchParams.get('email');
+
     // Find payment by session ID with submission and booking details
     const payment = await prisma.payment.findUnique({
       where: {
@@ -58,6 +60,11 @@ export async function GET(request: NextRequest) {
         { error: 'Payment not found' },
         { status: 404 }
       );
+    }
+
+    // Verify email matches to prevent unauthorized access
+    if (!email || payment.customerEmail.toLowerCase() !== email.toLowerCase()) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     return NextResponse.json({

@@ -88,8 +88,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Get the base URL for redirects
-    const origin = req.headers.get('origin') || process.env.NEXTAUTH_URL || 'http://localhost:3000';
+    // Get the base URL for redirects - use trusted environment variable, not request origin
+    const origin = process.env.NEXTAUTH_URL || 'http://localhost:3000';
 
     // Create Stripe Checkout Session
     const session = await stripe.checkout.sessions.create({

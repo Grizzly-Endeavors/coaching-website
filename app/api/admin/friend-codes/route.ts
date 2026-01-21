@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { handleApiError } from '@/lib/api-error-handler';
 import { logger } from '@/lib/logger';
+import { requireAuth } from '@/lib/auth';
 
 /**
  * GET /api/admin/friend-codes
@@ -9,11 +10,7 @@ import { logger } from '@/lib/logger';
  */
 export async function GET(request: NextRequest) {
   try {
-    // TODO: Add auth check for admin
-    // const session = await getServerSession();
-    // if (!session?.user) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
+    await requireAuth();
 
     const friendCodes = await prisma.friendCode.findMany({
       orderBy: { createdAt: 'desc' },
@@ -44,11 +41,7 @@ export async function GET(request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    // TODO: Add auth check for admin
-    // const session = await getServerSession();
-    // if (!session?.user) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
+    await requireAuth();
 
     const body = await request.json();
     const { code, description, maxUses, expiresAt } = body;

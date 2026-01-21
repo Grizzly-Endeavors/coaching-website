@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
-import { Button, Badge, Loading, getStatusBadgeVariant } from '@/components/ui';
+import { Button, Badge, Loading, getStatusBadgeVariant, useToast } from '@/components/ui';
 import type { Submission } from '@/lib/types';
 import { getCoachingTypeName } from '@/lib/coaching';
 import { logger } from '@/lib/logger';
@@ -11,6 +11,7 @@ import { logger } from '@/lib/logger';
 export default function SubmissionDetailPage() {
   const router = useRouter();
   const params = useParams();
+  const { showToast } = useToast();
   const id = params.id as string;
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,7 +43,7 @@ export default function SubmissionDetailPage() {
       setReviewUrl(data.submission.reviewUrl || '');
     } catch (error) {
       logger.error('Error fetching submission:', error instanceof Error ? error : new Error(String(error)));
-      alert('Failed to load submission');
+      showToast({ type: 'error', title: 'Failed to load submission' });
     } finally {
       setLoading(false);
     }
@@ -66,14 +67,14 @@ export default function SubmissionDetailPage() {
 
       if (!response.ok) throw new Error('Failed to update submission');
 
-      alert('Submission updated successfully!');
+      showToast({ type: 'success', title: 'Submission updated successfully!' });
       if (sendDiscordNotification) {
-        alert('Discord notification sent to the user!');
+        showToast({ type: 'success', title: 'Discord notification sent to the user!' });
       }
       fetchSubmission();
     } catch (error) {
       logger.error('Error updating submission:', error instanceof Error ? error : new Error(String(error)));
-      alert('Failed to update submission');
+      showToast({ type: 'error', title: 'Failed to update submission' });
     } finally {
       setSaving(false);
     }
@@ -93,11 +94,11 @@ export default function SubmissionDetailPage() {
 
       if (!response.ok) throw new Error('Failed to delete submission');
 
-      alert('Submission deleted successfully');
+      showToast({ type: 'success', title: 'Submission deleted successfully' });
       router.push('/admin/submissions');
     } catch (error) {
       logger.error('Error deleting submission:', error instanceof Error ? error : new Error(String(error)));
-      alert('Failed to delete submission');
+      showToast({ type: 'error', title: 'Failed to delete submission' });
       setDeleting(false);
     }
   }

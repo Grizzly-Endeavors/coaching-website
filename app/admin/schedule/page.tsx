@@ -6,11 +6,12 @@ import {
   AdminTableRow,
   AdminTableCell,
 } from '@/components/admin';
-import { Badge, Button, Loading, getStatusBadgeVariant } from '@/components/ui';
+import { Badge, Button, Loading, getStatusBadgeVariant, useToast } from '@/components/ui';
 import type { Booking, BookingStatus } from '@/lib/types';
 import { logger } from '@/lib/logger';
 
 export default function SchedulePage() {
+  const { showToast } = useToast();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<BookingStatus>('ALL');
@@ -49,11 +50,11 @@ export default function SchedulePage() {
 
       if (!response.ok) throw new Error('Failed to update booking');
 
-      alert(`Booking marked as ${newStatus}`);
+      showToast({ type: 'success', title: `Booking marked as ${newStatus}` });
       fetchBookings();
     } catch (error) {
       logger.error('Error updating booking:', error instanceof Error ? error : new Error(String(error)));
-      alert('Failed to update booking');
+      showToast({ type: 'error', title: 'Failed to update booking' });
     } finally {
       setUpdating(null);
     }

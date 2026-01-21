@@ -6,3 +6,6 @@ export * from './ui';
 
 // Layout Components
 export * from './layout';
+
+// Booking Components
+export * from './booking';

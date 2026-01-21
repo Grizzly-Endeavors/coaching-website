@@ -22,48 +22,6 @@ export default function TestimonialsCarousel({ items }: TestimonialsCarouselProp
   const [direction, setDirection] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  const slideVariants = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? 1000 : -1000,
-      opacity: 0,
-      position: 'absolute' as const,
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      opacity: 1,
-      position: 'relative' as const, // Temporarily relative to take up space? No, should be consistent.
-      // Actually, for the "overlap" effect, usually all items are absolute.
-      // But we need the container to have height.
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? 1000 : -1000,
-      opacity: 0,
-      position: 'absolute' as const,
-    })
-  };
-
-  // To handle height with absolute positioning, we can either set a fixed height
-  // or use a hidden copy to prop open the container.
-  // Or, we can keep the "center" item as relative if we only have one showing at a time,
-  // but that makes the "exit" item jump to absolute.
-  // A common pattern is to have the container have a fixed height or aspect ratio.
-  // Given the design, the testimonials might vary in length.
-  // Let's try making the wrapper relative and the slides absolute,
-  // but we need to know the height.
-
-  // Simpler approach for smooth sliding without complex height calculation:
-  // Keep the current layout but remove `mode="wait"`.
-  // When `mode="wait"` is removed, both components exist at the same time.
-  // They will stack vertically if they are both `position: relative`.
-  // So we MUST make them `position: absolute` during the transition.
-
-  // Let's go with:
-  // Container: relative, needs a height.
-  // We can use a "spacer" invisible element or just set a min-height that accommodates the content.
-  // The previous implementation had `min-h-[300px]`.
-
   const variants = {
     enter: (direction: number) => {
       return {
@@ -84,11 +42,6 @@ export default function TestimonialsCarousel({ items }: TestimonialsCarouselProp
         opacity: 0,
       };
     }
-  };
-
-  const swipeConfidenceThreshold = 10000;
-  const swipePower = (offset: number, velocity: number) => {
-    return Math.abs(offset) * velocity;
   };
 
   const paginate = useCallback((newDirection: number) => {

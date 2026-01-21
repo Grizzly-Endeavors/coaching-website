@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
+import { useToast } from '@/components/ui/Toast';
 import { AdminTable, AdminTableRow, AdminTableCell } from '@/components/admin';
 import {
   Dialog,
@@ -31,6 +32,7 @@ interface FriendCode {
 }
 
 export default function FriendCodesPage() {
+  const { showToast } = useToast();
   const [friendCodes, setFriendCodes] = useState<FriendCode[]>([]);
   const [loading, setLoading] = useState(true);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -159,7 +161,7 @@ export default function FriendCodesPage() {
       await fetchFriendCodes();
     } catch (error) {
       logger.error('Error deleting friend code:', error instanceof Error ? error : new Error(String(error)));
-      alert('Failed to delete friend code');
+      showToast({ type: 'error', title: 'Failed to delete friend code' });
     }
   };
 

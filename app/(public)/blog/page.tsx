@@ -11,6 +11,7 @@ import { Pagination, PaginationSkeleton } from '@/components/blog/Pagination';
 import type { BlogPostSummary } from '@/lib/types/blog.types';
 import { loadLocale } from '@/lib/locales';
 import { getBlogPosts, getBlogTags } from '@/lib/blog';
+import { logger } from '@/lib/logger';
 
 const blogLocale = loadLocale('blog');
 const metadataLocale = loadLocale('metadata');
@@ -40,7 +41,7 @@ async function getBlogPostsData(page: number = 1, tag?: string) {
   try {
     return await getBlogPosts(page, 12, tag);
   } catch (error) {
-    console.error('Error fetching blog posts:', error instanceof Error ? error : new Error(String(error)));
+    logger.error('Error fetching blog posts:', error instanceof Error ? error : new Error(String(error)));
     return {
       posts: [],
       pagination: {
@@ -60,7 +61,7 @@ async function getAllTags() {
   try {
     return await getBlogTags();
   } catch (error) {
-    console.error('Error fetching tags:', error instanceof Error ? error : new Error(String(error)));
+    logger.error('Error fetching tags:', error instanceof Error ? error : new Error(String(error)));
     return [];
   }
 }

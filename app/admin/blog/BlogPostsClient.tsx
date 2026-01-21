@@ -7,7 +7,7 @@ import {
   AdminTableRow,
   AdminTableCell,
 } from '@/components/admin';
-import { Button, Badge, Loading } from '@/components/ui';
+import { Button, Badge, Loading, useToast } from '@/components/ui';
 import type { BlogPost } from '@/lib/types';
 import type { LocaleData } from '@/lib/locales/types';
 import { logger } from '@/lib/logger';
@@ -17,6 +17,7 @@ interface BlogPostsClientProps {
 }
 
 export default function BlogPostsClient({ locale }: BlogPostsClientProps) {
+  const { showToast } = useToast();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all');
@@ -54,11 +55,11 @@ export default function BlogPostsClient({ locale }: BlogPostsClientProps) {
 
       if (!response.ok) throw new Error(locale.messages?.delete_error || 'Failed to delete post');
 
-      alert(locale.messages?.delete_success || 'Post deleted successfully');
+      showToast({ type: 'success', title: locale.messages?.delete_success || 'Post deleted successfully' });
       fetchPosts();
     } catch (error) {
       logger.error('Error deleting post:', error instanceof Error ? error : new Error(String(error)));
-      alert(locale.messages?.delete_error || 'Failed to delete post');
+      showToast({ type: 'error', title: locale.messages?.delete_error || 'Failed to delete post' });
     }
   }
 
@@ -76,11 +77,11 @@ export default function BlogPostsClient({ locale }: BlogPostsClientProps) {
         ? (locale.messages?.publish_success || 'Post published successfully')
         : (locale.messages?.unpublish_success || 'Post unpublished successfully');
 
-      alert(successMessage);
+      showToast({ type: 'success', title: successMessage });
       fetchPosts();
     } catch (error) {
       logger.error('Error updating post:', error instanceof Error ? error : new Error(String(error)));
-      alert(locale.messages?.update_error || 'Failed to update post');
+      showToast({ type: 'error', title: locale.messages?.update_error || 'Failed to update post' });
     }
   }
 

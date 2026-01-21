@@ -22,7 +22,10 @@ export default function AdminLoginForm({ locale }: AdminLoginFormProps) {
   const [loginError, setLoginError] = useState<string>('');
 
   // Get redirect URL from query params or default to /admin
-  const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+  // Validate callbackUrl to prevent open redirect attacks
+  const rawCallbackUrl = searchParams.get('callbackUrl') || '/admin';
+  const isRelativeUrl = rawCallbackUrl.startsWith('/') && !rawCallbackUrl.startsWith('//');
+  const callbackUrl = isRelativeUrl ? rawCallbackUrl : '/admin';
 
   const handleDiscordLogin = async () => {
     setIsLoading(true);

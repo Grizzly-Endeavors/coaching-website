@@ -4,6 +4,16 @@ import { replaySubmissionSchema } from '@/lib/validations';
 import { handleApiError } from '@/lib/api-error-handler';
 import { rateLimit, getRateLimitHeaders } from '@/lib/rate-limiter';
 import { logger } from '@/lib/logger';
+import { z } from 'zod';
+
+// Zod schema for validating Discord cookie data
+const discordCookieSchema = z.object({
+  discordId: z.string().optional(),
+  discordUsername: z.string().optional(),
+  discordAccessToken: z.string().optional(),
+  discordRefreshToken: z.string().optional(),
+  discordTokenExpiry: z.string().or(z.number()).optional(),
+});
 
 /**
  * POST /api/replay/submit
@@ -54,18 +64,21 @@ export async function POST(request: NextRequest) {
     // Extract optional scheduledAt for VOD/Live coaching
     const scheduledAt = body.scheduledAt ? new Date(body.scheduledAt) : null;
 
-    // Check for Discord OAuth data in cookies
-    let discordData = null;
+    // Check for Discord OAuth data in cookies with strict validation
+    let discordData: z.infer<typeof discordCookieSchema> | null = null;
     const discordCookie = request.cookies.get('discord_user_data')?.value;
     if (discordCookie) {
       try {
-        discordData = JSON.parse(discordCookie);
+        const parsed = JSON.parse(discordCookie);
+        // Validate parsed data against schema
+        discordData = discordCookieSchema.parse(parsed);
         logger.debug('Discord OAuth data found', {
           discordUsername: discordData.discordUsername,
           hasAccessToken: !!discordData.discordAccessToken,
         });
       } catch (error) {
-        logger.error('Failed to parse Discord cookie data', error instanceof Error ? error : new Error(String(error)));
+        logger.error('Failed to parse or validate Discord cookie data', error instanceof Error ? error : new Error(String(error)));
+        // discordData remains null on validation failure
       }
     }
 

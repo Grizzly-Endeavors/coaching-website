@@ -121,11 +121,23 @@ async function checkAndSendReminders(): Promise<void> {
           hero: booking.submission?.hero,
         };
 
-        // Send reminder to client
-        const clientResult = await send30MinuteReminder(reminderDetails);
+        // Send reminder to client (catch individually to ensure admin reminder still runs)
+        let clientResult: { success: boolean; error?: string } = { success: false, error: 'Not attempted' };
+        try {
+          clientResult = await send30MinuteReminder(reminderDetails);
+        } catch (error) {
+          logger.error(`Exception sending 30-minute client reminder for booking ${booking.id}`, error instanceof Error ? error : new Error(String(error)));
+          clientResult = { success: false, error: error instanceof Error ? error.message : String(error) };
+        }
 
-        // Send reminder to admin
-        const adminResult = await send30MinuteAdminReminder(reminderDetails);
+        // Send reminder to admin (catch individually to ensure DB update still happens)
+        let adminResult: { success: boolean; error?: string } = { success: false, error: 'Not attempted' };
+        try {
+          adminResult = await send30MinuteAdminReminder(reminderDetails);
+        } catch (error) {
+          logger.error(`Exception sending 30-minute admin reminder for booking ${booking.id}`, error instanceof Error ? error : new Error(String(error)));
+          adminResult = { success: false, error: error instanceof Error ? error.message : String(error) };
+        }
 
         // Mark as sent if at least one succeeded
         if (clientResult.success || adminResult.success) {

@@ -3,8 +3,25 @@ import { ZodError } from 'zod';
 import { Prisma } from '@prisma/client';
 import { logger } from './logger';
 
-export function handleApiError(error: unknown): NextResponse {
-  logger.error('API error occurred', error instanceof Error ? error : new Error(String(error)));
+/**
+ * Centralized API error handler with context logging
+ * Handles common error types: Unauthorized, Zod validation, Prisma, and generic errors
+ *
+ * @param error - The caught error
+ * @param context - Optional context string for logging (e.g., "updating booking", "fetching users")
+ * @returns NextResponse with appropriate status code and error message
+ */
+export function handleApiError(error: unknown, context?: string): NextResponse {
+  const errorMessage = context ? `Error in ${context}` : 'API error occurred';
+  logger.error(errorMessage, error instanceof Error ? error : new Error(String(error)));
+
+  // Handle authentication/authorization errors
+  if (error instanceof Error && error.message === 'Unauthorized') {
+    return NextResponse.json(
+      { success: false, error: 'Unauthorized' },
+      { status: 401 }
+    );
+  }
 
   // Zod validation errors
   if (error instanceof ZodError) {

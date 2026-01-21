@@ -19,3 +19,43 @@ export function generateSlug(title: string): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
 }
+
+/**
+ * Formats a date for display in the UI.
+ * Uses en-US locale with abbreviated month, numeric day, and full year.
+ *
+ * @param dateString - Date string or Date object to format
+ * @returns Formatted date string (e.g., "Jan 5, 2026")
+ *
+ * @example
+ * formatDisplayDate('2026-01-05T10:30:00Z') // Returns "Jan 5, 2026"
+ * formatDisplayDate(new Date()) // Returns current date formatted
+ */
+export function formatDisplayDate(dateString: string | Date): string {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+/**
+ * Formats a date with time for display in the UI.
+ * Uses en-US locale with abbreviated month, numeric day, year, and time.
+ *
+ * @param dateString - Date string or Date object to format
+ * @returns Formatted date and time string (e.g., "Jan 5, 2026, 10:30 AM")
+ *
+ * @example
+ * formatDisplayDateTime('2026-01-05T10:30:00Z') // Returns "Jan 5, 2026, 10:30 AM"
+ */
+export function formatDisplayDateTime(dateString: string | Date): string {
+  return new Date(dateString).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
