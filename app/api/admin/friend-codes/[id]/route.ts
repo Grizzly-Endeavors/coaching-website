@@ -109,21 +109,15 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
 /**
  * DELETE /api/admin/friend-codes/[id]
- * Delete a friend code
+ * Soft delete a friend code (marks as deleted and frees up the code name)
  */
 export async function DELETE(request: NextRequest, { params }: RouteParams) {
   try {
     await requireAuth();
     const { id } = await params;
 
-    // Check if code has been used
     const friendCode = await prisma.friendCode.findUnique({
       where: { id },
-      include: {
-        _count: {
-          select: { submissions: true },
-        },
-      },
     });
 
     if (!friendCode) {
@@ -133,34 +127,30 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
       );
     }
 
-    // If code has been used, we might want to keep it for historical tracking
-    // Instead of deleting, we could just deactivate it
-    if (friendCode._count.submissions > 0) {
-      await prisma.friendCode.update({
-        where: { id },
-        data: { isActive: false },
-      });
-
-      logger.info('Friend code deactivated (had usage history)', {
-        id: friendCode.id,
-        code: friendCode.code,
-        usageCount: friendCode._count.submissions,
-      });
-
-      return NextResponse.json({
-        message: 'Friend code has been deactivated (preserved for historical tracking)',
-        friendCode: { ...friendCode, isActive: false },
-      });
+    if (friendCode.deletedAt) {
+      return NextResponse.json(
+        { error: 'Friend code is already deleted' },
+        { status: 400 }
+      );
     }
 
-    // If never used, safe to delete
-    await prisma.friendCode.delete({
+    // Soft delete: set deletedAt and rename code to free up the name
+    const deletedAt = new Date();
+    const deletedCode = `${friendCode.code}_deleted_${deletedAt.getTime()}`;
+
+    await prisma.friendCode.update({
       where: { id },
+      data: {
+        deletedAt,
+        code: deletedCode,
+        isActive: false,
+      },
     });
 
-    logger.info('Friend code deleted', {
+    logger.info('Friend code soft deleted', {
       id: friendCode.id,
-      code: friendCode.code,
+      originalCode: friendCode.code,
+      newCode: deletedCode,
     });
 
     return NextResponse.json({

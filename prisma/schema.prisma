@@ -215,6 +215,7 @@ model FriendCode {
   usesCount   Int       @default(0) @map("uses_count") // How many times it's been used
   expiresAt   DateTime? @map("expires_at") // Null = never expires
   isActive    Boolean   @default(true) @map("is_active") // Can be manually disabled
+  deletedAt   DateTime? @map("deleted_at") // Soft delete timestamp
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 

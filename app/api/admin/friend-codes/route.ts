@@ -13,6 +13,9 @@ export async function GET(request: NextRequest) {
     await requireAuth();
 
     const friendCodes = await prisma.friendCode.findMany({
+      where: {
+        deletedAt: null, // Exclude soft-deleted codes
+      },
       orderBy: { createdAt: 'desc' },
       include: {
         _count: {
@@ -54,13 +57,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if code already exists
+    // Check if code already exists (exclude soft-deleted codes)
     const existing = await prisma.friendCode.findFirst({
       where: {
         code: {
           equals: code.trim(),
           mode: 'insensitive',
         },
+        deletedAt: null,
       },
     });
 

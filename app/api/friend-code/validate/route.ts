@@ -71,13 +71,14 @@ export async function POST(request: NextRequest) {
       }));
     }
 
-    // Validate friend code against database
+    // Validate friend code against database (exclude deleted codes)
     const friendCodeRecord = await prisma.friendCode.findFirst({
       where: {
         code: {
           equals: friendCode.trim(),
           mode: 'insensitive',
         },
+        deletedAt: null,
       },
     });
 
