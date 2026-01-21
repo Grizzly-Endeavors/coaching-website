@@ -259,6 +259,59 @@ function BookingContent() {
     setSelectedTimeSlot(null);
   };
 
+  const handleFriendCodeClick = () => {
+    // Validate form data before opening friend code dialog
+    setErrors({});
+
+    // For VOD Review and Live Coaching, require time slot selection
+    if ((selectedType === 'vod-review' || selectedType === 'live-coaching') && !selectedTimeSlot) {
+      setErrors({ timeSlot: 'Please select an appointment time' });
+      document.getElementById('time-slot-picker')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // Filter out empty replays
+    const filledReplays = (formData.replays || []).filter(replay => replay.code.trim() !== '');
+
+    const dataToValidate = {
+      ...formData,
+      replays: filledReplays,
+    };
+
+    // Validate form data
+    const result = replaySubmissionSchema.safeParse(dataToValidate);
+    if (!result.success) {
+      const fieldErrors: FormErrors = {};
+      result.error.issues.forEach((error) => {
+        const path = error.path;
+        if (path.length === 1) {
+          const field = path[0] as keyof FormErrors;
+          if (field !== 'replays') {
+            (fieldErrors[field] as string | undefined) = error.message;
+          }
+        } else if (path.length > 1) {
+          const [field, index, subfield] = path;
+          if (field === 'replays') {
+            if (!Array.isArray(fieldErrors.replays)) {
+              fieldErrors.replays = [];
+            }
+            if (!fieldErrors.replays[index as number]) {
+              fieldErrors.replays[index as number] = {};
+            }
+            fieldErrors.replays[index as number][subfield as keyof ReplayFieldErrors] = error.message;
+          }
+        }
+      });
+      setErrors(fieldErrors);
+      // Scroll to top of form to show errors
+      formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+
+    // Validation passed, open the dialog
+    setFriendCodeDialogOpen(true);
+  };
+
   const getCoachingTypeDescription = () => {
     switch (selectedType) {
       case 'review-async':
@@ -603,7 +656,7 @@ function BookingContent() {
                     <div className="text-center">
                       <button
                         type="button"
-                        onClick={() => setFriendCodeDialogOpen(true)}
+                        onClick={handleFriendCodeClick}
                         className="text-xs text-text-muted hover:text-text-secondary underline transition-colors"
                       >
                         or use a code
@@ -618,7 +671,7 @@ function BookingContent() {
               ) : (
                 /* For Review Async: Show only the form */
                 <Card variant="surface" padding="lg">
-                  <form onSubmit={handleSubmit} className="space-y-6">
+                  <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
                     {/* Contact Information */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <Input
@@ -802,7 +855,7 @@ function BookingContent() {
                     <div className="text-center">
                       <button
                         type="button"
-                        onClick={() => setFriendCodeDialogOpen(true)}
+                        onClick={handleFriendCodeClick}
                         className="text-xs text-text-muted hover:text-text-secondary underline transition-colors"
                       >
                         or use a code
