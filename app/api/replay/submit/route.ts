@@ -32,11 +32,11 @@ import { logger } from '@/lib/logger';
  */
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting: 10 requests per hour per IP
+    // Rate limiting: 20 requests per 15 minutes per IP
     const rateLimitOptions = {
-      maxRequests: 10,
-      windowMs: 60 * 60 * 1000, // 1 hour
-      message: 'Too many replay submissions. Please try again later.',
+      maxRequests: 20,
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      message: 'Too many replay submissions.',
     };
 
     const rateLimitResult = await rateLimit(request, rateLimitOptions);
