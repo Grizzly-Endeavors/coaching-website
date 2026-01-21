@@ -63,6 +63,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Normalize replay codes to uppercase BEFORE validation
+    if (submissionData.replays && Array.isArray(submissionData.replays)) {
+      submissionData.replays = submissionData.replays.map((replay: any) => ({
+        ...replay,
+        code: replay.code ? replay.code.toUpperCase() : replay.code,
+      }));
+    }
+
     // Validate friend code against database
     const friendCodeRecord = await prisma.friendCode.findFirst({
       where: {
@@ -171,7 +179,7 @@ export async function POST(request: NextRequest) {
         friendCodeId: friendCodeRecord.id, // Link to friend code
         replays: {
           create: validatedData.replays.map((replay) => ({
-            code: replay.code.toUpperCase(),
+            code: replay.code, // Already normalized to uppercase before validation
             mapName: replay.mapName,
             notes: replay.notes || null,
           })),

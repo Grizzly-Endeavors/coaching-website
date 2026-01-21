@@ -42,11 +42,11 @@ const discordCookieSchema = z.object({
  */
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting: 10 requests per hour per IP
+    // Rate limiting: 20 requests per 15 minutes per IP
     const rateLimitOptions = {
-      maxRequests: 10,
-      windowMs: 60 * 60 * 1000, // 1 hour
-      message: 'Too many replay submissions. Please try again later.',
+      maxRequests: 20,
+      windowMs: 15 * 60 * 1000, // 15 minutes
+      message: 'Too many replay submissions.',
     };
 
     const rateLimitResult = await rateLimit(request, rateLimitOptions);
@@ -57,6 +57,14 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body = await request.json();
+
+    // Normalize replay codes to uppercase BEFORE validation
+    if (body.replays && Array.isArray(body.replays)) {
+      body.replays = body.replays.map((replay: any) => ({
+        ...replay,
+        code: replay.code ? replay.code.toUpperCase() : replay.code,
+      }));
+    }
 
     // Validate request body with Zod
     const validatedData = replaySubmissionSchema.parse(body);
@@ -113,7 +121,7 @@ export async function POST(request: NextRequest) {
         status: 'AWAITING_PAYMENT', // Changed from PENDING to AWAITING_PAYMENT
         replays: {
           create: validatedData.replays.map((replay) => ({
-            code: replay.code.toUpperCase(), // Normalize to uppercase
+            code: replay.code, // Already normalized to uppercase before validation
             mapName: replay.mapName,
             notes: replay.notes || null,
           })),
