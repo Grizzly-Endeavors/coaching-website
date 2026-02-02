@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
+import { ToastProvider } from '@/components/ui/Toast';
 
 interface AdminLayoutClientProps {
   children: React.ReactNode;
@@ -21,6 +22,7 @@ export function AdminLayoutClient({ children, userEmail }: AdminLayoutClientProp
   };
 
   return (
+    <ToastProvider>
     <div className="min-h-screen bg-[#0f0f23]">
       {/* Mobile Header */}
       <div className="lg:hidden fixed top-0 left-0 right-0 z-40 bg-[#1a1a2e] border-b border-[#2a2a40] px-4 py-3">
@@ -137,6 +139,7 @@ export function AdminLayoutClient({ children, userEmail }: AdminLayoutClientProp
         <div className="p-4 sm:p-6 lg:p-8">{children}</div>
       </main>
     </div>
+    </ToastProvider>
   );
 }
 
