@@ -43,7 +43,7 @@ jobs:
           helm upgrade --install coaching-website ./helm \
             --create-namespace \
             --namespace coaching-website \
-            --set image.tag=latest \
+            --set image.tag=${{ github.sha }} \
             --set postgresql.username="${{ secrets.POSTGRES_USERNAME_COACHING }}" \
             --set postgresql.password="${{ secrets.POSTGRES_PASSWORD_COACHING }}" \
             --set secrets.nextauthUrl="${{ secrets.NEXTAUTH_URL }}" \
